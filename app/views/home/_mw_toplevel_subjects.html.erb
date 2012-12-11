@@ -1,0 +1,11 @@
+<div class="module">
+	<div class="header">
+		<h4>Online <%= @cousin_name %> - Browse by Subject</h4>
+	</div>
+	<div class="content">
+		<% for subject in Subject.all_tls %>
+		<a class="btn_<%= Worker.inurl(subject.name) -%>" href="/<%= Worker.inurl(@cousin_name) -%>/<%= Worker.inurl(subject.name) -%>/online" title="Online <%= subject.name -%> <%= @cousin_name %>">Online <%= subject.name -%> <%= @cousin_name %></a>					
+		<% end %>
+		<div class="clear"></div>
+  </div>
+</div>

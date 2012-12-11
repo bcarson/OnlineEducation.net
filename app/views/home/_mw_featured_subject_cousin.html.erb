@@ -1,0 +1,17 @@
+<h3>Featured Online <%= @subject.name -%> <%= @cousin_name %></h3>
+<% for program in Program.find(:all, :limit => 10, :conditions => ['is_online = 1']) %>
+<% @school = program.school %>
+<div class="entry thumb">
+
+  <%= render :partial => 'school_thumbnail' %>
+
+	<div class="article">
+		<h4><a href="#"><%= program.name %></a></h4>
+		<p><%= program.description %></p>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-- end .entry -->
+<% end %>
+<a href="" class="show_all_results">Show all 35 Online <span><%= @subject.name -%> <%= @cousin_name %></span></a>
+<!-- NEED TO ADD ON CAMPUS SCHOOLS HERE AS WELL -->

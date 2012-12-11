@@ -1,0 +1,131 @@
+<script type="text/javascript">
+	resize_all();
+
+	$(".tab_content").hide();
+	$("ul.tabs li:first").addClass("active").show();
+	$(".tab_content:first").show();
+
+	$(".school_tab_content").hide();
+	$("ul.school_tabs li:first").addClass("active").show();
+	$(".school_tab_content:first").show();
+
+	$("ul.tabs li").click(function() {
+
+	    $("ul.tabs li").removeClass("active");
+	    $(this).addClass("active");
+	    $(".tab_content").hide();
+	    var activeTab = $(this).find("a").attr("href");
+	    $(activeTab).fadeIn();
+	    return false;
+	});
+
+	$("ul.school_tabs li").click(function() {
+
+	    $("ul.school_tabs li").removeClass("active");
+	    $(this).addClass("active");
+	    $(".school_tab_content").hide();
+	    var activeTab = $(this).find("a").attr("href");
+	    $(activeTab).show();
+	    return false;
+	});
+
+  $("#school_info_view .close a").click(function() {
+      $("#school_info_view").fadeOut();
+      return false;
+  });
+
+	$('table a.url').breakly(1);
+
+//	create_fb_buttons("http://www.onlineeducation.net/school/<%= @school.url_string -%>");
+//
+//	function create_fb_buttons(url) {
+//		create_like_button(url);
+//		create_share_button(url);
+//	}
+//
+//  function create_like_button(url) {
+//      var elem1 = $(document.createElement("fb:like"));
+//      elem1.attr("href", url);
+//      $("div#fb_like").empty().append(elem1);
+//      FB.XFBML.parse($("div#fb_like").get(0));
+//  }
+//
+//  function create_share_button(url) {
+//      var elem2 = $(document.createElement("fb:share-button"));
+//      elem2.attr("href", url);
+//      $("div#fb_share").empty().append(elem2);
+//      FB.XFBML.parse($("div#fb_share").get(0));
+//  }
+//
+  setTimeout(function(){load_social_elements();}, 3000);
+
+</script>
+
+	<div class="top"></div>
+	<div class="wrapped">
+		<div class="header">
+
+  		<div class="school_logo">
+				<%= @school.logo_small %>
+  		</div>
+  		<div class="school_info">
+				<h3><a target="_blank" href="/school/<%= @school.url_string -%>"><%= @school.name %></a></h3>
+				<%= @school.full_address %> <%= ' <span>|</span> Phone: ' + @school.phone if !@school.phone.blank? -%><br/>
+				<% if !@school.url.blank? %>
+					<a href="<%= @school.url -%>"><%= @school.url -%></a><br/>
+				<% end %>
+			</div>
+			<div class="close"><a href="#">Close</a></div>
+			<div class="clear"></div>
+		</div>
+		<div class="school_info_content">
+			<div id="school_tab_wrapper">
+				<ul class="school_tabs">
+					<li><a href="#school_tab1">Summary</a></li>
+					<li><a href="#school_tab2">Costs</a></li>
+					<li><a href="#school_tab3">Admissions</a></li>
+					<li><a href="#school_tab4">Programs</a></li>
+					<li><a href="#school_tab5">Social</a></li>
+					<li><a href="#school_tab6">Contact</a></li>
+					<li><a href="#school_tab7">News</a></li>
+				</ul>
+
+				<div class="school_tab_container">
+					<div id="school_tab1" class="school_tab_content">
+						<%= render :partial => "mw_school_general" %>
+					</div>
+					<div id="school_tab2" class="school_tab_content">
+						<%= render :partial => "mw_school_costs" %>
+					</div>
+					<div id="school_tab3" class="school_tab_content">
+						<%= render :partial => "mw_school_enrollment_and_graduation" %>
+						<%= render :partial => "mw_school_admissions" %>
+					</div>
+					<div id="school_tab4" class="school_tab_content">
+						<% if @school.is_online == true %>
+			  			<%= render :partial => "mw_school_course_catalog" %>
+			      <% else %>
+						  <%= render :partial => "mw_school_programs" %>
+				    <% end %>
+					</div>
+					<div id="school_tab5" class="school_tab_content">
+						<%= render :partial => "mw_school_social" %>
+						<%= render :partial => "mw_school_reviews" %>
+						<%= render :partial => "mw_school_qa" %>
+					</div>
+					<div id="school_tab6" class="school_tab_content">
+						<%= render :partial => "mw_school_contact" %>
+					</div>
+					<div id="school_tab7" class="school_tab_content">
+						<%= render :partial => "mw_school_google_news" %>
+					</div>
+				</div>
+			</div>
+			<!-- end #tab_wrapper -->
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="bottom"></div>
+
+
+

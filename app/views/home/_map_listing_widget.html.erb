@@ -1,0 +1,30 @@
+<div id="listing_widget">
+	<div class="three_step_widget">	
+		<% @fid = rand(25322) %>
+		<form name="myform<%=@fid-%>" id="find-school-main" action="http://info.onlineeducation.net/search" method="POST" class="qdf dfw-form-1">
+			<h4>Find a School</h4>
+			<p>
+				<select class="degree edudirect-degree_level_id" name="degree_level_id">
+		    		<option value="">Select a Level</option>
+		    	</select>
+			</p>
+			<p>
+		    	<span id="s_c<%=@fid-%>"></span>
+				<select class="category edudirect-category_id" name="category_id">
+		   	  		<option value="">Select a Category</option>
+		    	</select>
+			</p>
+			<p>
+				<select class="subject edudirect-subject_id" name="subject_id">
+		    		<option value="">Select a Subject</option>
+		    	</select>
+			</p>
+			<p>
+				<input type="image" class="submit" src="/images/btn_listing_widget_find_now.png" />
+			</p>
+			<input type="hidden" name="publisher_id" value="onlineeducation" />
+	    	<input type="hidden" name="formid" value="<%= @fid -%>">
+	    	<input type="hidden" name="loc" value="123-t">
+		</form>
+	</div>
+</div>

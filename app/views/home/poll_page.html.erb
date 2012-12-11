@@ -1,0 +1,66 @@
+
+<%= render(:partial => "mw_page_title") %>
+
+<script type="text/javascript">
+
+  function vote_for_this(id){
+	  document.getElementById('voting' + id.toString()).innerHTML = 'Voting...';
+		jQuery.ajax({
+			url: '/home/vote_for_this?id=' + id.toString(),
+			success: function(data){
+	      $('#pollitems').html(data);
+      }
+    });	
+  }
+
+  setTimeout(function(){load_fb();}, 300);
+
+  function load_fb(){
+    var e = document.createElement('script');
+    e.type = 'text/javascript';
+    e.src = document.location.protocol +
+      '//connect.facebook.net/en_US/all.js?r=' + Math.floor(Math.random()*1100).toString();
+    //e.async = true;
+    document.getElementById('fb-root').appendChild(e);	
+  }
+</script> 
+
+<div id="wrapper">
+	<div id="content">
+		<div id="main">
+			
+			
+			<div id="pollitems">
+				<% for pollitem in @pollitems %>
+			
+				  <font style="font-size: 20px"> <%= pollitem.pollvotes.count %> Votes</font> 
+				  <b><%= pollitem.name %></b> 
+				    <span id="voting<%= pollitem.id -%>">
+					    <a href="#" onClick="vote_for_this(<%= pollitem.id -%>); return false;">Vote for this</a>
+					  </span>
+			    <br><br>
+				<% end %>
+			</div>
+		
+		
+		<br><br>
+		<p><b>Leave a Comment:</b><br></p>
+		
+		<p>
+		  <fb:comments numposts="10" width="535" publish_feed="true"></fb:comments>				
+		</p>
+    <br><br><p style="font-size: 10px">Note: this page was created by a visitor using our "Poll Your Friends" feature</p>
+		</div>
+		
+		<div id="fb-root"></div>
+		
+		<!-- end #main -->
+		<div class="clear"></div>
+	</div>
+	<!-- end #content -->
+</div>
+<!-- #wrapper -->
+	
+
+
+

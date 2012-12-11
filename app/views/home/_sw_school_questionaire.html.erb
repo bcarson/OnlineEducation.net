@@ -1,0 +1,54 @@
+
+<script type="text/javascript">
+	function matching_go(){
+
+	  //document.getElementById('matching_result').innerHTML = 'Matching...';
+	  jQuery.ajax({
+			url: '/home/matching_go',
+			data: $("#matchingform").serialize(),
+			success: function(data){
+				$.fancybox(data).trigger('click');
+			}
+		});
+	}
+</script>
+
+<div class="ad_container match_widget">
+	<form id="matchingform" onSubmit="return false;">
+		<li class="select">
+			<select name="location">
+				<option value="anywhere">Anywhere in the US</option>
+				<option value="eastcoast">East Coast</option>
+				<option value="westcoast">West Coast</option>
+				<option value="online">Online</option>
+        <% for state in State.all %>
+          <option value="<%= state.id -%>"><%= state.name %></option>
+        <% end %>
+			</select>
+		</li>
+		<li class="select gpa">
+			<select name="gpa">
+				<option value="0">&lt; 2.0</option>
+				<option value="2.0">2.0-2.5</option>
+				<option value="2.5">2.5-3.0</option>
+				<option  value="3.0"selected="true">3.0-3.5</option>
+				<option value="3.5">3.5-3.8</option>
+				<option value="3.8">3.8 +</option>
+			</select>
+		</li>
+		<li class="select field">
+			<select name="subject_id">
+				  <option value="all">Undecided</option>
+				<% for subject in Subject.nodes %>
+				  <option value="<%= subject.id -%>"><%= subject.name %></option>
+				<% end %>
+			</select>
+		</li>
+		<li class="checkboxes">
+			<span><input type="checkbox" name="size[]" value="1" checked="true" id="small"><label for="small">Small</label></span>
+			<span><input type="checkbox" name="size[]" value="2" checked="true" id="medium"><label for="medium">Medium</label></span>
+			<span><input type="checkbox" name="size[]" value="3" checked="true" id="large"><label for="large">Large</label></span>
+		</li>
+		<li class="button"><input class="submit" type="image" src="/images/btn_find_schools_now.png" onClick="matching_go(); return false;"></li>
+	</form>
+</div>

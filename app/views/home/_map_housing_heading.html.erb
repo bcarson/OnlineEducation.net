@@ -1,0 +1,133 @@
+<div id="housing_title"><a href="http://oodle.com">Find Local Housing Rentals - Powered by Oodle</a></div>
+<div id="housing_options">
+	<p><small>Display Housing listings after next update? <input <%= "checked=true" if @show_housing == true -%> id="housing_save" type="checkbox" value="1" onClick="if (this.checked == true){document.getElementById('show_housing').value = '1'}else{document.getElementById('show_housing').value = '0'}"> <strong>Yes</strong></small></p>
+	<p>and show <select id="housing_category_select" name="category" onChange="document.getElementById('housing_category').value = this.value; if (document.getElementById('show_housing').value == '0'){document.getElementById('housing_save').checked = true; document.getElementById('show_housing').value = '1';}">
+	<option <%= 'selected="true"' if @hcategory == 'all' -%> value="all">All Categories</option>
+	<option <%= 'selected="true"' if @hcategory == 'apartment' || @hcategory.blank? -%> value="apartment">Apartments</option>
+	<option <%= 'selected="true"' if @hcategory == 'condo' -%> value="condo">Condos</option>
+	<option <%= 'selected="true"' if @hcategory == 'home'  -%> value="home">Houses</option>
+	<option <%= 'selected="true"' if @hcategory == 'roommates'  -%> value="roommates">Rooms / Roommates</option>
+	<option <%= 'selected="true"' if @hcategory == 'short_term'  -%> value="short_term">Short Term</option>
+	<option <%= 'selected="true"' if @hcategory == 'vacation'  -%> value="vacation">Vacation Rentals</option>
+	<option <%= 'selected="true"' if @hcategory == 'mobile'  -%> value="mobile">Mobile Homes</option>
+	<option <%= 'selected="true"' if @hcategory == 'other'  -%> value="mobile">Other Housing</option>
+	</select>
+	<span style="color: blur; cursor: pointer;" onClick="resize_for_housing_tab();">More Options &raquo;</span>
+	</p>
+</div>
+<div id="more_options" style="display: none;">
+	<ul>
+		<li><label>Beds</label>
+		<select onChange="document.getElementById('beds').value = this.value;if (document.getElementById('show_housing').value == '0'){document.getElementById('housing_save').checked = true; document.getElementById('show_housing').value = '1';}">
+			<option <%= 'selected="true"' if params['beds'].blank? -%> value="">0+</option>
+			<option <%= 'selected="true"' if params['beds'] == '1' -%> value="1">1+</option>
+			<option <%= 'selected="true"' if params['beds'] == '2' -%> value="2">2+</option>
+			<option <%= 'selected="true"' if params['beds'] == '3' -%> value="3">3+</option>
+			<option <%= 'selected="true"' if params['beds'] == '4' -%> value="4">4+</option>
+			<option <%= 'selected="true"' if params['beds'] == '5' -%> value="5">5+</option>
+			<option <%= 'selected="true"' if params['beds'] == '6' -%> value="6">6+</option>
+		</select></li>
+
+		<li><label>Baths</label>
+		<select onChange="document.getElementById('baths').value = this.value;if (document.getElementById('show_housing').value == '0'){document.getElementById('housing_save').checked = true; document.getElementById('show_housing').value = '1';}">
+			<option <%= 'selected="true"' if params['baths'].blank? -%> value="">0+</option>
+			<option <%= 'selected="true"' if params['baths'] == '1' -%> value="1">1+</option>
+			<option <%= 'selected="true"' if params['baths'] == '1_5' -%> value="1_5">1.5+</option>
+			<option <%= 'selected="true"' if params['baths'] == '2' -%> value="2">2+</option>
+			<option <%= 'selected="true"' if params['baths'] == '2_5' -%> value="2_5">2.5+</option>
+			<option <%= 'selected="true"' if params['baths'] == '3' -%> value="3">3+</option>
+			<option <%= 'selected="true"' if params['baths'] == '3_5' -%> value="3_5">3.5+</option>
+			<option <%= 'selected="true"' if params['baths'] == '4' -%> value="4">4+</option>
+			<option <%= 'selected="true"' if params['baths'] == '4_5' -%> value="4_5">4.5+</option>
+			<option <%= 'selected="true"' if params['baths'] == '5' -%> value="5">5+</option>
+			<option <%= 'selected="true"' if params['baths'] == '5_5' -%> value="5_5">5.5+</option>
+			<option <%= 'selected="true"' if params['baths'] == '6' -%> value="6">6+</option>
+		</select></li>
+
+		<li><label>Monthly Cost</label>
+		<select onChange="document.getElementById('price_min').value = this.value;if (document.getElementById('show_housing').value == '0'){document.getElementById('housing_save').checked = true; document.getElementById('show_housing').value = '1';}">
+			<option <%= 'selected="true"' if params['price_min'].blank? -%> value="">No Min</option>
+			<option <%= 'selected="true"' if params['price_min'] == '250' -%> value="250">$250</option>
+			<option <%= 'selected="true"' if params['price_min'] == '500' -%>  value="500"> $500</option>
+			<option <%= 'selected="true"' if params['price_min'] == '750' -%>  value="750"> $750</option>
+			<option <%= 'selected="true"' if params['price_min'] == '1000' -%>  value="1000"> $1000</option>
+			<option <%= 'selected="true"' if params['price_min'] == '1250' -%>  value="1250"> $1250</option>
+			<option <%= 'selected="true"' if params['price_min'] == '1500' -%>  value="1500"> $1500</option>
+			<option <%= 'selected="true"' if params['price_min'] == '1750' -%>  value="1750"> $1750</option>
+			<option <%= 'selected="true"' if params['price_min'] == '2000' -%>  value="2000"> $2000</option>
+			<option <%= 'selected="true"' if params['price_min'] == '2250' -%>  value="2250"> $2250</option>
+			<option <%= 'selected="true"' if params['price_min'] == '2500' -%>  value="2500"> $2500</option>
+			<option <%= 'selected="true"' if params['price_min'] == '2750' -%>  value="2750"> $2750</option>
+			<option <%= 'selected="true"' if params['price_min'] == '3000' -%>  value="3000"> $3000</option>
+			<option <%= 'selected="true"' if params['price_min'] == '3500' -%>  value="3500"> $3500</option>
+			<option <%= 'selected="true"' if params['price_min'] == '4000' -%>  value="4000"> $4000</option>
+			<option <%= 'selected="true"' if params['price_min'] == '5000' -%>  value="5000"> $5000</option>
+			<option <%= 'selected="true"' if params['price_min'] == '6000' -%>  value="6000"> $6000</option>
+		</select>
+
+		<em>to</em>
+		<select onChange="document.getElementById('price_max').value = this.value;if (document.getElementById('show_housing').value == '0'){document.getElementById('housing_save').checked = true; document.getElementById('show_housing').value = '1';}">
+			<option <%= 'selected="true"' if params['price_max'].blank? -%> value="">No Max</option>
+			<option <%= 'selected="true"' if params['price_max'] == '250' -%> value="250">$250</option>
+			<option <%= 'selected="true"' if params['price_max'] == '500' -%>  value="500"> $500</option>
+			<option <%= 'selected="true"' if params['price_max'] == '750' -%>  value="750"> $750</option>
+			<option <%= 'selected="true"' if params['price_max'] == '1000' -%>  value="1000"> $1000</option>
+			<option <%= 'selected="true"' if params['price_max'] == '1250' -%>  value="1250"> $1250</option>
+			<option <%= 'selected="true"' if params['price_max'] == '1500' -%>  value="1500"> $1500</option>
+			<option <%= 'selected="true"' if params['price_max'] == '1750' -%>  value="1750"> $1750</option>
+			<option <%= 'selected="true"' if params['price_max'] == '2000' -%>  value="2000"> $2000</option>
+			<option <%= 'selected="true"' if params['price_max'] == '2250' -%>  value="2250"> $2250</option>
+			<option <%= 'selected="true"' if params['price_max'] == '2500' -%>  value="2500"> $2500</option>
+			<option <%= 'selected="true"' if params['price_max'] == '2750' -%>  value="2750"> $2750</option>
+			<option <%= 'selected="true"' if params['price_max'] == '3000' -%>  value="3000"> $3000</option>
+			<option <%= 'selected="true"' if params['price_max'] == '3500' -%>  value="3500"> $3500</option>
+			<option <%= 'selected="true"' if params['price_max'] == '4000' -%>  value="4000"> $4000</option>
+			<option <%= 'selected="true"' if params['price_max'] == '5000' -%>  value="5000"> $5000</option>
+			<option <%= 'selected="true"' if params['price_max'] == '6000' -%>  value="6000"> $6000</option>
+		</select></li>
+
+		<li><label>Square Footage</label>
+		<select onChange="document.getElementById('sqft_min').value = this.value;if (document.getElementById('show_housing').value == '0'){document.getElementById('housing_save').checked = true; document.getElementById('show_housing').value = '1';}">
+			<option <%= 'selected="true"' if params['sqft_min'].blank? -%> value="">No Min</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '250' -%> value="250">250</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '500' -%> value="500"> 500</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '750' -%> value="750"> 750</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '1000' -%> value="1000"> 1000</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '1250' -%> value="1250"> 1250</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '1500' -%> value="1500"> 1500</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '1750' -%> value="1750"> 1750</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '2000' -%> value="2000"> 2000</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '2250' -%> value="2250"> 2250</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '2500' -%> value="2500"> 2500</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '2750' -%> value="2750"> 2750</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '3000' -%> value="3000"> 3000</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '3500' -%> value="3500"> 3500</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '4000' -%> value="4000"> 4000</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '5000' -%> value="5000"> 5000</option>
+			<option <%= 'selected="true"' if params['sqft_min'] == '6000' -%> value="6000"> 6000</option>
+		</select>
+
+		<em>to</em>
+		<select onChange="document.getElementById('sqft_max').value = this.value;if (document.getElementById('show_housing').value == '0'){document.getElementById('housing_save').checked = true; document.getElementById('show_housing').value = '1';}">
+			<option <%= 'selected="true"' if params['sqft_max'].blank? -%> value="">No Max</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '250' -%> value="250">250</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '500' -%> value="500"> 500</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '750' -%> value="750"> 750</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '1000' -%> value="1000"> 1000</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '1250' -%> value="1250"> 1250</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '1500' -%> value="1500"> 1500</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '1750' -%> value="1750"> 1750</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '2000' -%> value="2000"> 2000</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '2250' -%> value="2250"> 2250</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '2500' -%> value="2500"> 2500</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '2750' -%> value="2750"> 2750</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '3000' -%> value="3000"> 3000</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '3500' -%> value="3500"> 3500</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '4000' -%> value="4000"> 4000</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '5000' -%> value="5000"> 5000</option>
+			<option <%= 'selected="true"' if params['sqft_max'] == '6000' -%> value="6000"> 6000</option>
+		</select></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+

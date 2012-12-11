@@ -1,0 +1,134 @@
+<!-- #tuition costs in state and out of state, enrollment, odds of getting in when available, costs & financial aid info -->
+
+	<% if @school.tuition_undergrad_09_in_state || @school.percent_first_time_undergrad_receiving_financial_aid %>	
+		<% reset_cycle() -%>
+		<table class="universal school" cellspacing="0" style="display:none;">
+	
+			<tr class="<%= cycle("even", "odd") -%>">
+				<th colspan="2">School Costs</th>
+			</tr>
+
+	
+		<% if @school.percent_first_time_undergrad_receiving_financial_aid %>
+		<tr class="<%= cycle("even", "odd") -%>">
+			<td colspan="2" style="font-size:14px">
+			  <p>
+			
+				  <% if !@school.percent_undergrad_receiving_grants_or_scholarships.blank? %>
+					  At <%= @school.name -%>, 
+					  <%= @school.percent_first_time_undergrad_receiving_financial_aid -%>% 
+					  percent of first-time undergrads receive financial aid,  
+					  <%= @school.percent_undergrad_receiving_grants_or_scholarships -%>% receive grants and/or scholarships
+					  (an average of $<%= number_with_delimiter(@school.undergrad_receiving_grants_or_scholarships_avg_amount) %>), 
+					  and <%= @school.percent_undergrad_receiving_loans %>% receive loans ($<%= number_with_delimiter(@school.undergrad_receiving_loans_avg_amount) %> on average).
+	        <% end %>
+
+				  <% if !@school.room_and_board_09_on_campus.blank?%>
+				    On-campus room and board costs about $<%= number_with_delimiter(@school.room_and_board_09_on_campus) %>.
+				  <% end %>
+			
+				  <% if !@school.room_and_board_09_off_campus.blank? %>
+				    Off campus it is around $<%= number_with_delimiter(@school.room_and_board_09_off_campus) %>. 
+				  <% end %>
+				</p>
+			
+				<% if !@school.avg_08_net_price.blank? %>
+				  <p>
+					  Taking into account total living expenses and financial aid, the <b>average net cost</b> of attending 
+					  <%= @school.name %> is <u><b>$<%=  number_with_delimiter(@school.avg_08_net_price) -%></b></u> per year.
+					</p>
+				<% end %>
+			</td>
+		</tr>
+		<% end %>	
+		
+		
+		<% if @school.tuition_undergrad_09_in_state %>	
+			<tr>
+				<td class="title heading" colspan="2">Yearly Tuition</td>
+			</tr>
+
+
+			<% if @school.tuition_undergrad_09_in_state and @school.tuition_undergrad_09_out_of_state and @school.tuition_grad_09_in_state and @school.tuition_grad_09_out_of_state %>
+			  <tr><td colspan="2" class="chart"><%= @school.tuition_chart %></td></tr>
+			<% end %>
+	
+			<% if @school.tuition_undergrad_09_in_state %>	
+				<tr class="<%= cycle("even", "odd") -%>">
+					<td class="title">Tuition Undergrad in State</td>
+					<td>$<%= number_with_delimiter(@school.tuition_undergrad_09_in_state) -%></td>
+				</tr>
+			<% end %>
+
+			<% if @school.tuition_undergrad_09_out_of_state %>
+			<tr class="<%= cycle("even", "odd") -%>">
+				<td class="title">Tuition Undergrad Out of State</td>
+				<td>$<%= number_with_delimiter(@school.tuition_undergrad_09_out_of_state) -%></td>
+			</tr>
+			<% end %>
+			<% if @school.tuition_grad_09_in_state %>
+			<tr class="<%= cycle("even", "odd") -%>">
+				<td class="title">Tuition Graduate in State</td>
+				<td>$<%= number_with_delimiter(@school.tuition_grad_09_in_state) -%></td>
+			</tr>
+			<% end %>
+
+			<% if @school.tuition_grad_09_out_of_state %>
+			<tr class="<%= cycle("even", "odd") -%>">
+				<td class="title">Tuition Graduate Out of State</td>
+				<td>$<%= number_with_delimiter(@school.tuition_grad_09_out_of_state) -%></td>
+			</tr>
+			<% end %>
+  
+		  <% if @school.total_expense_09_in_state_on_campus %>	
+			  
+				<tr>
+					<td class="title heading" colspan="2">Living Costs</td>
+				</tr>
+			<% end %>
+	
+			<% if @school.total_expense_09_in_state_on_campus and @school.total_expense_09_out_of_state_on_campus and @school.total_expense_09_in_state_off_campus and @school.total_expense_09_in_state_off_campus_with_family and @school.total_expense_09_out_of_state_off_campus and @school.total_expense_09_out_of_state_off_campus_with_family %>
+		  	<tr><td colspan="2" class="chart"><%= @school.expenses_chart %></td></tr>	
+		  <% end %>
+
+			<% if @school.total_expense_09_in_state_on_campus %>	
+				<tr class="<%= cycle("even", "odd") -%>">
+					<td class="title">Total Expense in State on Campus</td>
+					<td>$<%= number_with_delimiter(@school.total_expense_09_in_state_on_campus) -%></td>
+				</tr>
+			<% end %>
+	
+			<% if @school.total_expense_09_out_of_state_on_campus %>
+				<tr class="<%= cycle("even", "odd") -%>">
+					<td class="title">Total Expense Out of State On Campus</td>
+					<td>$<%= number_with_delimiter(@school.total_expense_09_out_of_state_on_campus) -%></td>
+				</tr>
+			<% end %>
+			<% if @school.total_expense_09_in_state_off_campus %>
+			<tr class="<%= cycle("even", "odd") -%>">
+				<td class="title">Total Expense  In State Off Campus</td>
+				<td>$<%= number_with_delimiter(@school.total_expense_09_in_state_off_campus) -%></td>
+			</tr>
+			<% end %>
+			<% if @school.total_expense_09_in_state_off_campus_with_family %>
+			<tr class="<%= cycle("even", "odd") -%>">
+				<td class="title">Total Expense in State off Campus With Family</td>
+				<td>$<%= number_with_delimiter(@school.total_expense_09_in_state_off_campus_with_family) -%></td>
+			</tr>
+			<% end %>
+			<% if @school.total_expense_09_out_of_state_off_campus %>
+			<tr class="<%= cycle("even", "odd") -%>">
+				<td class="title">Total Expense Out of State Off Campus</td>
+				<td>$<%= number_with_delimiter(@school.total_expense_09_out_of_state_off_campus) -%></td>
+			</tr>
+			<% end %>
+			<% if @school.total_expense_09_out_of_state_off_campus_with_family %>
+			<tr class="<%= cycle("even", "odd") -%>">
+				<td class="title">Total Expense Out of State Off Campus With Familhy</td>
+				<td>$<%= number_with_delimiter(@school.total_expense_09_out_of_state_off_campus_with_family) -%></td>
+			</tr>
+			<% end %>
+	  <% end %>
+</table>
+			<div class="section_break">&nbsp;</div>	
+<% end %>

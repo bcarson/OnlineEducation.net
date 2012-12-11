@@ -1,0 +1,95 @@
+<h3>Online <%= @subject.name -%> Courses at Accredited Schools</h3>
+
+<div style="float: right; width: 200px; padding-left:20px; height: 320px; text-align: center;">
+	<img src="/images/subject_photos/article-upper-<%= Worker.inurl(@subject.categorysubject.name) -%>.jpg"/>
+</div>
+
+  <% @school = @schools.first -%>
+
+<% if !@school.blank? -%>
+	<p>
+		
+		<% @professions = @subject.opt_professions -%>
+
+		<% if !@professions.blank? -%>
+		
+		  <a href="/school/<%= @school.url_string -%>"><%= @school.name -%></a><% if @schools.count > 1 -%>, 
+		  the school below with the highest overall ranking,<% end -%> is effective at equipping students 
+		  via its <%= @subject.safe_downcase_name -%> courses  
+		  to be successful  
+		    <% @nogo = nil -%>
+			  <% for profession in @professions[0..5] -%>
+			    <% if profession == @professions.fourth || profession == @professions.last -%>
+	          <% if @nogo.blank? -%>
+			        <%= profession.safe_plural_downcase_name -%><%= @professions.length > 1 ? ', etc.' : '.' -%>
+			        <% @nogo = true if profession == @professions.fourth -%>
+			      <% end -%>
+			    <% else -%>
+			      <% if @nogo.blank? -%>
+			        <%= profession.safe_plural_downcase_name -%>,
+			      <% end -%>
+			    <% end -%>
+			  <% end -%>
+
+			  and connect them to future employers.  
+
+		  <% @zocc = @professions.first.opt_zoccs.first -%>
+
+		  <% if !@zocc.blank? and @zoccstat = @zocc.zoccupationstat -%>
+
+				According to the US Bureau of Labor Statistics, at present there are <%= number_with_delimiter(@zoccstat.total_employed) -%> people employed as  
+				<%= @zocc.safe_name.downcase -%> alone in the US, and their average annual salary is 
+				$<%= number_with_delimiter(@zoccstat.mean_annual_wage.to_i) -%>.
+			<% end -%>
+
+		  <% @zocc2 = @professions.first.opt_zoccs[2] -%>
+
+		  <% if !@zocc2.blank? and @zoccstat2 = @zocc2.zoccupationstat  -%>
+	
+			  <%= @zocc2.safe_name -%> make on average $<%= number_with_delimiter(@zoccstat2.mean_annual_wage.to_i) -%> 
+			  per year and there are about <%= number_with_delimiter(@zoccstat2.total_employed) -%> 
+			  of them employed today.
+			<% end -%>
+
+			
+		<% end -%>
+
+	</p>
+	
+	<% if @r = Replacement.find_by_name_and_replaceable_id('subject.organizations', @subject.id) -%>
+	<b><%= @subject.name -%> Organizations</b>
+	<ul>
+		<% for num in (0..9) -%>
+		  <% @output = Worker.clean_content_display(@r.body[num.to_s]) -%>
+		  <li><a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@output) -%>"><%= @output -%> &raquo;</a></li>
+		<% end -%>
+	</ul>
+	<% end -%>
+
+	
+	
+	<% if @r = Replacement.find_by_name_and_replaceable_id('subject.common_job_tasks', @subject.id) -%>
+	
+	<b><%= @subject.name -%> Common Job Tasks</b>
+	<ul>
+		<% for num in Worker.get_display_num_array(@subject.id)  -%>
+		  <li><%= Worker.clean_content_display(@r.body[num.to_s]) -%></li>
+		<% end -%>
+	</ul>
+	<% end -%>
+	
+	<% if @r = Replacement.find_by_name_and_replaceable_id('subject.journals_and_magazines', @subject.id) -%>
+	<b>Popular Journals &amp; Magazines</b>
+	<ul>
+		<% for num in (0..9) -%>
+		  <% @output = Worker.clean_content_display(@r.body[num.to_s]) -%>
+		  <li><a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@output) -%>"><%= @output -%> &raquo;</a></li>
+		<% end -%>
+	</ul>
+	<% end -%>
+
+
+	
+<% end -%>
+
+<div class="clear"></div>

@@ -1,0 +1,45 @@
+<%= '<b>' + flash[:notice] + '</b><br><br>' unless flash[:notice].blank? %>
+<a href="/admin/programs/schoolprograms?id=<%= @school.id -%>">&larr; back to <%= @school.name %> programs</a>
+<br><br>
+<a href="/admin/programs/workonprogram?id=<%= @program.id -%>">&larr; back to full editing <%= @program.name %></a>
+<br><br>
+<br>
+Quick Add / Removal of Courses Belonging to <b><%= @program.name %></b> <small>(ID# <%= @program.id %>)</small> at <%= @school.name %>
+<br><br>
+
+<div style="float: right">
+Find/Show Courses from another Program: <br>
+<input type="text" name="name" size="100" id="pname"><br><span id="psuggest"></span>
+</div>
+
+
+<%= observe_field('pname',
+     :url => {:action => :program_suggest, :sid => @program.school_id, :m => true},
+     :frequency => 0.5,
+     :update => 'psuggest',
+     :with => 'name')
+     %>
+
+<%= form_tag(:action => 'update_courselist') %>
+	<input type="hidden" name="pid" value="<%= @program.id -%>">
+
+
+<% if !@program.parent_id.blank? and @parent = Program.find(@program.parent_id) %>
+<small>
+  <b>Parent: <%= @parent.name %></b><br><%= @parent.zcourselist.gsub(/\n/, '<br>')%>	<br><br>
+</small>
+<% end %>
+<textarea name="courselist" rows="20" cols="80"><%= @program.zcourselist %></textarea><br>
+<input id="thesubmit" type="submit" value="Update &raquo;">
+  <span id="poutput"></span>
+</form>
+
+Search for a class: <input id="cn" type="text" name="course[name]" size="50"> <br><span id="suggest"></span><br>
+
+ <%= observe_field('cn',
+      :url => {:action => :course_suggest, :sid => @program.school_id, :m => true},
+      :frequency => 0.5,
+      :update => 'suggest',
+      :with => 'name')
+      %>
+

@@ -1,0 +1,108 @@
+<%= render(:partial => "mw_page_title") %>
+
+<div id="wrapper">
+	<div id="content">
+		<div id="main" class="about">
+				<div style="text-align: center"><iframe width="560" height="345" src="http://www.youtube.com/embed/vqiMKnGmzus" frameborder="0" allowfullscreen></iframe></div>
+			
+			<a id="about"></a>
+			<div id="section" class="logo">
+				<div class="left">
+					<img src="/images/about/logo.png"/>
+				</div>
+				<div class="right">
+					<p class="large"><strong>Education Database Online</strong> is a comprehensive resource designed to help
+					current and prospective students learn about the many educational opportunities
+					and higher degree programs available within the United States.</p>
+					<p>The number of on-campus and web-based college and university programs is increasing every day,
+						making it difficult for potential students and their families to sort through the options and choose
+						the best school based on their location, grades, test scores, field of study, time, and budget.
+						As you may have already noticed, finding helpful information on the Internet about colleges
+						and universities is difficult.
+						This site has been created so that visitors can get <b><u>an informative
+						and comparative overview</u></b> of both the brick-and-mortar
+						schools and online schools that offer programs in their desired subject area.
+						Using the information located on this site, students will be able to make an educated decision
+						about the school that is right for them, obtain information about housing available near the school, learn about
+						local restaurants and activities, places to find work, and more. <br>
+						<a href="/classroom-vs-online">Learn more about classroom 
+						vs. online education &raquo;</a></p>
+				</div>
+				<div class="clear"></div>
+								
+			</div>
+
+			<a id="overview"></a>
+			<div id="section" class="overview">
+				
+				
+				<div class="left">
+					<img src="/images/about/map_overview.png"/>
+				</div>
+				<div class="right">
+					<h2>Discover campus schools and programs via an interactive Google map</h2>
+					<ol>
+						<li>This top-left part of the interface will always display the total number of schools found  (and number displayed) within the current map bounds or selected city, state, or geo-coordinates.</li>
+						<li>Use your mouse to move and zoom the map to any area in the US, choose the subject area of your choice (or leave 'All Subjects' selected), and click "Update Map" to load in the appropriate schools.</li>
+						<li>Use these tabs to show nearby cities, states, and more information about the subject and/or area you are viewing.</li>
+						<li>Clicking on the "More Info" button on the left listings or in the info window for a school on the map will load in lots of information about a school.</li>
+					</ol>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<a id="school_summary"></a>
+			<div id="section" class="blue overview">
+				<div class="left">
+					<img src="/images/about/summary.png"/>
+				</div>
+				<div class="right">
+					<h2>Obtain comprehensive information about every higher-education school in the US</h2>
+					<ul>
+					  <li><strong>School Summary</strong> &mdash; shows a photo of the campus, a description, rankings, enrollment, and general information such as special learning opportunities, student services, types of awards offered, and more.
+						</li>
+						<li><strong>Costs</strong> &mdash; describes how many students receive financial aid via grants and/or scholarships, on- and off-campus room and board expenses, and average yearly living expenses taking into account tuition, books, living, and financial aid.</li>
+						<li><strong>Admissions</strong> &mdash; shows enrollment and graduation rates of students that have applied for, accepted, and graduated from this school. Detailed statistics are shown, if available, about retention rates, application details, prerequisites, and test scores.</li>
+						<li><strong>Programs</strong> &mdash; lists comprehensive information about the departments and programs offered, including the number of graduates last year at five different levels.</li>
+						<li><strong>Social</strong> &mdash; allows you to interact with others online via Twitter, Facebook, Quora, Yahoo! Answers, and more. Recent Facebook comments are shown about the school, and you can even view which of your Facebook friends went there!  Rankings, reviews, and professor information from different departments are shown here as well.</li>
+						<li><strong>Contact</strong> &mdash; enables you to send a message directly to the school's admissions department or contact them publicly via various social media channels that are available.</li>
+						<li><strong>News</strong> &mdash; gives links to local and campus newspapers so you can read more about the school and its city. Recent news is also listed about the school (powered by Google news).</li>
+					</ul>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<a id="features"></a>
+			<div id="section" class="three_col">
+					<li><img src="/images/about/directions.png"/>
+						<p><strong>Ready to visit your selected schools?</strong>  Click <strong>Get Directions</strong> and get the information you need to take a road trip.</p></li>
+					<li><img src="/images/about/housing.png"/><p>By clicking the <strong>Housing</strong> tab you can find local condos, apartments, houses, etc. within any US map area. Narrow your search by selected the desired number of rooms, baths, price range, and square footage.</p></li>
+					<li><img src="/images/about/local_guide.png"/><p>The <strong>Local Guide</strong> provides easy access to yelp data &amp; reviews about local restaurants, shopping, night life, hotels, and much more...</p></li>
+				</ul>
+				<div class="clear"></div>
+			</div>
+
+			<a id="tools"></a>
+			<div id="section" class="blue two_col">
+
+					<div class="col">
+						<div class="left"><%= render :partial => 'sw_school_questionaire' %></div>
+						<h2>Easy-to-use school matching tool</h2>
+						<p>Get quick recommendations of schools to research based on your preferred location, High-School GPA, and desired subject area and school size.</p>
+					</div>
+					<div class="col end">
+						<div class="left"><%= render :partial => 'sw_poll_your_friends'%></div>
+						<h2>Still Can't Decide? Poll Your Friends!</h2>
+						<p>Our "Poll Your Friends" tool allows you to create a custom poll (with a custom title) with a list of the schools you are interested in attending (or applying to). After creating the poll, a bit.ly link is created for you to easily post on Twitter or Facebook for you to let your friends know to come and vote!</p>
+					</div>
+
+				<div class="clear"></div>
+			</div>
+			<br/><br/>
+		</div>
+		<!-- end #main -->
+		<div class="clear"></div>
+	</div>
+	<!-- end #content -->
+</div>
+<!-- #wrapper -->

@@ -1,0 +1,92 @@
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$("#utility_bar a.dropdown").click(function() {
+		//$("#utility_bar ul li .sub").fadeIn();
+		//alert('het');
+	});
+
+});
+  function submit_utility_form(){
+	  
+	  $('.select_box .sub').hide();
+		$('.loading_map').html('<img src="/images/update_spinner.gif"/>');
+    $.ajax({
+			url: '/home/update_map',
+			data: $('#search_form').serialize(),
+			success: function(data){
+				$('#ajaxindiv').html(data);
+				$('.loading_map').html('<img src="/images/update_spinner_static.gif"/>');
+				resize_all();
+        //$('#school_list_details').effect("highlight", {color: '#444444'}, 100);
+			}
+		});
+    return false;
+  }
+</script>
+
+<div id="utility_bar">
+	<div id="utility_bar_container">
+
+
+
+		<div id="ajaxindiv" class="clear"></div>
+		<div class="select_box">
+			<ul>
+				<li>
+					<div class="update_map_button">
+						<div class="loading_map"><img src="/images/update_spinner_static.gif"/></div>
+						<a class="update_map" href="#" onClick="if (initialized == false){map_first_load(1);}else{submit_utility_form();}; return false;">Update Map</a>
+					</div>
+				</li>
+				<li class="drop"><a class="dropdown nav_state select_subject<%= ' all' if @subject.blank? -%>" href="#" onClick="return false;">Select Subject</a>
+					<div class="sub">
+						<div class="dropdown_selected select_subject"></div>
+						<div class="dropdown_content">
+
+									<form id="search_form" name="search_form" method="post" action="/home/update_map">
+										<input type="hidden" id="lat1" name="lat1">
+										<input type="hidden" id="lng1" name="lng1">
+										<input type="hidden" id="lat2" name="lat2">
+										<input type="hidden" id="lng2" name="lng2">
+
+										<input type="hidden" id="show_yelps" name="show_yelps" value="0">
+										<input type="hidden" id="yelp_category" name="yelp_category" value="all">
+
+										<input type="hidden" id="show_housing" name="show_housing" value="0">
+										<input type="hidden" id="housing_category" name="housing_category" value="all">
+
+								    <input type="hidden" id="show_tab" name="show_tab" value="1">
+
+								    <input type="hidden" id="beds" name="beds">
+								    <input type="hidden" id="baths" name="baths">
+								    <input type="hidden" id="price_min" name="price_min">
+								    <input type="hidden" id="price_max" name="price_max">
+								    <input type="hidden" id="sqft_min" name="sqft_min">
+								    <input type="hidden" id="sqft_max" name="sqft_max">
+									<select name="subject_id" onFocus="map_first_load(1);" onChange="submit_utility_form();">
+										<option value="all" <%= 'selected="true"' if @subject.blank? -%>>ALL SUBJECTS</option>
+									  <% for subject in Subject.all_prims_alpha_order %>
+									   <option value="<%= subject.id -%>" <%= 'selected="true"' if @subject and @subject.id == subject.id -%>><%= subject.name %></option>
+									  <% end %>
+								  </select>
+								</form>
+
+
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div id="btn_popup_group" class="button_group">
+			<% if !request.request_uri.index(/mapsearch/) %>
+				<a href="#" class="info"><span>More Info</span></a>
+				<a href="#" class="cities"><span>Cities</span></a>
+				<a href="#" class="states"><span>Nearby States</span></a>
+			<% end %>
+		</div>
+
+	</div>
+</div>
+<!-- end #utility_bar -->

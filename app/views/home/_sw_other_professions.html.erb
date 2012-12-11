@@ -1,0 +1,17 @@
+<div class="module">
+	<div class="header">
+		<h4><a href="/subjects/<%= Worker.inurl(@thesubject.name) -%>"><%= @thesubject.name %></a> Professions</h4>
+	</div>
+	<div class="content">
+		<ul class="link_list">
+			<% @theprofessions = @thesubject.opt_professions %>
+		  <% for profession in @theprofessions %>
+		    <% if !profession.has_zocc.blank? %>
+    			<li><a href="/professions/<%= Worker.inurl(profession.name) -%>"><%= profession.name %></a></li>
+        <% end %>
+      <% end %>
+		</ul>
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

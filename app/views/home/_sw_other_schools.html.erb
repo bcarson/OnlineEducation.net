@@ -1,0 +1,30 @@
+<div class="module">
+	<div class="header">
+		<% if @school.is_online? %>
+		  <h4>Other Online Schools</h4>
+		<% else %>
+		  <h4>Nearby Schools</h4>
+		<% end %>
+	</div>
+	<div class="content">
+		<ul class="link_list">
+
+			<% if @school.is_online? %>
+			<% for school in School.all_online %>
+  			<li><a href="/school/<%= school.url_string -%>"><%= school.name %></a></li>
+      <% end %>
+
+			<% else %>
+			  <% @theschools = School.find(:all, :within => 100, :origin =>[@school.lat,@school.lng], :order => 'distance', :conditions => ['monetize_URL IS NULL']) -%>
+				<% for school in @theschools[0..19] %>
+	  			<% if school != @school %>
+	          <li><a href="/school/<%= school.url_string -%>"><%= school.name %></a></li>
+	        <% end %>
+	      <% end %>
+			<% end %>
+
+		</ul>
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

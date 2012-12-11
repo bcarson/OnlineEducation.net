@@ -1,0 +1,297 @@
+<h3><%= @subject.name -%> Schools <%= @within.blank? ? 'in' : 'near' -%> <%= @city.name -%></h3>
+
+<% @one = true if @schools.length == 1 -%>
+
+
+<% if !@city.zarea_id.blank? and !@city.county_id.blank? -%>
+  <% @county = County.find_by_id(@city.county_id) -%>
+  <% @zarea = Zarea.find_by_id(@city.zarea_id) -%>
+  <% @zareawage = Zareawage.find_by_occupation_id_and_area_id(0,@zarea.id) -%>
+<% end -%>
+
+
+
+
+<p>
+	<strong><%= @city.name -%>, <%= @state.two_letter_code -%></strong>
+	<%= '(population: ' + number_with_delimiter(@city.population) + ')' if !@city.population.blank? -%> has
+	<%= !@one ? @total_schools_count.en.numwords : 'one' -%>
+	<%= @subject.safe_downcase_name -%> school<%= 's' if !@one -%> within
+	<% if @within.blank? -%>
+	  its city limits.
+	<% else -%>
+	  a <%= @within -%>-mile radius of its city center.
+	<% end -%>
+	<% @school = @schools.first -%>
+	<% @within ? @thein = ' in this group' : @thein = ' in the city' -%>
+	<a href="/school/<%= @school.url_string -%>"><%= @school.name -%></a><%= ', the highest ranked school' + @thein + ' with ' + Worker.an_name(@subject.safe_downcase_name) + ' program, ' if !@one -%>
+	<%= ' has a total student population of ' + number_with_delimiter(@school.student_population) + '. It ' if @school.student_population -%>
+	is the
+	<% if @school.country_rank != 1%>
+	  <%= @school.country_rank.en.ordinal -%>
+	<% end -%>
+	highest ranked school in the USA and <%= 'one of ' if @school.state_rank.blank? -%> the
+	<% if @school.state_rank and @school.state_rank != 1 -%>
+	  <%= @school.state_rank.en.ordinal -%>
+	  <% @highest_school = School.find(:first, :select => 'name, url_string, state_id, state_rank', :conditions => ['state_id = ?', @school.state_id], :order => 'state_rank' ) -%>
+	<% end -%>
+	highest in the state <%= 'of ' + @school.state.name if @school.state -%><%= ' (#1 is <a href="/school/' + @highest_school.url_string + '">' + @highest_school.name + '</a>)' if !@highest_school.blank? -%>.
+
+  <% @crawlschools = @school.crawlschools -%>
+  <% for c in @crawlschools -%>
+    <% @crawlschool = c if c.url.index(/ratemy/) -%>
+  <% end -%>
+  <% if !@crawlschool.blank? -%>
+	  <% @crawlprofs = [] -%>
+	  <% for crawlprof in @crawlschool.crawlprofs -%>
+	   <%  @crawlprofs << crawlprof if @subject.name.index(/#{crawlprof.department}/i) -%>
+	  <% end -%>
+  <% end -%>
+
+  <% if !@crawlprofs.blank? -%>
+
+    To learn more about <%= @subject.safe_downcase_name -%> programs in <%= @city.name -%>,
+    ratemyprofessors.com has reviews of <%= @subject.safe_downcase_name -%>
+    professors at <%= @school.name_for_search -%> such as
+    <% for p in @crawlprofs[0..5] -%>
+      <% if p == @crawlprofs.last || p == @crawlprofs[5] -%>
+         <%= 'and' if @crawlprofs.length > 1 -%>
+         <% @f = p.name.split(',') -%>
+	        <a target="_blank" rel="nofollow" href="http://www.ratemyprofessors.com/ShowRatings.jsp?tid=<%= p.url -%>"><%= @f[1] -%> <%= @f[0]%></a>.
+      <% else -%>
+        <% @f = p.name.split(',') -%>
+        <a rel="nofollow" target="_blank" href="http://www.ratemyprofessors.com/ShowRatings.jsp?tid=<%= p.url -%>"><%= @f[1] -%> <%= @f[0]%></a>,
+      <% end -%>
+
+    <% end -%>
+  <% end -%>
+</p>
+
+
+
+
+<% @professions = @subject.opt_professions -%>
+
+<% if !@professions.blank? -%>
+  <p><% @nogo = nil -%>
+	  <%= @subject.name -%> students from <%= @city.name -%> schools who go on to become
+	  <% for profession in @professions[0..3] -%>
+	    <% if profession == @professions.fourth || profession == @professions.last -%>
+	      <% if @nogo.blank? -%>
+	        <%= profession.safe_plural_downcase_name -%><%= @professions.length > 1 ? ', etc.' : '.' -%>
+	        <% @nogo = true if profession == @professions.fourth -%>
+	      <% end -%>
+	    <% else -%>
+	      <% if @nogo.blank? -%>
+	        <%= profession.safe_plural_downcase_name -%>,
+	      <% end -%>
+	    <% end -%>
+	  <% end -%>
+
+	  have a good chance at finding employment.
+
+  <% @zocc = @professions.first.opt_zoccs.first -%>
+
+  <% if !@zocc.blank? and @zoccstat = @zocc.zoccupationstat -%>
+
+		For example, there are <%= number_with_delimiter(@zoccstat.total_employed) -%> people working as
+		<%= @zocc.safe_name.downcase -%> alone in the US, and their average annual salary is
+		$<%= number_with_delimiter(@zoccstat.mean_annual_wage.to_i) -%>.
+	<% end -%>
+
+  <% @zocc2 = @professions.first.opt_zoccs[2] -%>
+
+  <% if !@zocc2.blank? and @zoccstat2 = @zocc2.zoccupationstat -%>
+
+	  Also, <%= @zocc2.safe_name -%> make on average $<%= number_with_delimiter(@zoccstat2.mean_annual_wage.to_i) -%>
+	  per year and there are about <%= number_with_delimiter(@zoccstat2.total_employed) -%>
+	  of them employed in the US today.
+	<% end -%>
+
+  <% if @zarea and !@zocc2.blank? and !@zocc.blank? and @zareawage1 = Zareawage.find_by_area_id_and_occupation_id(@zarea.id, @zocc.occ_id) and @zareawage2 = Zareawage.find_by_area_id_and_occupation_id(@zarea.id, @zocc2.occ_id) -%>
+    In fact, <b> in the <%= @zarea.safe_name -%> area alone</b>, there are
+    <%= number_with_delimiter(@zareawage2.tot_emp) -%> employed <%= @zocc2.safe_name.downcase -%> earning an average salary of
+    $<%= number_with_delimiter(@zareawage2.a_mean) -%>. <%= @zocc.safe_name -%> in this area earn
+    $<%= number_with_delimiter(@zareawage1.a_mean) -%>/yr and there are <%= number_with_delimiter(@zareawage1.tot_emp) -%> employed.
+
+  <% end -%>
+
+
+
+
+	</p>
+<% end -%>
+
+
+
+
+
+
+
+
+
+<p>
+
+  <% if !@zarea.blank? and !@zareawage.blank? -%>
+    <%= @city.name -%> lies in <%= @county.name -%> county, which is one of the
+    <%= County.count(:conditions => ['state_id = ?', @city.state_id ]) -%>
+    counties in <%= @state.name -%>.  Overall, the <%= @zarea.safe_name -%> area has <%= number_with_delimiter(@zareawage.tot_emp) -%>
+    total employed workers according to the US Bureau of Labor Statistics, with a <%= @zareawage.emp_prse -%>% unemployment
+    rate, $<%= @zareawage.h_mean -%>/hr average worker wage, and a $<%= number_with_delimiter(@zareawage.a_mean) -%> average annual salary.
+
+    <% if !@zareawage1.blank? and !@zareawage2.blank? -%>
+      Thus, about <%= @zareawage1.jobs_1000 -%> out of every 1000 jobs in <%= @city.name -%> are held by <%= @zocc.safe_name.downcase -%>,
+      and <%= @zareawage2.jobs_1000 -%>/1000 are held by <%= @zocc2.safe_name.downcase -%>.
+    <% end -%>
+
+  <% end -%>
+</p>
+
+<p>
+	<% if !@one and !@school.avg_08_net_price.blank? -%>
+	  Of the <%= @total_schools_count -%> <%= @subject.safe_downcase_name -%> schools
+
+		<% if @within.blank? -%>
+		  in
+		<% else -%>
+		  with a <%= @within -%>-mile radius of
+		<% end -%>
+		<%= @city.name -%>,
+		<% @ct = 0 -%>
+		<% @highest_np = @schools.first -%>
+		<% @lowest_np = @schools.first -%>
+
+		<% for school in @schools -%>
+		  <% @ct += 1 if school.student_population and school.student_population > 10000 -%>
+		  <% @highest_np = school if !school.avg_08_net_price.blank? and school.avg_08_net_price > @highest_np.avg_08_net_price -%>
+		  <% @lowest_np = school if !school.avg_08_net_price.blank? and school.avg_08_net_price < @lowest_np.avg_08_net_price -%>
+		<% end -%>
+		<% if @ct == 0 -%>
+		  none
+		<% else -%>
+		  <% if @ct != @schools.count -%>
+		    only <%= @ct -%>
+		  <% else -%>
+		   <%= @ct == 2 ? 'both' : 'all' -%> of them
+		  <% end -%>
+		<% end -%>
+		  <%= @ct == 1 ? 'has' : 'have' -%> a student population over 10k.
+	<% end -%>
+	<% @highest_np = @schools.first if @highest_np.blank? -%>
+	<% @lowest_np = @schools.last if @lowest_np.blank? -%>
+	After taking into account tuition, living expenses, and financial aid,
+	  <a href="/school/<%= @highest_np.url_string -%>"><%= @highest_np.name -%></a>
+	  <% if !@one -%>
+	    comes out as the most expensive ($<%= number_with_delimiter(@highest_np.avg_08_net_price) -%>/yr) for <%= @subject.safe_downcase_name -%> students<%= @one ? '.' : ',' -%>
+	    with <a href="/school/<%= @lowest_np.url_string -%>"><%= @lowest_np.name -%></a> as the lowest, reported at only $<%= number_with_delimiter(@lowest_np.avg_08_net_price) -%>/yr.
+	  <% else -%>
+	    ends up costing a student $<%= number_with_delimiter(@highest_np.avg_08_net_price) -%>/yr.
+	  <% end -%>
+	</p>
+
+
+
+
+  <% @donealready = nil %>
+	<% for school in @schools %>
+	  <% @ps = Program.find(:all, :conditions => ['school_id = ? and name like ?', school.id, '%' + @subject.name + '%']) %>
+	  <% if !@ps.blank? %>
+	    <% if @donealready != true %>
+				<h3><%= @subject.name %> Programs <%= @within.blank? ? 'in' : 'near' -%> <%= @city.name %></h3>
+				<br>
+				<% @donealready = true %>	
+	    <% end %>
+		  <b><%= school.name -%></b><br>
+			<ul>
+		    <%= render :partial => 'schools_programs_list' %>
+		  </ul>
+	  <% end -%>
+	<% end %>
+
+  <hr><hr><br>
+
+
+	<% if @r = Replacement.find_by_name_and_replaceable_id('city.music_venues', @city.id) -%>
+	<b>Popular <%= @city.name -%> Music Venues:</b>
+	<ul>
+		<% for num in Worker.get_display_num_array(@subject.id)  -%>
+	    <% @output = Worker.clean_content_display(@r.body[num.to_s]) -%>
+	    <li><a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@output + ' ' + @city.name) -%>"><%= @output -%> &raquo;</a></li>
+
+		<% end -%>
+	</ul>
+	<% end -%>
+
+	<% if @r = Replacement.find_by_name_and_replaceable_id('city.restaurants', @city.id) -%>
+	<b>Notable Restaurants:</b>
+	<ul>
+		<% for num in Worker.get_display_num_array(@subject.id)  -%>
+	    <% @output = Worker.clean_content_display(@r.body[num.to_s]) -%>
+	    <li><a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@output + ' ' + @city.name) -%>"><%= @output -%> &raquo;</a></li>
+
+		<% end -%>
+	</ul>
+	<% end -%>
+
+
+<% if @r = Replacement.find_by_name_and_replaceable_id('city.bars', @city.id) -%>
+<b>Popular Bars in <%= @city.name -%>:</b>
+<ul>
+	<% for num in Worker.get_display_num_array(@subject.id)  -%>
+    <% @output = Worker.clean_content_display(@r.body[num.to_s]) -%>
+    <li><a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@output + ' ' + @city.name) -%>"><%= @output -%> &raquo;</a></li>
+	<% end -%>
+</ul>
+<% end -%>
+
+<% if @r = Replacement.find_by_name_and_replaceable_id('city.landmarks', @city.id) -%>
+<b>City Landmarks &amp; Places to visit:</b>
+<ul>
+	<% for num in Worker.get_display_num_array(@subject.id)  -%>
+    <% @output = Worker.clean_content_display(@r.body[num.to_s]) -%>
+    <li><a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@output + ' ' + @city.name) -%>"><%= @output -%> &raquo;</a></li>
+
+	<% end -%>
+</ul>
+<% end -%>
+
+<% if @r = Replacement.find_by_name_and_replaceable_id('city.top_industries', @city.id) -%>
+<b>Top Industries / Businesses:</b>
+<ul>
+	<% for num in Worker.get_display_num_array(@subject.id)  -%>
+	  <li><%= Worker.clean_content_display(@r.body[num.to_s]) -%></li>
+	<% end -%>
+</ul>
+<% end -%>
+
+<% if @r = Replacement.find_by_name_and_replaceable_id('city.parks', @city.id) -%>
+<b><%= @city.name -%> City Parks:</b>
+<ul>
+	<% for num in Worker.get_display_num_array(@subject.id)  -%>
+	  <li><%= Worker.clean_content_display(@r.body[num.to_s]) -%></li>
+	<% end -%>
+</ul>
+<% end -%>
+
+<b>See Also</b>
+<ul>
+	<% if @subject.has_online_program == true %>
+		<li><a href="/subjects/<%= Worker.inurl(@subject.name) -%>"><%= @subject.name -%> Information</a></li>
+		<% p = @subject.professions.first -%>
+		<li><a href="/professions/<%= Worker.inurl(p.name) -%>">Salary Details for <%= p.an_name -%> </a></li>
+		<li><a href="/schools/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name -%> Schools</a></li>
+		<li><a href="/programs/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name -%> Programs</a></li>
+		<li><a href="/courses/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name -%> Courses</a></li>
+		<% if @subject.has_online_cert == true %>
+		  <li><a href="/certifications/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name -%> Certifications</a></li>
+		<% end -%>
+	<% end -%>
+</ul>
+
+<b>Related Subjects - Schools in or near <%= @city.name -%></b>
+<ul>
+	<% for subject in @subject.prim_siblings_or_kids -%>
+	  <li><a href="/schools/<%= Worker.inurl(subject.name) -%>/<%= @state.two_letter_code -%>/<%= Worker.inurl(@city.name) -%>"><%= subject.name -%></li>
+	<% end -%>
+</ul>
+

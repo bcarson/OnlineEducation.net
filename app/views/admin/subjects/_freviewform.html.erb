@@ -1,0 +1,32 @@
+
+<% @replacement = Replacement.find_by_name_and_replaceable_id(@name,@themodel.id) %>
+
+	<%= form_remote_tag :update => 's' + @name.gsub(".",'') + @themodel.id.to_s, :url => {:action => 'freview_go'} %>
+	  <br><br><br><br>
+	  <h2><%= @themodel.name -%><%= ', ' + @themodel.state.name if params[:model] == 'city' %> - <small><%= @name %></small></h2>
+	  <input type="hidden" name="name" value="<%= @name -%>">
+		<input type="hidden" name="mid" value="<%= @themodel.id -%>">
+	    
+    <% if @ht and @ht.action_type == 'replacements_long'  %>
+	    <textarea id="thetextarea<%= @themodel.id -%>" cols="90" rows="10" name="body"><%= @replacement.body if @replacement %></textarea>
+    <% else %>
+      <% if @ht and @ht.action_type == 'replacements_special' -%> 
+        <textarea style="height: 23px; vertical-align:text-top;" name="body" rows="1" cols="90"><%= @replacement.body if @replacement -%></textarea><br>
+      <% else %>
+        <% if @ht.blank? %>
+          <textarea style="height: 23px; vertical-align:text-top;" name="body" rows="1" cols="90"><%= @replacement.body if @replacement -%></textarea><br>
+        <% else %>
+		      <% @ct = 0 %>
+		      <% while @ct < 10 -%> 
+		        <%= @ct + 1 %>) <textarea style="height: 23px; vertical-align:text-top;" name="entries[<%= @ct %>]" rows="1" cols="90"><%= @replacement.body[@ct.to_s] if @replacement -%></textarea><br>
+		        <% @ct = @ct + 1 %>
+		      <% end %>
+		    <% end %>
+      <% end %>
+    <% end %> 
+    <br>
+    <span id="s<%= @name.gsub(".",'') -%><%= @themodel.id -%>">
+	    <input type="submit" value="Update &raquo;">
+    </span>
+	</form>
+

@@ -1,0 +1,16 @@
+<div class="module">
+	<div class="header">
+		<h4>Top Cities for <%= @subject.name %></h4>
+	</div>
+	<div class="content">
+		<ul class="link_list">
+			<% for city in City.find(:all, :limit => 10, :order => 'population DESC', :conditions => ['prim = 1']) %>
+			  <li><a href="/schools/<%= Worker.inurl(@subject.name) -%>/<%= city.state.two_letter_code -%>/<%= Worker.inurl(city.name) -%>">
+			  <%= city.name %> <%= @subject.name %> <%= @cousin_name %> 
+		</a></li>
+			<% end %>
+		</ul>
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

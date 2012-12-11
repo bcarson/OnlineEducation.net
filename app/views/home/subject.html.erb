@@ -1,0 +1,32 @@
+<%= render :partial => "mw_page_title" %>
+
+<div id="wrapper">
+	<div id="content">
+		<div id="main">			
+      <%= render :partial => "content_subject" %>
+			<div class="section_break"></div>
+			<%= render :partial => "mw_full_list_of_ss" %>
+			<div class="section_break"></div>
+			<%= render :partial => "mw_states_and_cities" -%>			
+		</div>
+		<!-- end #main -->
+		
+		<div id="sidebar">
+			<% @cousin_name = 'Schools' if @cousin_name == 'Professions' ||  @cousin_name == 'Subjects' %>
+			<%= render :partial => "sw_123_widget" %>	
+			<%= render :partial => "sw_featured_schools" %>
+			<%= render :partial => "sw_find_school_form" %>
+			<%= render :partial => "sw_subject_cousins" %>		
+			<%# render :partial => "sw_top_cities_subject" %>
+			<%# render :partial => "sw_subject_schools_by_state" %>		
+			<% @cousin_name = 'Degrees' if request.request_uri.index(/(subjects|professions)/i) %>
+      <%# render :partial => "sw_degreelevel_subjects" %>	
+      <%= render :partial => 'sw_classroom_ad' %>			
+
+		</div>
+		<!-- end #sidebar -->
+		<div class="clear"></div>
+	</div>
+	<!-- end #content -->
+</div>
+<!-- #wrapper -->

@@ -1,0 +1,66 @@
+
+
+
+<%# first listing should always be an online school if possible -%>
+<% if !@subject.blank? -%>
+
+    <% if !@schools.blank? and @school = @schools.first and @school.is_online? -%>
+
+    <% else -%>
+      <%# @school = @topschools.first -%>
+
+      <% @school = School.find(:first, :order => 'schools.priority DESC', :conditions => ['is_online = 1 AND subjects.id = ?', @subject.id], :include => [:subjects]) -%>
+
+    <% end -%>
+
+    <%= render :partial => 'map_school_online_list_display' -%>
+
+<% else %>
+
+  <% @school = School.find(:first, :order => 'schools.priority DESC', :conditions => ['is_online = 1']) -%>
+  <%= render :partial => 'map_school_online_list_display' -%>
+  
+
+<% end -%>
+
+
+  <% @ct = 0 -%>
+	<% for school in @schools -%>
+			<div class="school" itemscope itemtype="http://schema.org/CollegeOrUniversity">
+				<div class="left">
+					<form>
+					<label for="select_school_<%= school.id -%>"><%= school.logo_small -%></label><br/>
+						<input onClick="modify_checked_school_ids(<%= school.id -%>); modify_waypts(<%= school.lat -%>, <%= school.lng -%>)" type="checkbox" name="select_school[]" id="select_school_<%= school.id -%>"/><div class="select"><label for="select_school_<%= school.id -%>">Select</label></div>
+					</form>
+				</div>
+				<div class="right">
+					<h4><a target="_blank" itemprop="url" href="/school/<%= school.url_string -%>"><span itemprop="name"><%= school.name -%></span></a></h4>
+					<div class="sub"><%= school.full_address -%></div>
+					<div itemprop="location" itemscope itemtype="http://schema.org/City">
+						<meta itemprop="name" content="<%= school.city.name if !school.city.blank? -%>" />
+						<div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+					    <meta itemprop="latitude" content="<%= school.lat -%>" />
+				      <meta itemprop="longitude" content="<%= school.lng -%>" /> 	
+				    </div>
+					</div>
+					<% if !@subject.blank? and @ps = Program.find(:all, :conditions => ['school_id = ? and name like ?', school.id, '%' + @subject.name + '%']) and @ps.length > 0 -%>
+					  <div style="cursor: pointer;" class="program_link" onClick="$('#programs<%= school.id -%>').toggle();">Show <%= @subject.name -%> Programs&nbsp;(<%= @ps.length -%>)&nbsp;&raquo;</div>
+					  <div style="display:none" id="programs<%= school.id -%>">
+              <%= render :partial => 'schools_programs_list' %>
+						</div>
+					<% end -%>
+					<a class="more_info" href="#" onClick="map_first_load(1); load_school_info_view(<%= school.id -%>); return false;"><span>More Info</span></a>
+					<a class="view_on_map" href="#" onClick="map_first_load(1); google.maps.event.trigger(markers[<%= @ct -%>],'click'); return false;"><span>View on Map</span></a>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+		<%# end -%>
+
+	  <% @ct += 1 -%>
+	<% end -%>
+
+	<% if @schools.blank? and @online_schools.blank? -%>
+	<br><br><center><b>No on-campus <%= @subject.safe_downcase_name if @subject -%> schools were found in this area.<br><br>Please zoom out and try again.</b></center>
+	<% end -%>
+

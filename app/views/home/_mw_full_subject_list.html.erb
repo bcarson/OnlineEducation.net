@@ -1,0 +1,27 @@
+<div class="module">
+	<div class="header">
+		<h4>Full List of Subjects</h4>
+	</div>
+	<div class="content">
+		<div class="entry">
+			<div class="article">
+				<ul class="main_list_left">
+				<% @ct = 0 %>
+				<% @len = @subjects.count %>
+				<% for subject in @subjects -%>
+					<% @ct += 1 %>
+					<li><a href="/subjects/<%= Worker.inurl(subject.name) -%>"><%= subject.name -%></a></li>
+				  <% if @ct == 200 %>
+						</ul>
+						<ul class="main_list_right">
+					<% end %>
+				<% end -%>
+				</ul>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end .entry -->
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

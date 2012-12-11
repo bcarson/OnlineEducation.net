@@ -1,0 +1,211 @@
+<!--Admissions / Application Schedule, Fee, Requirement, etc-->
+<% reset_cycle() -%>
+<table class="universal school" cellspacing="0">
+	<tr class="<%= cycle("even", "odd") -%>">
+		<th colspan="2">Admissions</th>
+	</tr>
+
+	<% if Worker.is_not_blank(@school.application_deadline) %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Yearly Application Deadline</td>
+		<td><%= @school.application_deadline -%></td>
+	</tr>
+	<% end %>
+	<% if @thisiscleanedup == true and Worker.is_not_blank(@school.admissions_requirements) %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Admissions Requirements</td>
+		<td><%= @school.admissions_requirements -%></td>
+	</tr>
+	<% end %>
+	<% if Worker.is_not_blank(@school.admissions_office_phone) %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Admissions Office Phone</td>
+		<td><%= @school.admissions_office_phone -%></td>
+	</tr>
+	<% end %>
+	<% if Worker.is_not_blank(@school.admissions_office_email) %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Admissions Office Email</td>
+		<td><a href="mailto:<%= @school.admissions_office_email -%>"><%= @school.admissions_office_email -%></a></td>
+	</tr>
+	<% end %>
+	<% if Worker.is_not_blank(@school.admissions_office_address) %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Admissions Office Address</td>
+		<td><%= @school.admissions_office_address -%></td>
+	</tr>
+	<% end %>
+	<% if Worker.is_not_blank(@school.admissions_transfer_url) %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Admissions Transfer URL</td>
+		<td><a class="url" href="<%= @school.admissions_transfer_url -%>" target="_blank"><%= @school.admissions_transfer_url -%></a></td>
+	</tr>
+	<% end %>
+	<% if Worker.is_not_blank(@school.admissions_url) %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Admissions Website</td>
+		<td><a class="url" href="<%= @school.admissions_url -%>" target="_blank"><%= @school.admissions_url -%></a>
+
+		  <% if  Worker.is_not_blank(@school.financial_aid_url) %>
+		   (find financial aid info <a href="<%= @school.financial_aid_url -%>" target="_blank">here</a>)
+		  <% end %>
+			<% if @letsshowthis and !@school.monetize_url.blank? %>
+			  &nbsp; &nbsp; Click <a href="<%= @school.getinfourl -%>" rel="nofollow">here</a> to request free info
+			<% end %>
+		</td>
+	</tr>
+	<% end %>
+
+	<% if  Worker.is_not_blank(@school.application_url) %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Application Website</td>
+		<td><a class="url" href="<%= @school.application_url -%>" target="_blank"><%= @school.application_url -%></a>
+		<% if !@school.monetize_url.blank? %>
+		 &nbsp; &nbsp; Click <a href="<%= @school.getinfourl -%>" rel="nofollow"> here </a>to request free info
+		<% end %>
+		</td>
+	</tr>
+	<% end %>
+	<% if @school.application_fee %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Application Fee</td>
+		<td>$<%= @school.application_fee.to_i -%></td>
+	</tr>
+	<% end %>
+
+
+	<% if @school.adm_secondary_school_gpa || @school.adm_secondary_school_record || @school.adm_prep_program || @school.adm_dem_comp || @school.adm_test_scores || @school.adm_toefl %>
+	<tr><td colspan="2" style="font-size: 14px">
+
+		<p>In order to be accepted to <%= @school.name %>, you should have: </p>
+		<ul>
+		  <%= '<li>A High School GPA</li>' if @school.adm_secondary_school_gpa %>
+		  <%= '<li>A High School Record</li>' if @school.adm_secondary_school_record %>
+		  <%= '<li>Completed a college prep course</li>' if @school.adm_prep_program %>
+		  <%= '<li>Formal demonstration of competencies</li>' if @school.adm_dem_comp %>
+		  <%= '<li>SAT and ACT test scores</li>' if @school.adm_test_scores %>
+		  <%= '<li>TOEFL<li>' if @school.adm_toefl %>
+    </ul>
+
+	</td></tr>
+
+  <% end %>
+
+
+  <% if @school.sat_cr_25 || @school.act_composite_75 %>
+	<tr><td colspan="2">&nbsp;</td></tr>
+	<tr>
+		<td class="title heading" colspan="2">Test Scores</td>
+	</tr>
+	<% end %>
+
+
+  <% if @school.sat_cr_25 and @school.sat_cr_75 and @school.sat_math_25 and @school.sat_math_75 and @school.sat_writing_25 and @school.sat_writing_75  %>
+    <tr><td colspan="2" class="chart"><%= @school.sat_chart %></td></tr>
+  <% end %>
+
+
+	<% if @school.sat_cr_25 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">SAT Reading (25th Percentile)</td>
+		<td><%= @school.sat_cr_25 -%></td>
+	</tr>
+	<% end %>
+
+	<% if @school.sat_cr_75 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">SAT Reading (75th Percentile)</td>
+		<td><%= @school.sat_cr_75 -%></td>
+	</tr>
+	<% end %>
+
+
+	<% if @school.sat_math_25 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">SAT Math (25th Percentile)</td>
+		<td><%= @school.sat_math_25 -%></td>
+	</tr>
+	<% end %>
+
+	<% if @school.sat_math_75 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">SAT Math (75th Percentile)</td>
+		<td><%= @school.sat_math_75 -%></td>
+	</tr>
+	<% end %>
+
+
+	<% if @school.sat_writing_25 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">SAT Writing (25th Percentile)</td>
+		<td><%= @school.sat_writing_25 -%></td>
+	</tr>
+	<% end %>
+
+	<% if @school.sat_writing_75 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">SAT Writing (75th Percentile)</td>
+		<td><%= @school.sat_writing_75 -%></td>
+	</tr>
+	<% end %>
+
+
+
+  <% if @school.act_composite_25 and @school.act_english_25 and @school.act_math_25 and @school.act_writing_25 -%>
+	  <tr><td colspan="2" class="chart"><%= @school.act_chart %></td></tr>
+  <% end %>
+
+
+
+	<% if @school.act_composite_25 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">ACT Composite (25th Percentile)</td>
+		<td><%= @school.act_composite_25 -%></td>
+	</tr>
+	<% end %>
+	<% if @school.act_composite_75 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">ACT Composite (75th Percentile)</td>
+		<td><%= @school.act_composite_75 -%></td>
+	</tr>
+	<% end %>
+	<% if @school.act_english_25 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">ACT English (25th Percentile)</td>
+		<td><%= @school.act_english_25 -%></td>
+	</tr>
+	<% end %>
+	<% if @school.act_english_75 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">ACT English (75th Percentile)</td>
+		<td><%= @school.act_english_75 -%></td>
+	</tr>
+	<% end %>
+	<% if @school.act_math_25 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">ACT Math (25th Percentile)</td>
+		<td><%= @school.act_math_25 -%></td>
+	</tr>
+	<% end %>
+	<% if @school.act_math_75 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">ACT Math (75th Percentile)</td>
+		<td><%= @school.act_math_75 -%></td>
+	</tr>
+	<% end %>
+	<% if @school.act_writing_25 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">ACT Writing (25th Percentile)</td>
+		<td><%= @school.act_writing_25 -%></td>
+	</tr>
+	<% end %>
+	<% if @school.act_writing_75 %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">ACT Writing (75th Percentile)</td>
+		<td><%= @school.act_writing_75 -%></td>
+	</tr>
+	<% end %>
+
+</table>
+
+			<div class="section_break">&nbsp;</div>

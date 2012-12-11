@@ -1,0 +1,24 @@
+
+<div id="school_list_details">
+	<h4>Showing the Top <span id="title_schools_count"><%= @schools.count %> of <%= @total_schools_count %></span> Total
+	</h4>
+	<h3>
+	  <span id="title_subject"><%= @subject.name rescue nil %></span>
+		Schools
+	</h3>
+	<h4>
+		<span id="title_in_or_near">
+			<% if @within.blank? -%>
+				in
+			<% else %>
+			  within <%= @within -%> miles of 
+			<% end %>
+		</span>
+		<span id="title_location">
+		  <%= @city.name + ',' rescue nil %> 
+		  <%= @state.two_letter_code rescue nil %>
+		  <%= '(' + sprintf("%.3f", @origin['lat']) + ', ' + sprintf("%.3f", @origin['lng']) + ')' if !params[:location].blank? %>
+		</span>
+	</h4>
+</div>
+

@@ -1,0 +1,146 @@
+
+<% @zoccupations = @profession.zoccupations %>
+
+<% if @zoccupations.blank? %>
+  <%# may just not want to use any of these for now.... ? @zoccupations = [@profession.subjects.first.parent]%>
+<% else %>
+  <h3><%= @profession.name %> Salary Information</h3>
+<% end %>
+
+<% for zoccupation in @zoccupations %>
+
+  <% if zoccupation.parent_id.blank? %>
+    <% zoccupationstat = zoccupation.zoccupationstat %>
+  <% else %>
+    <% parent = Zoccupation.find(zoccupation.parent_id) %>
+    <% zoccupationstat = parent.zoccupationstat %>   
+  <% end %>
+
+  
+
+	<h4 class="large"><span>Category:</span> <%= zoccupation.name %></h4>
+	
+  <% if zoccupationstat %>
+	
+		<table class="salary_table" cellspacing="0">
+		  <tr>
+			  <td class="title">Total # Employed in the US</td>
+			  <td align="center" class="large"><%= number_with_delimiter(zoccupationstat.total_employed) %></td>
+			</tr>
+
+      <% if zoccupationstat.mean_hourly_wage and zoccupationstat.mean_hourly_wage > 0 %>
+
+			  <tr>
+				  <td class="title">Average Hourly Wage:</td>
+				  <td align="center" class="large">$<%= zoccupationstat.mean_hourly_wage %>/hr</td>
+				</tr>
+
+			  <tr>
+				  <td class="title">Hourly Wage Range</td>
+				  <td class="embeded">
+					  <table border="1">
+						  <tr><td align="center" colspan="5" class="title">PERCENTILE</td></tr>
+						  <tr><td align="center">10%</td><td align="center">25%</td><td align="center">50%</td><td align="center">75%</td><td align="center">90%</td></tr>
+						  <tr>
+							  <td align="center" class="med">$<%= zoccupationstat.H_PCT10 -%></td>
+							  <td align="center" class="med">$<%= zoccupationstat.H_PCT25 -%></td>
+							  <td align="center" class="med">$<%= zoccupationstat.H_MEDIAN -%></td>
+							  <td align="center" class="med">$<%= zoccupationstat.H_PCT75 -%></td>
+							  <td align="center" class="med">$<%= zoccupationstat.H_PCT90 -%></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+		  <% end %>
+		
+		  <tr>
+			  <td class="title">Average Yearly Salary</td>
+			  <td align="center" class="large">$<%= number_with_delimiter(sprintf("%.0f", zoccupationstat.mean_annual_wage), :separator => ",") %></td>
+			</tr>
+		
+		  <tr>
+			  <td class="title">Yearly Salary Range</td>
+			  <td class="embeded">
+				  <table>
+					  <tr><td align="center" colspan="5" class="title">PERCENTILE</td></tr>
+					  <tr><td align="center">10%</td><td align="center">25%</td><td align="center">50%</td><td align="center">75%</td><td align="center">90%</td></tr>
+					  <tr>
+						  <td align="center" class="med">$<%= number_with_delimiter(sprintf("%.0f", zoccupationstat.A_PCT10), :separator => ",") -%></td>
+						  <td align="center" class="med">$<%= number_with_delimiter(sprintf("%.0f", zoccupationstat.A_PCT25), :separator => ",") -%></td>
+						  <td align="center" class="med">$<%= number_with_delimiter(sprintf("%.0f", zoccupationstat.A_MEDIAN), :separator => ",") -%></td>
+						  <td align="center" class="med">$<%= number_with_delimiter(sprintf("%.0f", zoccupationstat.A_PCT75), :separator => ",") -%></td>
+						  <td align="center" class="med">$<%= number_with_delimiter(sprintf("%.0f", zoccupationstat.A_PCT90), :separator => ",") -%></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+
+		  <tr>
+			  <td class="title">Employment Demographics</td>
+			  <td class="embeded">
+				  <table>
+					  <tr><td align="center" colspan="7" class="title">% OF WORKERS WITH</td></tr>
+					  <tr>
+						  <td align="center">&lt; High School Diploma</td>
+						  <td align="center">High School Diploma</td>
+						  <td align="center">Some College</td>
+						  <td align="center">Associate Degree</td>
+						  <td align="center">Bachelor Degree</td>
+						  <td align="center">Master Degree</td>
+						  <td align="center">Doctoral Degree</td>
+						</tr>
+					  <tr>
+						  <td align="center" class="med"><%= zoccupationstat.less_highschool %>%</td>
+						  <td align="center" class="med"><%= zoccupationstat.highschool %>%</td>
+						  <td align="center" class="med"><%= zoccupationstat.some_college %>%</td>
+						  <td align="center" class="med"><%= zoccupationstat.associates %>%</td>
+						  <td align="center" class="med"><%= zoccupationstat.bachelors %>%</td>
+						  <td align="center" class="med"><%= zoccupationstat.masters %>%</td>
+						  <td align="center" class="med"><%= zoccupationstat.doctoral %>%</td>
+						</tr>			
+					</table>
+				</td>
+
+		
+		</table>
+  <% end %>
+
+  <% @zstateos = zoccupation.zstatewages %>
+  <% if !@zstateos.blank? %>
+    <% @zstateos.sort!{|a,b| b.mean_hourly_wage.to_f <=> a.mean_hourly_wage.to_f }%>
+	  <h5 class="med"><%= zoccupation.name %> <span> &mdash; WAGES BY STATE, SORTED BY SALARY</span></h5>
+	  <table class="salary_table">
+		  <tr><th>STATE</th><th align="center">Average Hourly Wage</th><th align="center">Average Annual Salary</th></tr>
+		  <% for zstatewage in @zstateos %>
+		    <% if @zstate = Zstate.find_by_id(zstatewage.state_id) and !zstatewage.mean_annual_wage.index(/(\*|\#)/) and zstatewage.year == 2009 %>
+		      <% if (zstatewage.mean_hourly_wage and zstatewage.mean_hourly_wage != '"*"') || (zstatewage.mean_annual_wage and zstatewage.mean_annual_wage != '"*"') %>
+		        <% @gotsomething = true %>
+				    <tr class="<%= cycle("even", "odd") %>">
+				      <td class="title"><%=  @zstate.name %></td>
+				      <td align="center" class="med">
+					      <% if zstatewage.mean_hourly_wage != '"*"' %>
+					        $<%= zstatewage.mean_hourly_wage %>/hr
+					      <% else %> 
+					        <small>-</small>
+					      <% end %>
+					    </td>
+					    
+							<td align="center" class="med">
+								<% if zstatewage.mean_annual_wage != '"*"' %>
+								  $<%= number_with_delimiter(sprintf("%.0f", zstatewage.mean_annual_wage), :separator => ",") %>
+								<% else %>
+								  -
+								<% end %>
+							</td>
+				    </tr>
+				  <% end %>
+			  <% end %>
+		  <% end %>
+ 	    <% if !@gotsomething %>
+      <tr><td colspan="3"><center>Wage data not available at this time</center></td></tr>
+      <% end %>
+		</table>
+  <% end %>
+<br/><br/>
+<% end %>

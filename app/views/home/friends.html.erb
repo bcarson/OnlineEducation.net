@@ -1,0 +1,72 @@
+<div id="wrapper">
+	<div id="content">
+		<div id="main">
+			<table id="displayinfo" class="universal friends"></table>
+			
+			
+			<script type="text/javascript">
+			  $("#displayinfo").append("<tr><td class='title heading' colspan='2'>Your friends that have attended <%=h params[:q] %> <span style='font-size: 10px' id='loading'> &nbsp; &nbsp; <img src='/images/spinner_table_bars.gif' /><span></td></tr>");
+			  accessToken = window.location.hash.substring(1)
+				query = "SELECT uid, name, pic_square, education_history FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me())";
+        graphUrl = "https://api.facebook.com/method/fql.query?query=" + escape(query) + "&" + accessToken + "&callback=displayUsers"
+        var script = document.createElement("script");
+        script.src = graphUrl;
+        document.body.appendChild(script);  
+
+        function displayUsers(data) {
+	        no_users = true;
+	        master_output = '';
+          $(data).find("user").each(function(){
+	           output = '';
+	           output += '<tr><td class="profile_pic"><img src="' + $(this).children("pic_square").text() + '" /></td>';
+	           output += '<td><h1>' + $(this).children("name").text() + '</h1>';
+	           doit = false;
+	           $(this).children("education_history").find("education_info").each(function(){
+		           //did it matching with url_string?
+		           if ($(this).children("name").text().match(/<%= params[:q] -%>/ig)){doit = true;}
+		
+		           //build this user into the master url and output either way
+		           year = $(this).children("year").text();
+		           name = $(this).children("name").text();
+		           output += '<b>' + name + '</b> '; 
+							 output += year;
+							 output += '<ul><li>';
+		           if ($(this).find("concentration").length != 0){
+			           output += 'Concentration: ';
+			           $(this).find("concentration").each(function(){output += ' <u>' + $(this).text().replace(/\s*\(.+?\)/,'') + '</u> &nbsp; '});
+		           }else{
+			           output += '';
+		           }
+		           output += '</li></ul>';
+		           
+	           })
+	           if (doit == true){
+		           no_users = false;
+		           $("#displayinfo").append(output);
+	           }else{
+		           if ($(this).find("education_info").length != 0){master_output += output + '<br/>'; }
+	           }
+	          output += '</td></tr>';
+          });
+         
+          loading.innerHTML = '';
+          if (no_users == true){
+	           $("#displayinfo").append('<tr><td colspan="2"><p>It looks like none of your friends have told Facebook they went to <%= params[:q] -%>.</p></td></tr>');
+          }
+          $("#displayinfo").append("<tr><td class='title heading' colspan='2'>Here's where your other friends went to college &nbsp; &nbsp; <font style='font-size: 10px'>(at least, those that have told Facebook about it...)</font></td></tr>" + master_output);
+          //userName.innerText = data;
+        }
+
+			</script>
+			
+			
+		</div>
+		<!-- end #main -->
+		<div class="clear"></div>
+	</div>
+	<!-- end #content -->
+</div>
+<!-- #wrapper -->
+	
+
+

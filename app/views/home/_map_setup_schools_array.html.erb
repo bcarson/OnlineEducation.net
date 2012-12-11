@@ -1,0 +1,15 @@
+<% @ct = 0 %>
+schools = new Array();
+schools = [
+<% for school in @schools -%> 
+	["<%= school.name -%>", 
+		<%= school.lat -%>, 
+		<%= school.lng -%>, 
+		'<%= school.logo_small -%>', 
+		'<p><%= Worker.super_clean_snippet(school.imported_mission_statement,50) if school.imported_mission_statement %></p>', 
+		<%= @ct -%>,
+		'<%= school.full_address.blank? ? school.admissions_office_address.gsub("'","").gsub("\n"," ") : school.full_address.gsub("'","").gsub("\n"," ") -%>',
+		<%= school.id %>]<%= ',' unless school == @schools.last -%>
+  <% @ct = @ct + 1 -%>
+<% end -%> 
+];

@@ -1,0 +1,31 @@
+<div style="padding: 15px">
+	<h1>Subject OnlineProgram Tagging</h1>
+
+  <%= will_paginate @subjects %>  
+
+
+  <% for subject in @subjects %>
+    <b><%= subject.name %></b><br<br>
+    <% @subject = subject %>
+    <div id="oplist<%= subject.id -%>">
+       <%= render :partial => 'onlineps' %>
+    </div>
+    <br><br>
+    <%= form_remote_tag(:update => 'oplist' + subject.id.to_s, :url => {:action => 'add_program', :sid => subject.id}, :html => {:id => 'add_program_form' + subject.id.to_s}) %>
+    <input type="text" id="entering_add_program<%= subject.id -%>" name="program_name" size="60" value="">
+    <input type="submit" value="Go &raquo;"><br>
+    <br>
+    <span id="add_program_suggestions<%= subject.id -%>"></span>
+    </form>	
+
+
+		<%= observe_field('entering_add_program' + subject.id.to_s,
+		     :url => {:action => :program_suggest, :id => subject.id},
+		     :frequency => 0.5,
+		     :update => 'add_program_suggestions' + subject.id.to_s,
+		     :with => 'program_name')
+		     %>
+    
+    <br><br><hr><hr>
+  <% end %>
+</div>

@@ -1,0 +1,56 @@
+<% for course in @courses %>
+  <div id="c<%= course.id -%>">
+  <% @courseprogramjoin = Courseprogramjoin.find_by_course_id_and_program_id(course.id, @program.id) -%>
+  <%= form_remote_tag(:update => 'output' + course.id.to_s, :url => 'update_course') %>
+	  <input type="hidden" name="cid" value="<%= course.id -%>">
+	  <input type="hidden" name="cpjid" value="<%= @courseprogramjoin.id -%>">
+	
+		<%= course.school_id %> Name: <input type="text" name="course[name]" value="<%= course.name -%>" size="100"><br>
+		<input type="hidden" name="course[is_prereq]" value="0">	
+	  Is Prereq? <input type="checkbox" name="course[is_prereq]" value="1" <%= 'checked=true' if course.is_prereq == true -%> >
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	  <input type="hidden" name="courseprogramjoin[is_optional]" value="0">	
+	  Is Optional? <input type="checkbox" name="courseprogramjoin[is_optional]" <%= 'checked=true' if @courseprogramjoin.is_optional == true -%>  value="1">
+	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		Number: <input type="text" name="course[number]" value="<%= course.number -%>" size="10">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		Credits: <input type="text" name="course[credits]" value="<%= course.credits -%>" size="4"><br>
+		More Info URL: <input type="text" name="course[more_info_url]" value="<%= course.more_info_url -%>" size="100"><br>
+		Description:<br><textarea name="course[description]" cols="150" rows="3"><%= course.description -%></textarea>
+		<br><br>
+	  <input type="submit" value="Update &raquo;"> <span id="output<%= course.id -%>"></span>
+	  
+  </form><br><br><br><br><br><br></div>
+<% end %>
+
+<hr><hr><hr>
+Add a course:
+<%= form_remote_tag(:update => 'zcourselist', :url => 'add_course', :complete => "new Effect.Highlight('zcourselist')") %>
+  <input type="hidden" name="pid" value="<%= @program.id -%>">
+
+	Name: <input id="cn" type="text" name="course[name]" size="50"><span id="suggest"></span><br>
+	
+	 <%= observe_field('cn',
+	      :url => {:action => :course_suggest, :sid => @program.school_id},
+	      :frequency => 0.5,
+	      :update => 'suggest',
+	      :with => 'name')
+	      %>
+	
+	
+	<input type="hidden" name="course[is_prereq]" value="0">	
+  Is Prereq? <input type="checkbox" name="course[is_prereq]" value="1">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  <input type="hidden" name="is_optional" value="0">	
+  Is Optional? <input type="checkbox" name="is_optional" value="1">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Number: <input type="text" name="course[number]" size="10">
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Credits: <input type="text" name="course[credits]" size="4"><br>
+	More Info URL: <input type="text" name="course[more_info_url]" size="100"><br>
+	Description:<br><textarea name="course[description]" cols="150" rows="3"></textarea>
+	<br><br>
+  <input type="submit" value="Create New &raquo;">
+  
+</form>
+

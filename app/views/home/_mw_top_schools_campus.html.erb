@@ -1,0 +1,48 @@
+<div class="module">
+	<div class="header">
+		<% @campus_schools = School.find(:all, :limit => 20, :order => 'rank DESC', :conditions => ['subjects.id = ?', @subject.id], :include => [:subjects]) %>		
+		<h4>Top <%= @campus_schools.length %> US <%= @subject.name -%> Schools (campus and online)</h4>
+	</div>
+	<div class="content">
+		<div class="entry">
+			<div class="article">
+			<% @ct = 1 %>
+	    <% for school in @campus_schools %>
+				<table class="campus_school_info<%= cycle("",""," end") %>" cellspacing="0">
+					<tr>
+						<td class="logo" colspan="2" valign="center" align="center"><div class="logo_wrap"><%= school.logo_small %></div></td>
+					</tr>
+					<tr>
+						<td class="school_name" colspan="2"><a href="/school/<%= school.url_string -%>"><%= school.name %></a></td>
+					</tr>
+					<tr>
+						<%# fill in correct number %>
+						<td>Total Programs</td>
+						<td align="right"><strong><%= school.num_programs %></strong></td>
+					</tr>
+					<tr>
+						<%# fill in correct number %>
+						<td>Number of Subjects</td>
+						<td align="right"><strong><%= school.num_subjects %></strong></td>
+					</tr>
+					<% if !school.country_rank.blank? %>
+						<tr>
+							<%# fill in correct number %>
+							<td>Rank in USA</td>
+							<td align="right"><strong><%= school.country_rank.en.ordinal %></strong></td>
+						</tr>
+					<% end %>
+				</table>
+				<% if @ct % 3 == 0 %>
+				<div class="clear"></div>
+				<% end %>
+			<% @ct = @ct + 1 %>
+			<% end %>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<!-- end .entry -->						
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

@@ -1,0 +1,31 @@
+
+
+<div style="padding: 15px">
+	<h1>School Rmatching (match name to name)</h1>
+
+  <%= will_paginate @crawlschools %>  
+	
+	<% for crawlschool in @crawlschools %>
+
+		<%= form_remote_tag(:update => 'submit_status' + crawlschool.id.to_s, :url => {:action => 'update_crawlschool', :id => crawlschool.id}, :html => {:id => 'form' + crawlschool.id.to_s}) %>
+	    <% @theschool = nil %>
+	    <% @theschool = crawlschool.school if !crawlschool.school_id.blank? %>
+	    <%= crawlschool.name %> <small>(<%= crawlschool.city %>, <%= crawlschool.state %>)</small>
+	    <input type="text" id="url_string<%= crawlschool.id -%>" name="url_string" size="50" value="<%= @theschool.url_string if !@theschool.blank? -%>">
+	    <input type="submit" value="Update &raquo;">
+	    <span id="submit_status<%= crawlschool.id -%>"><%= @theschool.city.name + ', ' + @theschool.state.name rescue nil %></span>
+	    <br>
+	    <span id="suggestions<%= crawlschool.id -%>"></span>
+	    
+	  </form>
+
+		<%= observe_field('url_string' + crawlschool.id.to_s,
+		     :url => {:action => :school_suggest, :cid => crawlschool.id},
+		     :frequency => 0.5,
+		     :update => 'suggestions' + crawlschool.id.to_s,
+		     :with => 'url_string')
+		     %>
+
+  <% end %>
+
+</div>

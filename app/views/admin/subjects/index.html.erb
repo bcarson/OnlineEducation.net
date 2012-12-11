@@ -1,0 +1,115 @@
+<div style="padding: 15px">
+	<h1>Subject Profession &amp; Category Matching</h1>
+
+  <%= will_paginate @subjects %>  
+
+  <table>	
+	<% for subject in @subjects %>
+    <tr>
+      <td valign="top">
+	    <b><%= subject.name -%></b>
+	    <br>
+	    
+			<%= form_remote_tag(:update => 'prim_submit_status' + subject.id.to_s, :url => {:action => 'update_prim_profession', :id => subject.id}, :html => {:id => 'form' + subject.id.to_s}) %>
+
+		    <small>Primary Profession:</small> 
+		    <input type="text" id="entering_profession<%= subject.id -%>" name="profession_name" size="60" value="<%= subject.primaryprofession.name if !subject.primaryprofession.blank? %>">
+		    <input type="submit" value="Go &raquo;"><br>
+		    <span id="prim_submit_status<%= subject.id -%>"></span>
+		    <br>
+		    <span id="prim_suggestions<%= subject.id -%>"></span>
+
+		  </form>
+
+			<%= observe_field('entering_profession' + subject.id.to_s,
+			     :url => {:action => :profession_suggest, :id => subject.id},
+			     :frequency => 0.5,
+			     :update => 'prim_suggestions' + subject.id.to_s,
+			     :with => 'profession_name')
+			     %>
+	
+	      <b>Other professions associated with <u><%= subject.name %></u></b>
+		    <div id="plist<%= subject.id -%>">
+			    <% @subject = subject %>
+		      <%= render :partial => 'p_list' %>
+		    </div>
+		    <br><b>Add another profession</b>:<br>
+		    <%= form_remote_tag(:update => 'plist' + subject.id.to_s, :url => {:action => 'add_p', :sid => subject.id}, :html => {:id => 'add_p_form' + subject.id.to_s}) %>
+		    <input type="text" id="entering_add_profession<%= subject.id -%>" name="profession_name" size="60" value="">
+        <input type="submit" value="Go &raquo;"><br>
+        <br>
+        <span id="add_p_suggestions<%= subject.id -%>"></span>
+        </form>	
+
+
+				<%= observe_field('entering_add_profession' + subject.id.to_s,
+				     :url => {:action => :profession_suggest, :id => subject.id, :adding => '1'},
+				     :frequency => 0.5,
+				     :update => 'add_p_suggestions' + subject.id.to_s,
+				     :with => 'profession_name')
+				     %>
+
+
+			
+		  </td>
+
+		  <td valign="top">
+		    <b>Primary Profession Category for <u><i><%= subject.name %></i></u></b>
+		    <br>
+
+				<%= form_remote_tag(:update => 'zocc_submit_status' + subject.id.to_s, :url => {:action => 'update_prim_zocc'}, :html => {:id => 'zform' + subject.id.to_s}) %>
+			    
+			    <input type="hidden" name="pid" id="pid<%= subject.id -%>" value="<%= subject.primaryprofession.id if subject.primaryprofession -%>">
+			    <input type="text" id="entering_zocc<%= subject.id -%>" name="zocc_name" size="60" value="<%= subject.primaryprofession.primaryzocc.name if !subject.primaryprofession.blank? and !subject.primaryprofession.primaryzocc.blank? %>">
+			    <input type="submit" value="Go &raquo;"><br>
+			    <span id="zocc_submit_status<%= subject.id -%>"></span>
+			    <br>
+			    <span id="zocc_suggestions<%= subject.id -%>"></span>
+
+			  </form>
+
+				<%= observe_field('entering_zocc' + subject.id.to_s,
+				     :url => {:action => :zocc_suggest, :id => subject.id},
+				     :frequency => 0.5,
+				     :update => 'zocc_suggestions' + subject.id.to_s,
+				     :with => 'zocc_name')
+				     %>
+			
+			  <% if @profession = subject.primaryprofession %>
+
+			      <b>Other categories associated with <u><%= subject.name %></u></b>
+				    <div id="zlist<%= subject.id -%>">
+					    <% @subject = subject %>
+				      <%= render :partial => 'z_list' %>
+				    </div>
+				    <br><b>Add another category</b>:<br>
+				    <%= form_remote_tag(:update => 'zlist' + subject.id.to_s, :url => {:action => 'add_z', :sid => subject.id}, :html => {:id => 'add_z_form' + subject.id.to_s}) %>
+				    <input type="text" id="entering_add_zocc<%= subject.id -%>" name="zocc_name" size="60" value="">
+		        <input type="submit" value="Go &raquo;"><br>
+		        <br>
+		        <span id="add_z_suggestions<%= subject.id -%>"></span>
+		        </form>	
+
+
+						<%= observe_field('entering_add_zocc' + subject.id.to_s,
+						     :url => {:action => :zocc_suggest, :id => subject.id, :adding => '1'},
+						     :frequency => 0.5,
+						     :update => 'add_z_suggestions' + subject.id.to_s,
+						     :with => 'zocc_name')
+						     %>
+
+       <% end %>
+			
+			</td>
+		</tr>
+	  <tr><td colspan="2"><br><hr><hr><br></td></tr>
+  <% end %>
+
+
+
+
+
+
+
+
+</div>

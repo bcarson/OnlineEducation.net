@@ -1,0 +1,42 @@
+<%= render :partial => "mw_page_title" %>
+
+<div id="wrapper">
+	<div id="content">
+		<div id="main">
+			
+
+			<%= render :partial => "content_online_subject_schools" if @page and @page.url_string == 'online-[Subject]-schools' %>
+			<%= render :partial => "content_online_subject_programs" if @page and @page.url_string == 'online-[subject]-programs' %>
+			<%= render :partial => "content_online_subject_courses" if @page and @page.url_string == 'online-[subject]-courses' %>
+			<%= render :partial => "content_online_subject_certifications" if @page and @page.url_string == '[Subject]-certification' %>
+			
+			
+
+			<div class="section_break">&nbsp;</div>					
+			<%= render :partial => "mw_featured_subject_" + Worker.inurl(@cousin_name) %>
+			<%# render :partial => "mw_article_content" %>
+			<div class="section_break"></div>
+			<%= render :partial => "mw_states_and_cities" -%>
+			<div class="section_break"></div>
+			<%= render :partial => "mw_top_schools_campus" -%>
+	  </div>
+
+		<div id="sidebar">	
+			<%= render :partial => "sw_123_widget" %>	
+			<%= render :partial => "sw_featured_schools" %>
+			
+			<%= render :partial => "sw_find_school_form" %>
+			<%= render :partial => "sw_subject_cousins" %>		
+			<%= render :partial => "sw_related_subject_cousins" %>				
+			<%# render :partial => "sw_top_cities_subject" %>
+			<%# render :partial => "sw_subject_schools_by_state" %>
+      <%= render :partial => "sw_cousin_in_other_subjects" %>		
+      <%= render :partial => 'sw_classroom_ad' %>					
+      <%# this is currently too slow render :partial => "sw_degreelevel_subjects" %>				
+		</div>
+		<!-- end #sidebar -->
+		<div class="clear"></div>
+  </div>
+<!-- end #content -->
+</div>
+<!-- #wrapper -->

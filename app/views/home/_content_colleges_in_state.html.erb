@@ -1,0 +1,121 @@
+<h3>Colleges and Universities in <%= @state.name -%></h3>
+
+<% @school = @schools.first -%>
+<% @zstate = Zstate.find_by_state_id(@state.id) -%>
+
+
+<p>
+	<strong><%= @state.name -%></strong> has
+	<%= @total_schools_count -%>
+	higher education schools within its borders.
+
+	<a href="/school/<%= @school.url_string -%>"><%= @school.name -%></a>,
+	the highest-ranked school in <%= @state.two_letter_code -%>,
+	has a total student population of <%= number_with_delimiter(@school.student_population) -%> and
+	is the
+	<% if @school.country_rank != 1 -%>
+	  <%= @school.country_rank.en.ordinal -%>
+	<% end -%>
+	highest ranked school in the USA.
+
+
+	  Of the <%= @total_schools_count -%> schools
+	  in <%= @state.name -%>, the average student population is <%= number_with_delimiter(@state.avg_student_population.to_i) -%>
+	  and average student-to-faculty ratio is
+	  <%= @state.avg_student_to_faculty_ratio.to_i -%> to 1. There are <%= @state.total_programs -%> total
+	  degree (or certificate) programs in the state, with <%= number_with_delimiter(@state.avg_number_of_applicants_09.to_i) -%>
+	  people on average applying for a school.
+	  <% if @state.avg_tuition_undergrad_09_in_state and @state.avg_tuition_undergrad_09_in_state > 0 -%>
+	  Undergraduate tuition costs are normally around
+	  $<%= number_with_delimiter(@state.avg_tuition_undergrad_09_in_state.to_i) -%>, but can vary widely depending on the type
+	  of school.
+    <% end -%>
+	</p>
+
+	<p>
+
+		<% if !Worker.grabz('statemotto', @zstate.info) -%>
+			<%= @state.name -%>
+			<%= '(the ' + Worker.grabz('nickname', @zstate.info) +  ' state),' if !Worker.grabz('nickname', @zstate.info).blank? -%>
+			has a state motto of
+			<%= Worker.grabz('statemotto', @zstate.info) -%>.
+		<% end -%>
+
+		<% if !Worker.grabz('numofhomesbuiltinyrb', @zstate.info).blank? and !Worker.grabz('avgcostofnewsinglefamhome', @zstate.info).blank? and !Worker.grabz('residentname', @zstate.info).blank? and !Worker.grabz('avgannualincome', @zstate.info) -%>
+			Last year, there were
+			<%= number_with_delimiter(Worker.grabz('numofhomesbuiltinyrb', @zstate.info).to_i) -%> homes built in the state,
+			with an average cost of <%= number_with_delimiter(Worker.grabz('avgcostofnewsinglefamhome', @zstate.info).to_i) -%>,
+			which is reasonably affordable given the mean annual salary of <%= Worker.grabz('residentname', @zstate.info) -%>s
+			is <%= Worker.grabz('avgannualincome', @zstate.info) -%>.
+		<% end -%>
+	</p>
+
+<% if !@school.avg_08_net_price.blank? %>
+<p>
+	<% @ct = 0 -%>
+	<% @highest_np = @schools.first -%>
+	<% @lowest_np = @schools.first -%>
+
+	<% for school in @schools -%>
+	  <% @ct += 1 if school.student_population and school.student_population > 10000 -%>
+	  <% @highest_np = school if school.avg_08_net_price and school.avg_08_net_price > @highest_np.avg_08_net_price -%>
+	  <% @lowest_np = school if school.avg_08_net_price and school.avg_08_net_price < @lowest_np.avg_08_net_price -%>
+	<% end -%>
+
+	Of the <%= @total_schools_count -%> schools in <%= @state.name -%>,
+
+	<% if @ct == 0 -%>
+	  none
+	<% else -%>
+	  only <%= @ct -%>
+	<% end -%>
+	  <%= @ct == 1 ? 'has' : 'have' -%> a student population over 10k. After taking into account tuition, living expenses, and financial aid,
+	  <a href="/school/<%= @highest_np.url_string -%>"><%= @highest_np.name -%></a> comes out as the most expensive ($<%= number_with_delimiter(@highest_np.avg_08_net_price) -%>/yr)<%= @one ? '.' : ','%>
+	  <% if !@one -%>
+	    with <a href="/school/<%= @lowest_np.url_string -%>"><%= @lowest_np.name -%></a> as the lowest recorded at only $<%= number_with_delimiter(@lowest_np.avg_08_net_price) -%>/yr.
+	  <% end -%>
+</p>
+<% end %>
+
+  <% if !@zstate.fun_facts.blank? -%>
+	<b><%= @state.name -%> Interesting Facts</b>
+	<ul>
+		<% for line in @zstate.fun_facts.split("\n") -%>
+		  <% if !line.blank? and line.length > 10 -%>
+		    <li><%= line.gsub(/^-/,'') -%></li>
+		  <% end -%>
+		<% end -%>
+
+	</ul>
+  <% end -%>
+
+
+
+
+<% if @r = Replacement.find_by_name_and_replaceable_id('state.top_national_parks', @state.id) -%>
+<b>Top National Parks in <%= @state.name -%></b>
+<ul>
+	<% for num in (0..9) -%>
+	  <% @output = Worker.clean_content_display(@r.body[num.to_s]) -%>
+	  <li><a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@output + ' ' + @state.name) -%>"><%= @output -%> &raquo;</a></li>
+	<% end -%>
+</ul>
+<% end -%>
+
+
+<% if @r = Replacement.find_by_name_and_replaceable_id('state.famous_residents', @state.id) -%>
+<b>Famous State Residents</b>
+<ul>
+	<% for num in (0..9) -%>
+	  <% @output = Worker.clean_content_display(@r.body[num.to_s]) -%>
+	  <li><a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@output + ' ' + @state.name) -%>"><%= @output -%> &raquo;</a></li>
+	<% end -%>
+</ul>
+<% end -%>
+
+<b>See Also</b>
+<ul>
+	<% for subject in Subject.nodes -%>
+	  <li><a href="/schools/<%= Worker.inurl(subject.name) -%>/<%= @state.two_letter_code -%>"><%= subject.name -%> Schools in <%= @state.name -%></a></li>
+	<% end -%>
+</ul>

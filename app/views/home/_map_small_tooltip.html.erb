@@ -1,0 +1,12 @@
+<div class="small_tooltip" style="display:none;">
+	<div class="close"><a href="#" OnClick="$('.small_tooltip').fadeOut(); $.cookie('small_tool_tip', 'closed', { expires: 7}); return false;">X</a></div>
+	<p>Click <strong>Update Map</strong> to show all schools within the current map bounds (even after you move the map).  
+		  <% if !@subject.blank? %>
+		    Feel free to <strong>Change Subject</strong> to only show schools that offer a specific program.
+		  <% else %>
+		    Feel free to <strong>Select Subject</strong> to only show schools that offer a specific program.
+		  <% end %>
+		  <a target="_blank" href="/about#overview"><strong>Learn more in our Feature Guide &raquo;</strong></a>
+	</p>
+
+</div>

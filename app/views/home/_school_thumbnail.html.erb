@@ -1,0 +1,20 @@
+<div class="thumbnail">
+	<table class="school_info" cellspacing="0">
+		<tr>
+			<td class="logo" colspan="2" valign="center" align="center"><a href="/school/<%= @school.url_string -%>"><%= @school.logo_med %></a></td>
+		</tr>
+		<tr>
+			<td width="75%" class="ranking_left"><a target="_blank" href="/rankings">[?]</a></td>
+			<td align="right"  class="ranking_right" width="25%"><strong><%= @school.display_rank_online -%></strong></td>
+		</tr>
+		<tr>
+			<td><a href="/school/<%= @school.url_string -%>#programs">Total Programs</a></td>
+			<td align="right"><a href="/school/<%= @school.url_string -%>#programs"><strong><%= @school.num_programs -%></strong></a></td>
+		</tr>
+		<tr>
+			<td><a href="/school/<%= @school.url_string -%>#programs">Subject Areas</a></td>
+			<td align="right"><a href="/school/<%= @school.url_string -%>#programs"><strong><%= @school.num_subjects -%></strong></a></td>
+		</tr>
+	</table>
+	<br/><br/>
+</div>

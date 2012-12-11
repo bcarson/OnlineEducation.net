@@ -1,0 +1,40 @@
+<table cellspacing="0">
+	<tr>
+		<th width="20%">School Name <br>(link to homepage)</th>
+		<th>Overall Rank <a target="_blank" href="/rankings" style="font-size:10px">[?]</a></th>
+		<th>Avg. Net Cost</th>
+		<th>Student Population</th>
+		<th>Student-to-Faculty Ratio</th>
+		<th>Acceptance Ratio</th>
+		<th># of Programs</th>
+		<th>More Info</th>
+	</tr>
+	<% @ct = 1 %>
+	<% for school in @schools %>
+		<tr <%= 'class="even"' if @ct % 2 == 0 -%>>
+			<td class="school_name">
+			  <% if school.website_url.blank? %>
+			    <%= school.name %>
+		    <% else %>
+		      <a target="_blank" href="<%= school.website_url -%>"><%= school.name %></a>
+		    <% end %>
+			</td>
+			<td><%= sprintf("%.1f",school.rank) -%></td>
+			<td><%= school.avg_08_net_price.blank? ? 'n/a' : '$' + number_with_delimiter(school.avg_08_net_price) %></td>
+			<td><%= school.student_population.blank? ? 'n/a' : number_with_delimiter(school.student_population) %></td>
+			<td><%= (school.student_to_faculty_ratio.blank? and school.student_to_faculty_ratio != 0) ? 'n/a' : school.student_to_faculty_ratio.to_s + ' to 1' %></td>
+			<td><%= school.percent_admitted_09.blank? ? 'n/a' : school.percent_admitted_09.to_s + '%' %></td>
+			<td><%= school.programs.count %></td>
+			<td><a target="_blank" href="/school/<%= school.url_string -%>">more&nbsp;&raquo;</a></td>
+		</tr>
+		<% @ct = @ct + 1 %>
+	<% end %>
+</table>
+
+<br><br>
+
+<center>
+	<% for school in @schools %>
+	  <%= school.logo_med %> &nbsp;
+	<% end %>
+</center>

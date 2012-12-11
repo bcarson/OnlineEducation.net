@@ -1,0 +1,96 @@
+<h3>Ranked by Excellence</h3>
+<ul>
+<% for school in @schools -%>
+  <%# @programs = school.matching_programs(@subject) -%>
+  <% school_programs = Worker.all_programs_from_school(@programs, school) -%>
+
+	<div class="entry thumb">
+		
+    <% @school = school -%>
+    <%= render :partial => 'school_thumbnail' -%>
+
+
+			<div class="article">
+				<% for program in school_programs -%>
+				  <% courses = program.courses -%>
+				<div id="<%= Worker.inurl(program.name) -%>" class="section <%= dom_class_last(program, school_programs) -%>">
+  				<h4><%= program.name -%></h4>
+	  			<p><%= program.description -%></p>
+
+	        <table class="universal courses">
+		        <% if !program.concentrations.blank?  -%>
+			        <tr>
+				        <td class="title"><strong>Concentration</strong></td>
+				        <td><%= program.concentrations.first.name -%></td>
+				      </tr>
+			      <% end -%>
+
+		        <% if !program.more_info_url.blank? and Worker.not_na(program.more_info_url) -%>
+			        <tr>
+				        <td class="title"><strong>More Info</strong></td>
+				        <td><%= program.more_info_url -%></td>
+				      </tr>
+			      <% end -%>
+
+		        <% if !program.parent_id.blank? and @p = Program.find_by_id(program.parent_id) -%>
+			        <tr>
+				        <td class="title"><strong>Parent Program</strong></td>
+				        <td><%= @p.name -%></td>
+				      </tr>
+			      <% end -%>
+
+		        <% if !program.prereq_url.blank?  and Worker.not_na(program.prereq_url) -%>
+			        <tr>
+				        <td class="title"><strong>Prereq Info</strong></td>
+				        <td><%= program.prereq_url -%></td>
+				      </tr>
+			      <% end -%>
+
+		        <% if !program.prereq_gpa.blank? and Worker.not_na(program.prereq_gpa) and !program.prereq_gpa.index(/\//) -%>
+			        <tr>
+				        <td class="title"><strong>Prereq GPA</strong></td>
+				        <td><%= program.prereq_gpa -%></td>
+				      </tr>
+			      <% end -%>
+
+		        <% if !program.prereq_degree.blank? and Worker.not_na(program.prereq_degree)  -%>
+			        <tr>
+				        <td class="title"><strong>Prereq Degree</strong></td>
+				        <td><%= program.prereq_degree -%></td>
+				      </tr>
+			      <% end -%>
+
+
+		        <% if !program.instructions.blank?  and Worker.not_na(program.instructions) -%>
+			        <tr>
+				        <td class="title"><strong>Special Instructions</strong></td>
+				        <td><%= program.instructions -%></td>
+				      </tr>
+			      <% end -%>
+
+
+		        <% if !program.credit_transfer_restrictions.blank?  and Worker.not_na(program.credit_transfer_restrictions) -%>
+			        <tr>
+				        <td class="title top_align"><strong>Credit Transfer Restrictions</strong></td>
+				        <td><%= program.credit_transfer_restrictions -%></td>
+				      </tr>
+			      <% end -%>
+
+
+						<tr><td class="title top_align">Courses</td><td style="padding:0px"><table>
+			      <% for course in courses -%>
+			        <% if Worker.is_not_blank(course.name) -%>
+				        <tr><td><a href="/courses/<%= Worker.inurl(@subject.name) -%>/online#<%= course.id -%>-<%= Worker.inurl(course.name) -%>"><%= Worker.clean_content_display(course.name) -%></a>&nbsp;&raquo; </td></tr>
+				      <% end -%>
+					  <% end -%>
+						</table>
+						</td></tr>
+				  </table>
+				</div>
+				<% end -%>
+			</div>
+
+		<div class="clear"></div>
+	</div>
+
+<% end -%>

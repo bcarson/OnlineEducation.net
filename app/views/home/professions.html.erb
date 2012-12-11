@@ -1,0 +1,25 @@
+<%= render :partial => "mw_page_title" %>
+
+<div id="wrapper">
+	<div id="content">
+		<div id="main">			
+      <%= render :partial => "mw_article_content" %>
+			<div class="section_break"></div>
+			<%# render :partial => "mw_toplevel_subjects" %>
+			<%= render :partial => "mw_full_list_of_professions" %>
+		</div>
+		<!-- end #main -->
+		
+		<div id="sidebar">
+			<%= render :partial => "sw_find_school_form" %>
+      <%# render :partial => 'top_online_' + @cousin_name.downcase %>
+			<%= render :partial => "sw_school_questionaire" %>
+			<%= render :partial => 'sw_poll_your_friends' %>
+			<%= render :partial => 'sw_classroom_ad' %>
+		</div>
+		<!-- end #sidebar -->
+		<div class="clear"></div>
+	</div>
+	<!-- end #content -->
+</div>
+<!-- #wrapper -->

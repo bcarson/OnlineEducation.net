@@ -1,0 +1,52 @@
+<div style="padding: 15px">
+	<h1>Profession Subject &amp; Category Matching</h1>
+
+  <%= will_paginate @professions %>  
+
+  <table>	
+	<% for profession in @professions %>
+	  <% if !profession.zoccupations.blank? %>
+	    <tr>
+	      <td>
+		    <b><%= profession.name -%></b>
+		    <br>
+	    
+				<%= form_remote_tag(:update => 'prim_submit_status' + profession.id.to_s, :url => {:action => 'update_prim_subject', :id => profession.id}, :html => {:id => 'form' + profession.id.to_s}) %>
+
+			    <small>Primary Subject:</small> 
+			    <input type="text" id="entering_subject<%= profession.id -%>" name="subject_name" size="50" value="<%= profession.primarysubject.name if !profession.primarysubject.blank? %>">
+			    <input type="submit" value="Go &raquo;">
+			    <span id="prim_submit_status<%= profession.id -%>"></span>
+			    <br>
+			    <span id="prim_suggestions<%= profession.id -%>"></span>
+
+			  </form>
+
+				<%= observe_field('entering_subject' + profession.id.to_s,
+				     :url => {:action => :subject_suggest, :id => profession.id},
+				     :frequency => 0.5,
+				     :update => 'prim_suggestions' + profession.id.to_s,
+				     :with => 'subject_name')
+				     %>
+	
+			</td>
+		  </tr>
+		<% end %>
+  <% end %>
+  </table>
+
+
+<% for s in  Subject.nodes %>
+  <h2><%= s.name -%></h2>
+  <% for sub in s.all_prim_kids %>
+    <%= sub.name %><br>
+  <% end %>
+  <br><br>
+<% end %>
+
+
+
+
+
+
+</div>

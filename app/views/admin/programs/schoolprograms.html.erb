@@ -1,0 +1,30 @@
+<a href="/admin/programs">&larr; back to schools</a>
+<br><br>
+<% @schoolturk = Schoolturk.find_by_picsid(@school.picfoldernum.to_i) %>
+<% @output = '' %>
+<% if @schoolturk and !@schoolturk.programc.blank? %>
+
+  <% @output = @schoolturk.programc %>
+  <% @output = @output.gsub(/\n/,' <br> ') %>
+  <% @output = @output.gsub(/\[school_name\]/, '<b>' + @school.name + '</b>') %>
+  <%# @output = @output.gsub(/\[program_name\]/, '<b><u>' + @program.name + '</u></b>')  %>
+  <% @output = @output.gsub(/(http.*?)\s/, '<a target="_blank" href="\1">\1</a> ') %>
+
+	<span style="color:blue; cursor: pointer" onClick="new Effect.toggle('thediv','appear')">Show instructions & catalog URL &raquo;</span>
+	<div id="thediv" style="display:none; background-color: #ccc;">
+	<%= @output %>
+	</div>
+<% end %>
+
+
+
+<br><br>
+Select a program from <%= @school.name %> to work on:
+<br><br>
+<% for program in @programs -%>
+  <%= program.good_to_go == true ? '<font style="color:green">GOOD TO GO =========></font>' : '' %> 
+  <%= program.deficiency -%> 
+  <a href="/admin/programs/workonprogram?id=<%= program.id -%>"><%= program.name %></a>
+  <a href="/admin/programs/courselist?id=<%=program.id -%>">(course list)</a> <small>(ID# <%= program.id %>)</small>
+  <br>
+<% end %>

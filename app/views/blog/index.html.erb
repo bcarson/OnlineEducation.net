@@ -1,0 +1,52 @@
+<div id="page_header">
+	<div id="page_header_content">
+		<div class="left">
+			<h2<%= ' class="with_sub"' if @subtitle %>><%= @title %></h2>
+			<%= '<h3>' + @subtitle + '</h3>' if @subtitle %>
+		</div>
+	
+		<a id="blog_rss_btn" href="/feed">Subscribe to our blog</a>
+		
+	</div>
+</div>
+<!-- end #page_header -->
+
+<div id="wrapper">
+	<div id="content">
+		<div id="main">
+      <% for blog in @blogs %>
+        <% if File.exists?('public/images/infographics/large/' + blog.url_string + '.jpg') || File.exists?('public/images/blogs/' + blog.url_string + '/feature.jpg') %>
+          <% blog.is_infographic? ? @path = 'infographics/large/' + blog.url_string : @path = 'blogs/' + blog.url_string + '/feature' -%>
+        <% end %>
+	      <div class="entry <%= 'thumb' unless @pic.blank? -%>">
+		      <% unless @pic.blank? %>
+						<div class="thumbnail">
+							<img src="/images/<%= @path -%>.jpg"/>
+						</div>
+					<% end %>
+					<div class="article blog">
+						<h4><a href="<%= blog.url -%>"><%= widont_single(blog.title) -%></a></h4>
+						<div class="meta"><%= blog.created_at.strftime("Posted on %B %d, %Y") -%></div>
+						<%= blog.body %>
+					</div>
+					<div class="clear"></div>
+				</div>
+      <% end %>
+			<div class="clear"></div>
+			<%= will_paginate @blogs if @blogs and !@tag and @url_string.blank? %>
+		</div> <!-- end main -->
+		
+		
+		<div id="sidebar">
+			<%= render(:partial => "sw_featured_article") %>
+			<%= render(:partial => "sw_popular_posts") %>
+			<%= render(:partial => "sw_tags") %>			
+			<%= render(:partial => "sw_archives") %>	
+		</div>
+		<!-- end #sidebar -->		
+		<div class="clear"></div>
+	</div> <!-- end content -->
+
+	
+</div><!-- end wrapper -->
+	

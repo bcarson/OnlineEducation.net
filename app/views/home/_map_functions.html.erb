@@ -1,0 +1,100 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	map_first_load(0);
+	$('.overlay_screen').click(function(){
+		map_first_load(1);
+	});
+});
+var iterator = 0;
+var yiterator = 0;
+var hiterator = 0;
+var markers = [];
+var yelpmarkers = [];
+var housingmarkers = [];
+var clat = null;
+var clng = null;
+var thepoint = null;
+var waypts = [];
+var map = null;
+var directionsDisplay = new google.maps.DirectionsRenderer();
+var directionsService = new google.maps.DirectionsService();
+<%= render :partial => 'map_setup_schools_array' -%>
+
+function initialize() {
+    var latlng = new google.maps.LatLng(<%= @origin['lat'] %>, <%= @origin['lng'] %>);
+    var myOptions = {
+	      //scrollwheel: false,
+        zoom: 20,
+        center: latlng,
+        <% if !@within.blank? -%>
+        overviewMapControl: true,
+        overviewMapControlOptions: {
+	        opened: true
+        },
+        <% end -%>
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+    directionsDisplay.setMap(map);
+
+    <% if @within -%>
+		  //var image = 'http://code.google.com/apis/maps/documentation/javascript/examples/images/beachflag.png';
+		  var image = '/images/dot-blue-transparent.png';
+		  var myLatLng = new google.maps.LatLng(<%= @origin['lat'] -%>, <%= @origin['lng'] -%>);
+		  var beachMarker = new google.maps.Marker({
+		      position: myLatLng,
+		      map: map,
+		      icon: image
+		  });
+    <% end -%>
+    increasebounds(map, schools);
+
+    put_markers_on_map(map, schools);
+
+    //have map bounds recorded when map bounds change
+    google.maps.event.addListener(map, "bounds_changed", function() {
+      var center = map.getBounds();
+      document.getElementById('lat1').value = center.getNorthEast().lat().toString();
+      document.getElementById('lng1').value = center.getNorthEast().lng().toString();
+      document.getElementById('lat2').value = center.getSouthWest().lat().toString();
+      document.getElementById('lng2').value = center.getSouthWest().lng().toString();
+
+      //document.getElementById('overlayLabel').innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Click to update map &rarr;';
+
+    });
+
+
+
+
+    //set the correct map bounds
+    //setTimeout(function() {}, 300);
+}
+
+function increasebounds(map, schools){
+
+	if (schools.length == 1){
+		<% if @within -%>
+		  //var bounds = map.getBounds();
+		  var bounds = new google.maps.LatLngBounds();
+			s = schools[0]
+			bounds.extend(new google.maps.LatLng(s[1],s[2]));
+			bounds.extend(new google.maps.LatLng(<%= @origin['lat'] -%>, <%= @origin['lng'] -%>));
+			map.fitBounds(bounds);
+		<% else -%>
+		  map.setZoom(11);
+		  s = schools[0];
+		  map.setCenter(new google.maps.LatLng(s[1],s[2]));
+		<% end -%>
+	}else{
+	  //var bounds = map.getBounds();
+	  var bounds = new google.maps.LatLngBounds();
+		for (var j = 0; j < schools.length; j++){
+			s = schools[j];
+			bounds.extend(new google.maps.LatLng(s[1],s[2]));
+		}
+		bounds.extend(new google.maps.LatLng(<%= @origin['lat'] -%>, <%= @origin['lng'] -%>));
+    map.fitBounds(bounds);
+	}
+}
+</script>

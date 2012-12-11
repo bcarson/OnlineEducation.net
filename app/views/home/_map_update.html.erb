@@ -1,0 +1,122 @@
+<script type="text/javascript">
+
+	//clear the overlays and refresh the markers array
+	for(var i=0; i < markers.length; i++){
+	    markers[i].setMap(null);
+	}
+	for(var i=0; i < yelpmarkers.length; i++){
+	    yelpmarkers[i].setMap(null);
+	}
+	for(var i=0; i < housingmarkers.length; i++){
+	    housingmarkers[i].setMap(null);
+	}
+	markers = new Array();
+  yelpmarkers = new Array();
+  housingmarkers = new Array();
+
+	var iterator = 0;
+	var yiterator = 0;
+	var hiterator = 0;
+
+  <% if !@schools.blank? -%>
+    var clat = <%= @schools.first.lat -%>;
+	  var clng = <%= @schools.first.lng -%>;
+	  thepoint = new google.maps.LatLng(clat, clng);
+	<% end -%>
+
+  var waypts = [];
+
+	directionsDisplay.setMap(null);
+
+
+	//refresh the schools array
+  <%= render :partial => 'map_setup_schools_array' -%>
+  setTimeout(function() {put_markers_on_map(map, schools)}, 100);
+
+  <% if @show_yelps == true -%>
+    load_yelp_listings('1', '<%= @category -%>');
+  <% end -%>
+
+  <% if @show_housing == true -%>
+    load_housing_listings('1', '<%= @hcategory -%>','<%= params[:beds] -%>','<%= params[:baths] -%>','<%= params[:price_min] -%>','<%= params[:price_max] -%>','<%= params[:sqft_min] -%>','<%= params[:sqft_max] -%>');
+  <% end -%>
+
+  //need to add bound change here if necessary
+  //setTimeout(function() {increasebounds(map, schools)}, 2500);;
+
+
+</script>
+
+<div style="display: none;" id="goto_schoollist">
+    <%= render :partial => 'map_listing_tab_content' %>
+</div>
+
+<script type="text/javascript">
+  document.getElementById('school_list').innerHTML = document.getElementById('goto_schoollist').innerHTML;
+  document.getElementById('title_subject').innerHTML = '<%= @subject ? @subject.name : '' -%>';
+  document.getElementById('title_in_or_near').innerHTML = 'within';
+  document.getElementById('title_location').innerHTML = 'the selected map bounds';
+  document.getElementById('title_schools_count').innerHTML = '<%= @schools.count -%> of <%= @total_schools_count -%>';
+
+  <% if @show_yelps == true -%>
+    document.getElementById('yelp_listings').innerHTML = '<div class=\'loader\'>Loading... <img src=\'/images/spinner_e3e3e3.gif\'/></div>';
+	<% end -%>
+	<% if @show_housing == true -%>
+	  document.getElementById('housing_listings').innerHTML = '<div class=\'loader\'>Loading... <img src=\'/images/spinner_e3e3e3.gif\'/></div>';
+  <% end -%>
+  var count = $(".school_list :checkbox:checked").length;
+
+  school_list_checkbox();
+  other_school_list_functions();
+  document.getElementById('btn_popup_group').style.display = 'none';
+
+</script>
+
+
+<script type="text/javascript">
+
+	$(".listing_tab_content").hide();
+	$("ul.listing_tabs li").removeClass("active");
+
+	<% if params[:show_tab] == '3' and @show_yelps == true -%>
+	  $("#listing_tab3").show();
+	  $("#listing_tab3_li").addClass("active").show();
+	<% else -%>
+	  <% if params[:show_tab] == '2' and @show_housing == true -%>
+	    $("#listing_tab2").show();
+	    $("#listing_tab2_li").addClass("active").show();
+	  <% else -%>
+  	  $("ul.listing_tabs li:first").addClass("active").show();
+	    $(".listing_tab_content:first").show();
+	  <% end -%>
+	<% end -%>
+
+
+	$("ul.listing_tabs li").click(function() {
+	    $("ul.listing_tabs li").removeClass("active");
+	    $(this).addClass("active");
+	    $(".listing_tab_content").hide();
+	    var activeTab = $(this).find("a").attr("href");
+	    $(activeTab).show();
+	    return false;
+	});
+
+  $("#school_info_view .close a").click(function() {
+      $("#school_info_view").fadeOut();
+      return false;
+  });
+
+
+	$(".listing_overlay .close a").click(function() {
+		popup = 'closed';
+        $(".listing_overlay").fadeOut();
+        directionsDisplay.setMap(null);
+        document.getElementById('directionsPanel').innerHTML = '';
+        return false;
+    });
+
+</script>
+
+
+
+

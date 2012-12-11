@@ -1,0 +1,25 @@
+
+
+var houses = new Array();
+
+$.each(data.listings, function(i,listing){
+	
+	var thesource = '';
+	if (listing.images != null && listing.images[0] != null){thesource = '<img width="50px" src="' + listing.images[0].src + '" />'}
+	
+	var arr = [listing.title,
+   listing.location.latitude,
+   listing.location.longitude,
+   thesource,
+   listing.location.address + ' ' + listing.location.name + ', ' + listing.location.state + ' ' + listing.location.zip,
+   listing.body,
+   i,
+   listing.id,
+   listing.attributes.bedrooms, 
+   listing.attributes.bathrooms,
+   listing.attributes.price_display,
+   listing.attributes.square_feet 
+  ]
+	
+  houses.push(arr);
+});

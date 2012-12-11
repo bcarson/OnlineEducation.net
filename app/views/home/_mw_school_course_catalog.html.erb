@@ -1,0 +1,33 @@
+
+<script type="text/javascript">
+	function show_courses(id){
+		
+	  document.getElementById('loading' + id.toString()).innerHTML = 'Loading...';
+	  jQuery.ajax({ 
+			url: '/home/load_courses?id=' + id.toString(), 
+			success: function(data){
+				jQuery('#courses' + id.toString()).html(data);			
+				document.getElementById('loading' + id.toString()).innerHTML = '';
+			}
+		});    
+	}
+</script>
+
+
+
+<% reset_cycle() -%>
+<table id="programs" class="universal school" cellspacing="0">	
+<tr><th colspan="2"><%= @school.name %> Programs &amp; Course Catalog</th></tr>
+<% for program in @school.active_online_programs %>
+<tr>
+	<td class="top_align title"><%= program.name %></td>
+	<td style="width: 400px" class="top_align">
+	  <%= show_more(program.description.gsub("\n","<br>"), 30) %>
+	  <br /><br />
+	  <a href="#" onClick="show_courses(<%= program.id -%>); return false;">Show courses (<%= program.courses.count %>) &raquo;</a>
+	  <span id="loading<%= program.id -%>"></span>
+	  <div id="courses<%= program.id -%>"></div>
+	</td>
+</tr>
+<% end %>
+</table>

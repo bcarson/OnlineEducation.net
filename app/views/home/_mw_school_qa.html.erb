@@ -1,0 +1,18 @@
+<!-- #==Yahoo Q’s (API) -->
+
+<% reset_cycle() -%>
+<table class="universal school" cellspacing="0">
+	<tr class="<%= cycle("even", "odd") -%>">
+		<th colspan="2"><%= @school.name -%> Q&amp;A from Yahoo! Answers</th>
+	</tr>
+	<tr>
+		<td>
+			<div id="yahoo_answers">
+				<div class="school_name" style="display:none;"><%= @school.name %></div>
+			</div>
+			<h2><a href="http://www.quora.com/search?q=<%= CGI.escape(@school.name) -%>" title="Quora"> 
+        Also find more questions on Quora &raquo; 
+      </a></h2>
+		</td>
+	</tr>
+</table>

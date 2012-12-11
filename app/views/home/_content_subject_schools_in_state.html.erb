@@ -1,0 +1,227 @@
+<h3><%= @subject.name -%> Schools <%= @within.blank? ? 'in' : 'near' -%> <%= @state.name -%></h3>
+
+<% @school = @schools.first -%>
+<% @zstate = Zstate.find_by_state_id(@state.id) -%>
+
+<% @one = true if @schools.length == 1 -%>
+
+<p>
+	<strong><%= @state.name -%></strong> contains
+	<% if @total_schools_count < 20 -%>
+	  <%= @total_schools_count.en.numwords -%>  
+	<% else -%>
+	  <%= @total_schools_count -%>
+	<% end -%>
+	school<%= 's' if !@one -%> that offer<%= 's' if @one == true -%> <%= @subject.safe_downcase_name -%> programs.
+
+
+	<a href="/school/<%= @school.url_string -%>"><%= @school.name -%></a><% if !@one -%>,
+	the highest-ranking <%= @subject.safe_downcase_name -%> school in <%= @state.two_letter_code -%>,<% end -%>
+	has a total student population of <%= number_with_delimiter(@school.student_population) -%> and
+	is the
+	<% if @school.country_rank != 1 -%>
+	  <%= @school.country_rank.en.ordinal -%>
+	<% end -%>
+	highest ranked school in America.
+
+
+
+</p>
+
+
+<% if !@one and !@school.avg_08_net_price.blank? -%>
+<% @ct = 0 -%>
+<% @highest_np = @schools.first -%>
+<% @lowest_np = @schools.first -%>
+
+<p>
+
+	<% for school in @schools -%>
+	  <% @ct += 1 if school.student_population and school.student_population > 10000 -%>
+	  <% @highest_np = school if !school.avg_08_net_price.blank? and school.avg_08_net_price > @highest_np.avg_08_net_price -%>
+	  <% @lowest_np = school if !school.avg_08_net_price.blank? and school.avg_08_net_price < @lowest_np.avg_08_net_price -%>
+	<% end -%>
+
+	Of the <%= @total_schools_count -%> <%= @subject.safe_downcase_name -%> schools
+  in <%= @state.name -%>,
+
+	<% if @ct == 0 -%>
+	  none
+	<% else -%>
+	  <% if @ct != @schools.count -%>
+	    only <%= @ct -%>
+	  <% else -%> 
+	   <%= @ct == 2 ? 'both' : 'all' -%> of them 
+	  <% end -%>
+	<% end -%>
+	  <%= @ct == 1 ? 'has' : 'have' -%> a student population over 10k. After taking into account tuition, living expenses, and financial aid,
+	  <a href="/school/<%= @highest_np.url_string -%>"><%= @highest_np.name -%></a> comes out as the most expensive ($<%= number_with_delimiter(@highest_np.avg_08_net_price) -%>/yr)<%= @one ? '.' : ','%>
+	  
+	    with <a href="/school/<%= @lowest_np.url_string -%>"><%= @lowest_np.name -%></a> as the lowest recorded at only $<%= number_with_delimiter(@lowest_np.avg_08_net_price) -%>/yr.
+	  
+	</p>
+
+<% end -%>
+
+<% @professions = @subject.opt_professions -%>
+
+<% if !@professions.blank? -%>
+  <p>
+	  <%= @subject.name -%> students from <%= @state.name -%> schools who go on to become
+	
+	  <% @nogo = nil -%>
+	  <% for profession in @professions[0..3] -%>
+	    <% if profession == @professions[3] || profession == @professions.last -%>
+	      <% if @nogo.blank? -%>
+	        <%= profession.safe_plural_downcase_name -%><%= @professions.length > 1 ? ', etc.' : '.' -%>
+	        <% @nogo = true if profession == @professions.fourth -%>
+	      <% end -%>
+	    <% else -%>
+	      <% if @nogo.blank? -%>
+	        <%= profession.safe_plural_downcase_name -%>,
+	      <% end -%>
+	    <% end -%>
+	  <% end -%>
+
+	  have a good chance at finding employment.
+
+  <% @zocc = @professions.first.opt_zoccs.first -%>
+
+  <% if !@zocc.blank? and @zoccstat = @zocc.zoccupationstat -%>
+
+		For example, there are <%= number_with_delimiter(@zoccstat.total_employed) -%> people working as
+		<%= @zocc.safe_name.downcase -%> alone in the US, and their average annual salary is
+		$<%= number_with_delimiter(@zoccstat.mean_annual_wage.to_i) -%>.
+	<% end -%>
+
+  <% @zocc2 = @professions.first.opt_zoccs[2] -%>
+
+  <% if !@zocc2.blank? and @zoccstat2 = @zocc2.zoccupationstat -%>
+
+	  Also, <%= @zocc2.safe_name -%> make on average $<%= number_with_delimiter(@zoccstat2.mean_annual_wage.to_i) -%>
+	  per year and there are about <%= number_with_delimiter(@zoccstat2.total_employed) -%>
+	  of them employed in the US today.
+	<% end -%>
+
+  <% if !@zocc2.blank? and !@zocc.blank? and @zstatewage1 = Zstatewage.find_by_state_id_and_occ_id(@state.id, @zocc.occ_id) and @zstatewage2 = Zstatewage.find_by_state_id_and_occ_id(@state.id, @zocc2.occ_id) -%>
+    In fact, <b> in the <%= @state.name -%> alone</b>, there are
+    <%= number_with_delimiter(@zstatewage2.total_employed) if @zstatewage2.total_employed > 0 -%> employed <%= @zocc2.safe_name.downcase -%> earning an average yearly salary of
+    $<%= number_with_delimiter(@zstatewage2.mean_annual_wage) -%>. <%= @zocc.safe_name -%> in this state earn
+    $<%= number_with_delimiter(@zstatewage1.mean_annual_wage) -%>/yr and there are <%= number_with_delimiter(@zstatewage1.total_employed) if @zstatewage1.total_employed > 0 -%> employed.
+
+  <% end -%>
+
+ </p>
+<% end -%>
+
+
+<p>
+
+
+	  Also, within the <%= @subject.safe_downcase_name -%> schools
+	  in <%= @state.name -%>, the average student population is <%= number_with_delimiter(@state.avg_student_population.to_i) -%>
+	  and average student-to-faculty ratio is
+	  <%= @state.avg_student_to_faculty_ratio.to_i -%> to 1. Aside from <%= @subject.safe_downcase_name -%>,
+	  there are <%= @state.total_programs -%> total
+	  degree (or certificate) programs in the state, with <%= number_with_delimiter(@state.avg_number_of_applicants_09.to_i) -%>
+	  people on average applying for a school.  Undergraduate tuition costs are normally around
+	  $<%= number_with_delimiter(@state.avg_tuition_undergrad_09_in_state.to_i) -%>, but can vary widely depending on the type
+	  of school.
+
+	</p>
+
+	<p>
+
+		<% if !Worker.grabz('statemotto', @zstate.info) -%>
+			<%= @state.name -%>
+			<%= '(the ' + Worker.grabz('nickname', @zstate.info) +  ' state),' if !Worker.grabz('nickname', @zstate.info).blank? -%>
+			has a state motto of
+			<%= Worker.grabz('statemotto', @zstate.info) -%>.
+		<% end -%>
+
+		<% if !Worker.grabz('numofhomesbuiltinyrb', @zstate.info).blank? and !Worker.grabz('avgcostofnewsinglefamhome', @zstate.info).blank? and !Worker.grabz('residentname', @zstate.info).blank? and !Worker.grabz('avgannualincome', @zstate.info) -%>
+			Last year, there were
+			<%= number_with_delimiter(Worker.grabz('numofhomesbuiltinyrb', @zstate.info).to_i) -%> homes built in the state,
+			with an average cost of <%= number_with_delimiter(Worker.grabz('avgcostofnewsinglefamhome', @zstate.info).to_i) -%>,
+			which is reasonably affordable given the mean annual salary of <%= Worker.grabz('residentname', @zstate.info) -%>s
+			is <%= Worker.grabz('avgannualincome', @zstate.info) -%>.
+		<% end -%>
+	</p>
+	
+  <% @donealready = nil %>
+	<% for school in @schools %>
+	  <% @ps = Program.find(:all, :conditions => ['school_id = ? and name like ?', school.id, '%' + @subject.name + '%']) %>
+	  <% if !@ps.blank? %>
+	    <% if @donealready != true %>
+				<h3><%= @subject.name %> Programs <%= @within.blank? ? 'in' : 'near' -%> <%= @state.name %></h3>
+				<br>
+				<% @donealready = true %>	
+	    <% end %>
+		  <b><%= school.name -%></b><br>
+			<ul>
+		    <%= render :partial => 'schools_programs_list' %>
+		  </ul>
+	  <% end -%>
+	<% end %>
+
+
+	<hr><hr><br>
+	
+	<% if  @zstate and @zstate.fun_facts -%>
+	<p><b><%= @state.name -%> Interesting Facts</b>
+	<ul>
+		<% for line in @zstate.fun_facts.split("\n") -%>
+		  <% if !line.blank? and line.length > 10 -%>
+		    <li><%= line.gsub(/^-/,'').gsub(/\\/,'') -%></li>
+		  <% end -%>
+		<% end -%>
+
+	</ul>
+  <% end -%>
+
+
+<% if @r = Replacement.find_by_name_and_replaceable_id('state.top_national_parks', @state.id) -%>
+<b>Top National Parks in <%= @state.name -%>:</b>
+<ul>
+	<% for num in Worker.get_display_num_array(@subject.id)  -%>
+    <% @output = Worker.clean_content_display(@r.body[num.to_s]) -%>
+    <li><a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@output + ' ' + @state.name) -%>"><%= @output -%> &raquo;</a></li>
+	<% end -%>
+</ul>
+<% end -%>
+
+
+<% if @r = Replacement.find_by_name_and_replaceable_id('state.famous_residents', @state.id) -%>
+<b>Famous State Residents:</b>
+<ul>
+	<% for num in Worker.get_display_num_array(@subject.id)  -%>
+    <% @output = Worker.clean_content_display(@r.body[num.to_s]) -%>
+    <li><a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@output + ' ' + @state.name) -%>"><%= @output -%> &raquo;</a></li>
+	<% end -%>
+</ul>
+<% end -%>
+
+
+		<b>See Also</b>
+		<ul>
+			<% if @subject.has_online_program == true %>
+				<li><a href="/subjects/<%= Worker.inurl(@subject.name) -%>"><%= @subject.name -%> Information</a></li>
+				<% p = @subject.professions.first -%>
+				<li><a href="/professions/<%= Worker.inurl(p.name) -%>">Salary Details for <%= p.an_name -%> </a></li>
+				<li><a href="/schools/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name -%> Schools</a></li>
+				<li><a href="/programs/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name -%> Programs</a></li>
+				<li><a href="/courses/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name -%> Courses</a></li>
+				<% if @subject.has_online_cert == true %>
+				  <li><a href="/certifications/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name -%> Certifications</a></li>
+				<% end -%>
+			<% end -%>
+		</ul>
+
+		<b>Related Subjects - Schools in or near <%= @state.name -%></b>
+		<ul>
+			<% for subject in @subject.prim_siblings_or_kids -%>
+			  <li><a href="/schools/<%= Worker.inurl(subject.name) -%>/<%= @state.two_letter_code -%>"><%= subject.name -%></a></li>
+			<% end -%>
+		</ul>
+
+

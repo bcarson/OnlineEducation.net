@@ -1,0 +1,273 @@
+<% reset_cycle() -%>
+  <div id="fb-root"></div>
+	<table class="universal school" cellspacing="0">
+		<tr class="<%= cycle("even", "odd") -%>">
+			<th colspan="2"><%= @school.name -%> Social Media</th>
+		</tr>
+
+
+		<tr class="<%= cycle("even", "odd") -%>">
+
+
+
+
+  <% if request.request_uri.index(/^\/school/) %>
+ <td width="50%" class="twitter top_align">
+  <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+
+	<script type="text/javascript">
+		new TWTR.Widget({
+		  version: 2,
+		  type: 'search',
+		  search: '<%= @school.name_for_search -%> <%= 'OR ' + @school.twitter_username.gsub("@",'') if Worker.is_not_blank(@school.twitter_username) -%>',
+		  interval: 6000,
+		  rpp: 7,
+		  title: 'Recent tweets mentioning',
+		  subject: '<%= @school.name_for_search -%>',
+		  width: 290,
+		  height: 430,
+      theme: {
+		    shell: {
+		      background: '#397cb0',
+		      color: '#fff'
+		    },
+		    tweets: {
+		      background: '#ffffff',
+		      color: '#44444',
+		      links: '#2b6aae',
+					color: '#444'
+		    }
+		  },
+		  features: {
+		    scrollbar: false,
+		    loop: false,
+		    live: false,
+		    hashtags: true,
+		    timestamp: true,
+		    avatars: true,
+		    toptweets: true,
+		    behavior: 'default'
+		  }
+		}).render().start();
+
+
+    <% if Worker.is_not_blank(@school.twitter_username) %>
+		  document.write("<br><br>")
+			new TWTR.Widget({
+			  version: 2,
+			  type: 'profile',
+        rpp: 7,
+	      interval: 6000,
+        width: 290,
+        height: 430,
+        theme: {
+			    shell: {
+			      background: '#397cb0',
+			      color: '#fff'
+			    },
+			    tweets: {
+			      background: '#ffffff',
+			      color: '#44444',
+			      links: '#2b6aae',
+						color: '#444'
+			    }
+			  },
+			  features: {
+			    scrollbar: false,
+			    loop: false,
+			    live: false,
+			    hashtags: true,
+			    timestamp: true,
+			    avatars: false,
+			    behavior: 'all'
+			  }
+			}).render().setUser('<%= @school.twitter_username.gsub('@','') -%>').start();
+
+      <% end %>
+
+
+		</script>
+			</td>
+  <% end %>
+
+
+
+
+
+			<td width="50%" class="social_buttons top_align">
+				<% if request.request_uri.index(/^\/school/) %>
+				<h2>Ask your friends about <%= @school.name -%>!</h2>
+        <fb:comments href="http://www.onlineeducation.net/school/<%= @school.url_string -%>" numposts="10" width="335" publish_feed="true"></fb:comments>
+
+        <br><br>
+        <% end %>
+        <% @output = 'All - What do you think about ' + @school.name + '?' %>
+        <% @output += ' ' + @school.twitter_username if Worker.is_not_blank(@school.twitter_username) %>
+
+         <h2>Ask a question via:</h2>
+            <br>
+						<ul>
+							<li><a rel="nofollow" class="social" href="http://twitter.com/home?status=<%= CGI.escape(@output) -%>" title="Tweet a Question"><img src="/images/icons/social/32/twitter.png"/> Twitter &raquo;</a></li>
+
+
+        			<li><a rel="nofollow" href="http://www.quora.com/search?q=<%= CGI.escape(@school.name) -%>" title="Quora"><img src="/images/icons/social/32/quora.png"/> Quora &raquo;</a></li>
+
+        			<li><a rel="nofollow" href="http://answers.yahoo.com/search/search_result?p=<%= CGI.escape(@school.name) -%>" title="Yahoo! Answers"> <img src="/images/icons/social/32/yahoo.png"/> Yahoo! Answers &raquo;</a></li>
+	            <% if !request.request_uri.index(/^\/school/) %>
+	            <li><a rel="nofollow" href="<%= Worker.is_not_blank(@school.facebook_url) ? @school.facebook_url : 'http://www.facebook.com' -%>" title="Facebook"> <img src="/images/icons/social/32/facebook.png"/> Facebook &raquo;</a></li>
+
+	            <% end %>
+					</ul>
+
+
+
+        <h2 class="blue_button"><a  rel="nofollow" id="fb_link" target="_blank" href="#">Click Here
+	      to see which of your Facebook friends went to <%= @school.name_for_search %></a></h2>
+	      <br>
+        <script type="text/javascript">
+ 	        url = "https://www.facebook.com/dialog/oauth?client_id=<%= @fb_app_id -%>&scope=friends_education_history" +
+	                     "&redirect_uri=http://<%= @thehost -%>/friends/" + escape("\"<%= @school.name_for_search -%>\"") +
+	                     "&response_type=token";
+	        document.getElementById('fb_link').href=url;
+        </script>
+
+        <h2>Recent Facebook Comments Mentioning <%= @school.name_for_search %></h2>
+
+        <div id="recent_fb_comments"></div>
+
+        <script type="text/javascript">
+				var fuzzyFacebookTime = (function(){
+
+				  fuzzyTime.defaultOptions={
+				    // time display options
+				    relativeTime : 48,
+				    // language options
+				    monthNames : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+				    amPm : ['AM', 'PM'],
+				    ordinalSuffix : function(n) {return ['th','st','nd','rd'][n<4 || (n>20 && n % 10<4) ? n % 10 : 0]}
+				  }
+
+				  function fuzzyTime (timeValue, options) {
+
+				    var options=options||fuzzyTime.defaultOptions,
+				        date=parseDate(timeValue),
+				        delta=parseInt(((new Date()).getTime()-date.getTime())/1000),
+				        relative=options.relativeTime,
+				        cutoff=+relative===relative ? relative*60*60 : Infinity;
+
+				    if (relative===false || delta>cutoff)
+				      return formatTime(date, options)+' '+formatDate(date, options);
+
+				    if (delta<60) return 'less than a minute ago';
+				    var minutes=parseInt(delta/60 +0.5);
+				    if (minutes <= 1) return 'about a minute ago';
+				    var hours=parseInt(minutes/60 +0.5);
+				    if (hours<1) return minutes+' minutes ago';
+				    if (hours==1) return 'about an hour ago';
+				    var days=parseInt(hours/24 +0.5);
+				    if (days<1) return hours+' hours ago';
+				    if (days==1) return formatTime(date, options)+' yesterday';
+				    var weeks=parseInt(days/7 +0.5);
+				    if (weeks<2) return formatTime(date, options)+' '+days+' days ago';
+				    var months=parseInt(weeks/4.34812141 +0.5);
+				    if (months<2) return weeks+' weeks ago';
+				    var years=parseInt(months/12 +0.5);
+				    if (years<2) return months+' months ago';
+				    return years+' years ago';
+				  }
+
+				  function parseDate (str) {
+				    var v=str.replace(/[T\+]/g,' ').split(' ');
+				    return new Date(Date.parse(v[0] + " " + v[1] + " UTC"));
+				  }
+
+				  function formatTime (date, options) {
+				    var h=date.getHours(), m=''+date.getMinutes(), am=options.amPm;
+				    return (h>12 ? h-12 : h)+':'+(m.length==1 ? '0' : '' )+m+' '+(h<12 ? am[0] : am[1]);
+				  }
+
+				  function formatDate (date, options) {
+				    var mon=options.monthNames[date.getMonth()],
+				        day=date.getDate(),
+				        year=date.getFullYear(),
+				        thisyear=(new Date()).getFullYear(),
+				        suf=options.ordinalSuffix(day);
+
+				    return mon+' '+day+suf+(thisyear!=year ? ', '+year : '');
+				  }
+
+				  return fuzzyTime;
+
+				}());
+
+
+          function load_fb_comments(){
+				    var fbcommentsurl = 'https://graph.facebook.com/search?type=post&q=' + escape("<%= @school.name_for_search -%>") + '&callback=process_callback';
+	 	        var script = document.createElement("script");
+		        script.src = fbcommentsurl;
+		        document.body.appendChild(script);
+	        }
+	        function process_callback(zdata){
+		        output = '';
+		        $.each(zdata.data, function(i,comment){
+				      //$("<img/>").attr("src", comment.picture).appendTo("#recent_fb_comments");
+
+				      //if (comment.picture != null && comment.picture != ''){
+					    //  output += '<img width="50px" src="' + comment.picture + '" /><br/>';
+				      //}
+				      if (comment.message != null){
+								output += '<div class="fb_comment">';
+	              output += '<img src="https://graph.facebook.com/' + comment.from.id + '/picture" /> '
+
+					      //if (comment.icon != null && comment.icon != ''){
+						    //output += '<img src="' + comment.icon + '" />';
+					      //}
+
+					      output += '<div class="fb_comment_text"><b><a rel="nofollow" target="_blank" href="http://www.facebook.com/profile.php?id=' + comment.from.id + '">' + comment.from.name + '</a></b>';
+								//var thetime = Date.UTC(comment.created_time);
+								 // var day = thetime.getDate();
+								 // var month = thetime.getMonth();
+								 // var year = thetime.getFullYear();
+								// 	output += " on <b>" + day + "/" + month + "/" + year + "</b> <br/>"
+	              output += " <span class='fb_meta'> about " + fuzzyFacebookTime(comment.created_time.replace(/-/g,'/')) + "</span> <br/>"
+					      output += comment.message;
+					      output += '</div><div class="clear"></div></div>';
+					    };
+				      if ( i == 10 ) return false;
+				    });
+				    document.getElementById('recent_fb_comments').innerHTML = output;
+	        }
+
+          setTimeout("load_fb_comments();", 500);
+
+        </script>
+
+
+			</td>
+		</tr>
+
+  <% if request.request_uri.index(/^\/school/) and @thisneedstobefixed == true %>
+		<tr class="<%= cycle("even", "odd") -%>">
+			<td id="youtube_stuff" colspan="2" class="youtube">
+			  <style type="text/css">
+			    .playerInnerBox_gsvb .player_gsvb {
+			      width : 320px;
+			      height : 260px;
+			    }
+			    @import url("http://www.google.com/uds/css/gsearch.css");
+
+			  </style>
+			  <script type="text/javascript" src="http://www.google.com/uds/solutions/videobar/gsvideobar.js?mode=new"></script>
+			  <style>
+			    @import url("http://www.google.com/uds/solutions/videobar/gsvideobar.css");
+			  </style>
+				<div id="player_area"></div>
+			  <div id="videoBar-bar">
+			    <span style="color:#676767;font-size:11px;margin:10px;padding:4px;">Loading...</span>
+			  </div>
+      <div id="more_youtube_stuff"></div>
+			</td>
+		</tr>
+  <% end %>
+
+	</table>

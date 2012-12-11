@@ -1,0 +1,7 @@
+<% for school in School.find(:all, :order => 'priority DESC', :select => 'id, name, priority, is_online', :conditions => ['is_online = ?', true]) %>
+  <%= form_remote_tag(:update => 'thediv', :url => 'update_onlineschoolpriority') %>
+    <%= school.name %> <input type="text" value="<%= school.priority -%>" name="school[priority]">
+    <input type="hidden" name="sid" size="5" value="<%= school.id -%>">
+    <input type="submit" value="Go &raquo;">
+  </form>
+<% end %>

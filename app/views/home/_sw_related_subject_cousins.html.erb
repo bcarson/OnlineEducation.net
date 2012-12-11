@@ -1,0 +1,20 @@
+<div class="module">
+	<div class="header">
+		<h4>Related <%= @subject.name %> <%= @cousin_name %></h4>
+	</div>
+	<div class="content">
+		<ul class="link_list">
+			
+			<% for subject in @subject.prim_siblings_or_kids %>
+        <% if subject.has_online_program == true %>
+          <% @dont = true if @cousin_name == 'Certifications' and subject.has_online_cert != true %>
+          <% if !@dont %>
+			      <li><a href="/<%= @cousin_name.downcase -%>/<%= Worker.inurl(subject.name) -%>/online">Online <%= subject.name %> <%= @cousin_name -%></a></li>
+			    <% end %>
+			  <% end %>
+			<% end %>
+	</ul>
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

@@ -1,0 +1,18 @@
+<div id="the_static_content" class="popup_window">
+	<div class="top"></div>
+	<div class="wrapped">
+		<div class="header">
+			<h2>More Information</h2>
+			<div class="close"><a href="#">Close</a></div>
+			<div class="clear"></div>
+		</div>
+		<div class="info_content">
+			<%= render :partial => 'content_colleges_in_city' if @page and @page.url_string == 'colleges-in-[city]' -%>
+		  <%= render :partial => 'content_colleges_in_state' if @page and @page.url_string == 'colleges-in-[state]' -%>
+		  <%= render :partial => 'content_subject_schools_in_city' if @page and @page.url_string == '[Subject]-schools-in-[City]' -%>
+		  <%= render :partial => 'content_subject_schools_in_state' if @page and @page.url_string == '[Subject]-schools-in-[State]' -%>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="bottom"></div>
+</div>

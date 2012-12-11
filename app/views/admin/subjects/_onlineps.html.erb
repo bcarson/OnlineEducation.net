@@ -1,0 +1,3 @@
+<% for program in Program.find(:all, :conditions => ['is_online = 1 AND inactive IS NULL and subjects.id = ?', @subject.id], :include => [:subjects]) %>    
+  <%= program.name %><br>
+<% end %>

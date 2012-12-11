@@ -1,0 +1,26 @@
+<h3>Online <%= @degreelevel.name -%> Degrees</h3>
+
+  <% @school = @schools.first -%>
+
+<% if !@school.blank? -%>
+	<p>
+		
+
+		
+		  <a href="/school/<%= @school.url_string -%>"><%= @school.name -%></a><% if @schools.count > 1 -%>, the highest ranking 
+		  school listed above,<% end -%> 
+		  is an accredited US institution offering <%= @degreelevel.name.downcase -%> programs to train 
+		  people 
+		  to become excellent workers in their field. 
+		
+		  Of the <%= @schools.length.en.numwords -%> schools listed above, 
+		
+
+	</p>
+	
+
+
+	
+<% end -%>
+
+<div class="clear"></div>

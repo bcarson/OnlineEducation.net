@@ -1,0 +1,147 @@
+<!--our ‘score’ for the school - inlcude link to page describing how we do our ranking.  -->
+<% reset_cycle() -%>
+<div class="school_intro">
+	<div class="left">
+		<div class="summary_box">
+			<% if File.exists?('public/images/school/' + @school.picfoldernum.to_s + '/photo-large.jpg') %>
+			  <%= @school.photo_large %>
+			<% else %>
+ 			  <%= @school.photo_large %>
+      <% end %>
+			<!-- <%= @school.photo_med %> -->
+			<div class="ranking_board">
+				<%# @school.monetize_url.blank? ? 'Overall' : 'Online School' -%>
+				<a target="_blank" style="color: white;" title="Learn about this ranking" href="/rankings">
+				<% if @school.monetize_url.blank? %>
+			    <%= sprintf("%.1f",@school.rank) -%>
+        <% else %>
+          <%= sprintf("%.1f",(@school.priority / 100.0)  * 100) %>
+        <% end %>
+        </a>
+			</div>
+			<table width="100%">
+				<% if !@school.total_expense_09_in_state_on_campus.blank? %>
+					<tr>
+						<td>Total Cost</td>
+						<td>$<%= number_with_delimiter(@school.total_expense_09_in_state_on_campus) %></td>
+					</tr>
+				<% end %>
+
+				<% if !@school.student_population.blank? %>
+					<tr>
+						<td>Total Enrollment</td>
+						<td><%= number_with_delimiter(@school.student_population) -%></td>
+					</tr>
+				<% end %>
+
+				<% if !@school.student_to_faculty_ratio.blank? and @school.student_to_faculty_ratio != 0 %>
+					<tr>
+						<td>Student-to-Faculty Ratio</td>
+						<td><%= @school.student_to_faculty_ratio -%> : 1</td>
+					</tr>
+				<% end %>
+
+			</table>
+		</div>
+		<!-- .summary_box -->
+		<a target="_blank" href="/rankings"><img style="margin-bottom:20px;" src="/images/btn_ranking.png"/></a>
+	</div>
+	<!-- .left -->
+	<div class="right">
+		<% if request.request_uri.index(/^\/school/) %>
+		<div class="school_name_box">
+			<div class="school_logo"><%= @school.logo_small %></div>
+			<div class="school_name">
+				<h1><%= @school.name %></h1>
+				<% if !@school.url.blank? -%>
+				   <a target="_blank" href="<%= @school.url -%>"><%= @school.url -%></a><br/>
+				<% end %>
+        <% if !@school.full_address.blank? || !@school.phone.blank? -%>
+					<%= @school.full_address.gsub('USA', '').gsub('US', '') -%>
+					<%= '<br>' + @school.phone if !@school.phone.blank? -%>
+					<br/>
+        <% end %>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<!-- .school_name_box -->
+		<% end %>
+		<% if !request.request_uri.index(/^\/school/) %>
+		  <b>About <%= @school.name -%></b>:<br><br>
+		<% end %>
+		<p><%= show_more(@school.imported_mission_statement, 100) %></p>
+		<div id="fb_like_and_share" class="fb_links">
+		  <div id="fb_like"><fb:like href="http://www.onlineeducation.net/school/<%= @school.url_string -%>" show_faces="true"></fb:like></div>
+		<!-- onlineeducation.net/school/<%= @school.url_string -%> -->
+		<!-- <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2www.textandpixelreflections.com&amp;layout=standard&amp;show_faces=true&amp;width=450&amp;action=like&amp;font&amp;colorscheme=light&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe> -->
+		  <!-- <div id="fb_share"><fb:share-button href="http://www.onlineeducation.net/school/<%= @school.url_string -%>" type="button"></fb:share-button></div> -->
+		</div>
+	</div>
+	<!-- .right -->
+</div>
+<!-- .school_intro -->
+<table class="universal school" cellspacing="0">
+	<tr class="<%= cycle("even", "odd") -%>">
+		<th colspan="2">General Information</th>
+	</tr>
+	<% if @school.institution_type %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Institution Type</td>
+		<td><%= @school.institution_type -%></td>
+	</tr>
+	<% end %>
+	<% if @school.special_learning_opportunities %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Special Learning Opportunities</td>
+		<td><%= @school.special_learning_opportunities -%></td>
+	</tr>
+	<% end %>
+	<% if @school.student_services %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Student Services</td>
+		<td><%= @school.student_services -%></td>
+	</tr>
+	<% end %>
+	<% if @school.credit_accepted %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Credit Accepted</td>
+		<td><%= @school.credit_accepted -%></td>
+	</tr>
+	<% end %>
+	<% if @school.religious_affiliation %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Religious Affiliation</td>
+		<td><%= @school.religious_affiliation -%></td>
+	</tr>
+	<% end %>
+	<% if @school.federal_aid %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Federal Aid</td>
+		<td><%= @school.federal_aid -%></td>
+	</tr>
+	<% end %>
+	<% if @school.awards_offered %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Degrees/Certificates Offered</td>
+		<td><%= @school.awards_offered -%></td>
+	</tr>
+	<% end %>
+	<% if @school.campus_setting %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Campus Setting</td>
+		<td><%= @school.campus_setting -%></td>
+	</tr>
+	<% end %>
+	<% if @school.campus_housing %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Campus Housing</td>
+		<td><%= @school.campus_housing -%></td>
+	</tr>
+	<% end %>
+	<% if @school.disability_services_students %>
+	<tr class="<%= cycle("even", "odd") -%>">
+		<td class="title">Disability Services Student</td>
+		<td><%= @school.disability_services_students -%></td>
+	</tr>
+	<% end %>
+</table>

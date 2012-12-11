@@ -1,0 +1,15 @@
+<div id="the_cities" class="popup_window">
+	<div class="top"></div>
+	<div class="wrapped">
+		<div class="header">
+			<h2>Cities <%= @city ? ' Near ' + @city.name : 'in ' + @state.name %></h2>
+			<div class="close"><a href="#">Close</a></div>
+			<div class="clear"></div>
+		</div>
+		<div class="info_content fullpage">
+			<%= render :partial => 'map_cities_content'%>
+		</div>		
+		</div>
+		<div class="clear"></div>
+		<div class="bottom"></div>
+</div>

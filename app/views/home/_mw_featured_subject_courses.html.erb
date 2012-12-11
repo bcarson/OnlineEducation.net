@@ -1,0 +1,84 @@
+<h3>Ranked by Excellence</h3>
+
+<% for school in @schools %>
+  <%# @programs = school.matching_programs(@subject) -%>
+  <% school_programs = Worker.all_programs_from_school(@programs, school) %>
+	<div class="entry thumb">
+
+
+    <% @school = school %>
+    <%= render :partial => 'school_thumbnail' %>
+
+
+		<div class="article">
+			<% if !@outbut.blank? %>
+				<p><%= show_more(@output, 600) %></p>
+			<% end %>
+			<h4 class="large"><%= @subject.name -%> Courses at <%= school.name %> </h4>
+				<% for program in school_programs %>
+				<% if program.inactive != true %>
+				<div class="section <%= dom_class_last(program, school_programs) %>">
+				  <h5 class="medium"><span>Program Name:</span>
+					  <%= program.name -%></h5>
+
+					  <% @courseprogramjoins = Courseprogramjoin.find_all_by_program_id(program.id) %>
+					  <% if !@courseprogramjoins.blank? %>
+
+
+						  <% for courseprogramjoin in @courseprogramjoins %>
+						    <% course = Course.find_by_id(courseprogramjoin.course_id) %>
+					      <table id="<%= course.id -%>-<%= Worker.inurl(course.name) if !course.name.blank? -%>" class="universal courses" cellspacing="0">
+									<tr>
+										<th colspan="2"><%= Worker.clean_content_display(course.name) if !course.name.blank? %></th>
+									</tr>
+						      <% if !course.number.blank? %>
+						        <tr>
+							        <td class="title">Course Number</td>
+							        <td><%= course.number %></td>
+							      </tr>
+						      <% end %>
+
+
+						      <% if !course.credits.blank? %>
+						        <tr>
+							        <td class="title">Credits</td>
+							        <td><%= course.credits %></td>
+							      </tr>
+						      <% end %>
+
+						      <% if !course.more_info_url.blank? %>
+						        <tr>
+							        <td class="title">More Info</td>
+							        <td><%= course.more_info_url %></td>
+							      </tr>
+						      <% end %>
+
+                  <% if @readyforthishere %>
+						        <tr>
+							        <td class="title">Is a Prereq?</td>
+							        <td><%= course.is_prereq ? 'Yes' : 'No' %></td>
+							      </tr>
+							    <% end %>
+							
+						     		<% if !course.description.blank? %>
+										<tr>
+											<td colspan="2"><p class="last"><%=  show_more(Worker.clean_content_display(course.description), 500) %></p></td>
+										</tr>
+										<% end %>
+						    </table>
+						    <br />
+						  <% end %>
+
+						<% end %>
+
+            <p><b>Program description:</b> <%= program.description.gsub("\n", '<br>') if program.description.present? %></p>
+				  </div>
+				<% end %>
+				<% end %>
+			</ul>
+
+		</div>
+		<div class="clear"></div>
+	</div>
+
+<% end %>

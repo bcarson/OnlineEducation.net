@@ -1,0 +1,27 @@
+<% reset_cycle() -%>
+
+<table id="programs" class="universal school" cellspacing="0" style="display:none;">	
+<tr><th colspan="6"><%= @school.name %> Programs</th></tr>
+
+<tr class="heading"><td>&nbsp;</td><td colspan="5"><h2><center>Number of Reported Graduates Last Year <br> <font style="font-size:12px">(According to the US National Center for Education Statistics)</font></center></h2></td></tr>
+	
+<tr class="heading" style="font-weight: bold">
+	<td class="col_item">Program Name</td>
+	<td class="col_item">Certificate</td>
+	<td class="col_item">Associate</td>
+	<td class="col_item">Bachelor</td>
+	<td class="col_item">Master</td>
+	<td class="col_item">Doctorate</td>
+</tr>
+<% for program in @school.programs %>
+<tr class="<%= cycle("even", "odd") -%>">
+	<td class="title"><%= program.name %></td>
+	<td class="col_item"><%= program.certificate_completions_08 %></td>
+	<td class="col_item"><%= program.associate_completions_08 %></td>
+	<td class="col_item"><%= program.bachelor_completions_08 %></td>
+	<td class="col_item"><%= program.master_completions_08 %></td>
+	<td class="col_item"><%= program.phd_completions_08 %></td>
+</tr>
+<% end %>
+</table>
+

@@ -1,0 +1,10 @@
+<% for comment in @school.comments %>
+<div class="comment">  
+		<p class="author"><span><%=h comment.name %></span> on <%= comment.created_at.strftime("%B %d, %Y") %> said:</p>
+		<p class="content">
+			<%= h(comment.body).gsub("\n", "<br />") %> 
+		</p>
+		
+	
+</div>
+<% end %>

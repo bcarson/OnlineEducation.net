@@ -1,0 +1,11 @@
+<% @ratings = @school.ratings %>
+<% @sum = 0 %>
+<% @ratings.each {|r| @sum += r.num if r.num.present?} %>
+<% if !@ratings.blank? %>
+  
+  <center> 
+  <%= @school.name %> <br/>has an average user rating of 
+  <span><%= sprintf("%.1f", @sum.to_f / @ratings.count.to_f ) %></span><br/>
+  (out of <%= @ratings.count %> unique-user rankings)
+	</center>
+<% end %>

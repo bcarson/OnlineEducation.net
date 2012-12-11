@@ -1,0 +1,98 @@
+<script type="text/javascript">
+var schools = Array();
+schools = ["<%= (@school and !@school.name.blank?) ? @school.name : 'University of Phoenix' -%>",''];
+
+function add_default_fields(schools) {
+	for (var i = 0, len = schools.length; i < len; ++i){
+		add_form_field(schools[i]);
+	}
+}
+
+var id = 1;
+
+function add_form_field(value) {
+	if (value == null) {
+		value = '';
+	}
+	//var id = document.getElementById("id").value;
+	$("#poll_content").append("<li id='row" + id + "'><input type='text' size='20' name='txt[]' value='"+ value +"' id='txt" + id + "' class='box'>&nbsp;&nbsp;<a class='remove' id='remove" + id + "' href='#' onClick='remove_form_field(\"#row" + id + "\"); return false;'>-</a><a class=\"add\" id=\"add" + id + "\" href=\"#\" onClick=\"add_form_field(); return false;\">+</a></li>");
+
+	var last_id = id - 1;
+	var last_add_id = "#add"+last_id;
+	$(last_add_id).remove();
+
+	var last_remove_id = "#remove"+last_id;
+	$(last_remove_id).show();
+
+	var this_id = id;
+	var this_remove_id = "#remove"+this_id;
+	$(this_remove_id).hide();
+
+	id = (id - 1) + 2;
+	//document.getElementById("id").value = id;
+}
+
+function remove_form_field(id) {
+	$(id).remove();
+}
+
+$(document).ready(function() {
+
+	add_default_fields(schools);
+	$('#poll_title input[type="text"]').addClass("idleField");
+
+	$('#poll_title input[type="text"]').focus(function() {
+		$(this).removeClass("idleField").addClass("focusField");
+        if (this.value == this.defaultValue){
+        	this.value = '';
+    	}
+    });
+
+    $('#poll_title input[type="text"]').blur(function() {
+    	$(this).removeClass("focusField").addClass("idleField");
+        if (this.value == ''){
+        	this.value = (this.defaultValue ? this.defaultValue : '');
+    	}
+    });
+
+});
+
+
+
+function poll_next_step(){
+	if (confirm('Are you sure your poll title & schools are correct?  Once you create a poll it cannot be modified (however, you can always make a new one).')){
+	
+		jQuery.ajax({
+			url: '/home/poll_next_step',
+			data: $("#pollform").serialize(),
+			success: function(data){
+				$.fancybox(data).trigger('click');
+			},
+			error: function(){
+				var sample_data = "<div style=\"width:550px;\" class=\"universal_popup\"><h2>Sorry, an error has occurred.</h2><p>Please try this feature again later.  We apologize for the inconvenience.</p></div>";
+				$.fancybox(sample_data).trigger('click');
+			}
+		});
+
+  }
+
+}
+
+</script>
+
+<div id="poll_your_friends">
+	<div id="title"><h3>POLL YOUR FRIENDS</h3></div>
+	<div id="poll_app">
+		<form action="#" method="get" id="pollform">
+			<input type="hidden" id="id" value="1">
+			<h5>TITLE OF THE POLL</h5>
+			<ul>
+				<li id='poll_title'><input type='text' size='20' name='title' class='box' value='Where should I apply?'></li>
+			</ul>
+			<h5>ADD SCHOOLS YOU ARE CONSIDERING</h5>
+			<ul id="poll_content"></ul>
+			<input type="image" src="/images/btn_poll_next_step.png" class="submit" onClick="poll_next_step(); return false;">
+			<p class="small">You'll be given a unique URL for your friends to visit, vote on your choices, and give feedback</p>
+		</form>
+	</div>
+</div>

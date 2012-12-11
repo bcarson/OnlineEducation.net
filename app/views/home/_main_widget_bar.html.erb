@@ -1,0 +1,115 @@
+<script>
+	var widget_bar_ht = 280;
+</script>
+
+		<div id="main_widget_bar">
+			<div class="content_wrap">
+				<div class="three_step_widget">
+					<% @fid = rand(25322) %>
+					<form name="myform<%=@fid-%>" id="find-school-main" action="http://info.onlineeducation.net/search" method="POST" class="qdf dfw-form-1">
+
+						<h4>Find a School</h4>
+						<p>
+							<select class="degree edudirect-degree_level_id" name="degree_level_id">
+					    		<option value="">Select a Level</option>
+					    	</select>
+						</p>
+						<p>
+					    	<span id="s_c<%=@fid-%>"></span>
+							<select class="category edudirect-category_id" name="category_id">
+					   	  		<option value="">Select a Category</option>
+					    	</select>
+						</p>
+						<p>
+							<select class="subject edudirect-subject_id" name="subject_id">
+					    		<option value="">Select a Subject</option>
+					    	</select>
+						</p>
+						<p>
+							<input type="image" class="submit" src="/images/btn_find_now_red.png" />
+						</p>
+						
+						<input type="hidden" name="publisher_id" value="onlineeducationnet" />
+				    	<input type="hidden" name="formid" value="<%= @fid -%>">
+				    	<input type="hidden" name="loc" value="123-t">
+					</form>
+				</div>
+
+				<% if @online_schools and @online_programs %>
+				  <% @topschools = @online_schools[0..2] %>
+				  <% @topprograms = @online_programs %>
+				<% else %>
+					<% if @subject.blank? %>
+					    <% @topschools = School.find(:all, :limit => 3, :order => 'priority DESC', :conditions => ['is_online = 1']) -%>
+					<% else %>
+					  <% if @degreelevel.blank? %>
+	  				  <% @topprograms = Program.find(:all, :limit => 10, :conditions => ['inactive IS NULL AND is_online = 1 AND subjects.id = ?', @subject.id], :include => [:subjects])  %>
+	          <% else %>
+					    <% @topprograms = Program.find(:all, :limit => 10, :conditions => ['inactive IS NULL AND is_online = 1 AND subjects.id = ? AND degreelevels.id = ?', @subject.id, @degreelevel.id], :include => [:subjects, :degreelevels])  %>
+	          <% end %>
+				    <% @topschools = [] %>
+				    <% for p in @topprograms %>
+				      <% s = p.school %>
+				      <% @topschools << s unless @topschools.index(s)  -%>
+				    <% end %>
+				    <% @topschools.sort!{|a,b| b.priority <=> a.priority } %>
+				    <% @topschools = @topschools[0..2]%>
+					<% end %>
+				<% end %>
+
+
+
+				<div class="top_<%= @topschools.count %>_schools no_programs">
+					<ul>
+						<% @ct = 1 %>
+						<% for school in @topschools %>
+
+							<% @top_widget_programs = school.top_widget_programs if @subject.blank? and @topprograms.blank? %>
+
+							<% if !@subject.blank? || !@topprograms.blank? %>
+							  <% @inp = [] %>
+							  <% for p in @topprograms -%>
+							    <% @inp << p if p.school_id == school.id %>
+							  <% end %>
+							  <% @top_widget_programs = @inp[0..2] %>
+							<% end -%>
+
+							<% if @subject.blank? and @topprograms.blank? %>
+							  <li class="programs_<%= @top_widget_programs.count %>">
+							<% end %>
+
+							<% if !@subject.blank? || !@topprograms.blank? %>
+							  <li class="programs_<%=@inp[0..2].count-%>">
+							<% end %>
+
+								<div class="number">#<%= @ct %></div>
+
+
+
+
+
+								<div class="school num<%= @ct %>">
+									<h4><a  href="<%= school.getinfourl -%>" ><%= school.name %></a></h4>
+									<%  @topschools.count == 1 ? @tlength = 95 : @tlength = 60 %>
+									<% for program in @top_widget_programs -%>
+									  <!--<%= truncate(program.name, :length => @tlength, :omission =>"&hellip;", :separator => " ") -%><br/>-->
+									<% end %>
+									<div class="clear"></div>
+								</div>
+															<% if @topschools.count <= 1 %>
+															<br/>
+															<% end %>
+								<div class="button"><a href="http://info.onlineeducation.net<%= school.getinfourl -%>" class="more_info">More Info</a></div>
+							</li>
+							<% @ct += 1 %>
+            <% end %>
+					</ul>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="content_wrap close_top">
+			<a href="#" class="close_top_bar">Close</a>
+			<div class="clear"></div>
+		</div>
+		<!-- end #main_widget_bar -->

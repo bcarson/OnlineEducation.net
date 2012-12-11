@@ -1,0 +1,13 @@
+<% @static_map_url = 'http://maps.google.com/maps/api/staticmap?' -%>
+<% @static_map_url += '&size=640x540&maptype=roadmap&sensor=false' -%>
+<% @static_map_url += '&markers=shadow:false%7Cicon:http%3A%2F%2Fwww.onlineeducation.net%2Fimages%2Fmap_icon_red.png' -%>
+<% for school in @schools[0..50] %>
+  <% @static_map_url += '%7C' + school.lat.to_s + ',' + school.lng.to_s -%>
+<% end -%>
+<div id="map_image"><img src="<%= @static_map_url -%>" alt="<%= @subject.name + ' ' if @subject -%>Schools in <%= @city.name + ', ' rescue nil -%><%= @state.two_letter_code rescue nil -%>"/></div>
+
+
+
+
+
+

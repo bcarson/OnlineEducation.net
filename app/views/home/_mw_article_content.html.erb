@@ -1,0 +1,51 @@
+
+      <% if @cousin_subject_page %>
+  			<h3><%= widont_single('Some title about ' + @subject.name + ' ' + @cousin_name ) %></h3>
+      <% end %>
+      <% if @subject_page %>
+  			<h3><%= widont_single('Some title about ' + @subject.name  ) %></h3>
+      <% end %>
+      <% if @degreelevel_subject_page -%>
+			  <h3><%= widont_single('Pursuing a ' + @degreelevel.name + ' degree in '+ @subject.name + ' has never been easier') %></h3>
+      <% end %>
+ 
+      <% if !@cousin_name.blank? %>
+			  <div style="float: right; padding-left: 20px; padding-bottom: 10px"><img src="/images/top_level_photos/<%= @cousin_name %>.jpg"/></div>
+			<% end %>
+
+      <% if !@subject.blank? %>
+				<% if @subject.parent_id %>
+					<% @parent_subject = Subject.find(@subject.parent_id) %>
+					<% @parent_subject_name = @parent_subject.name %>
+				<% else %>
+					<% @parent_subject_name = @subject.name %>
+				<% end %>
+				<div style="float: right; width: 200px; padding-left:20px; height: 320px; text-align: center;">
+					<img src="/images/subject_photos/article-upper-<%= Worker.inurl(@subject.categorysubject.name) %>.jpg"/>
+				</div>
+     <% end %>
+
+
+		 <% if !@cousin_page.blank? and @subject.blank? %>
+		   <p><%= @page.content %></p>
+		 <% else %>
+		   <% if !@titled.blank? %>
+				<p>Three sentences of templated text. Morbi interdum mollis sapien.
+					 Phasellus lacinia, magna a ullamcorper laoreet, lectus arcu pulvinar risus,
+					 vitae facilisis libero dolor a purus.</p>
+				<ul>
+					<li>Maybe a few bullet points longer sentence points longer sentence</li>
+					<li>Maybe a few bullet points shorter</li>
+					<li>Maybe a few bullet points</li>
+					<li>Maybe a few bullet points  points longer sentence point.</li>
+				</ul>
+				<div class="clear"></div>
+			<% else %>
+				<%= @output if !@output.blank? %>
+			  <%= @page.content if !@page.blank? %>
+			<% end %>
+		<% end %>
+
+
+
+

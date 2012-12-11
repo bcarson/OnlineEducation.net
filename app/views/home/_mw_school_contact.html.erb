@@ -1,0 +1,81 @@
+<!--
+#==CONTACT
+  #-’Ask school a Question’ (on twitter, email, fb?)
+  #-Link to request information
+  #-request information - template email to school admissions - ON MAP PAGE HAVE MULTIPLE SELECTED OPTION -->
+<% reset_cycle() -%>
+	<table class="universal school contact" cellspacing="0">
+		<tr class="<%= cycle("even", "odd") -%>">
+			<th colspan="2">Contact</th>
+		</tr>
+
+		<tr class="<%= cycle("even", "odd") -%>">
+			<td class="top_align school_address social_buttons">
+				<p><strong><%= @school.name %></strong><br/>
+				<%= @school.full_address -%><% if @school.phone %><br /><% end %>
+				<%= @school.phone -%></p>
+
+				<p><strong>Website:</strong> <% if Worker.is_not_blank(@school.website) %><a href="<%= @school.website -%>"><%= @school.website -%></a><% end %><br/>
+				<% if Worker.is_not_blank(@school.admissions_url) %>
+			  <strong>Admissions:</strong> <a href="<%= @school.admissions_url -%>" target="_blank">Website</a>
+
+					  <% if  Worker.is_not_blank(@school.financial_aid_url) %>
+					  <br/> (find financial aid info <a href="<%= @school.financial_aid_url -%>" target="_blank">here</a>)
+					  <% end %>
+
+				<% end %></p>
+
+				<br>
+				<h2>Connect with <%= @school.name -%> via: </h2>
+				<br>
+				<ul>
+				<% if Worker.is_not_blank(@school.facebook_url) %>
+					<li><a class="social" href="<%= @school.facebook_url -%>"><img src="/images/icons/social/32/facebook.png"/> Facebook</a></li>
+				<% end %>
+				<% if Worker.is_not_blank(@school.blog_url) %>
+					<li><a class="social" href="<%= @school.blog_url -%>"><img src="/images/icons/social/32/blog.png"/> Blog</a></li>
+				<% end %>
+				<% if Worker.is_not_blank(@school.blog_rss_url) %>
+					<li><a class="social" href="<%= @school.blog_rss_url -%>"><img src="/images/icons/social/32/rss.png"/> Blog RSS Feed</a></li>
+				<% end %>
+				<% if Worker.is_not_blank(@school.linkedin_url) %>
+					<li><a class="social" href="<%= @school.linkedin_url -%>"><img src="/images/icons/social/32/linkedin.png"/> LinkedIn</a></li>
+				<% end %>
+				</ul>
+
+			</td>
+			<td>
+
+
+
+				<% if Worker.is_not_blank(@school.admissions_office_email) and !@school.admissions_office_email.index(/http/)  %>
+
+				<script type="text/javascript">
+					function contact_message_go(id){
+
+					  document.getElementById('submitting').innerHTML = 'Sending...';
+					  jQuery.ajax({
+							url: '/home/contact_message_go?id=' + id.toString(),
+							data: $("#contactform").serialize(),
+							success: function(data){
+								jQuery('#submitting').html(data);
+							}
+						});
+					}
+				</script>
+
+				<h2>This contact form will send an email to <%= @school.admissions_office_email -%> on your behalf</h2>
+				<br>
+				<form id="contactform" class="universal_form school_contact" onSubmit="return false;">
+					<ul>
+						<li class="full"><label>Name</label><input type="text" name="name" class="box"/></li>
+						<li class="full"><label>Email</label><input type="text" name="email" class="box"/></li>
+						<li class="full"><label>Phone</label><input type="text" name="phone" class="box"/></li>
+						<li class="full"><label>Message</label><textarea name="body" class="box"></textarea></li>
+						<li id="submitting" class="full"><input type="image" class="submit" src="/images/btn_universal_submit.png" onClick="contact_message_go(<%= @school.id -%>);"/>
+					</ul>
+				</form>
+				<% end %>
+			</td>
+		</tr>
+	</table>

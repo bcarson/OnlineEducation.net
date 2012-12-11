@@ -1,0 +1,104 @@
+<!-- Enrollment Rate / Graduation Rate -->
+
+	<% if !@school.number_of_applicants_09.blank? || !@school.overall_grad_rate.blank? -%>
+	<% reset_cycle() -%>
+	<table class="universal school" cellspacing="0" style="display:none;">
+
+		<tr class="<%= cycle("even", "odd") -%>">
+			<th colspan="2">Enrollment &amp; Graduation Rates</th>
+		</tr>
+
+
+		<tr class="<%= cycle("even", "odd") -%>">
+			<td colspan="2" style="font-size:14px">
+			  <p>
+				  <% if !@school.number_of_applicants_09.blank?  %>
+					  In Fall 2009, <%= number_with_delimiter(@school.number_of_applicants_09) -%> people
+
+					  applied to <%= @school.name %>.
+				  <% end %>
+
+				  <% if !@school.percent_accepted_09.blank? %>
+					  Of the applicants,
+
+					  <%= @school.percent_admitted_09 -%>% were admitted
+					  <% if !@school.percent_admitted_09_male.blank? %>
+						  (<%= number_with_delimiter(@school.percent_admitted_09_male) -%>% male
+						   &amp; <%= number_with_delimiter(@school.percent_admitted_09_female) -%>% female
+						  )
+						<% end %>
+
+						<% if !@school.percent_accepted_09.blank? %>
+						  and
+					    <%= @school.percent_accepted_09 -%>% accepted
+					    <% if !@school.percent_accepted_09_male.blank? %>
+					      (<%= @school.percent_accepted_09_male%>% male and <%= @school.percent_accepted_09_female -%>% female)
+					    <% end %>
+
+					  <% end %>
+
+
+					<% end %>
+				</p>
+
+				<% if !@school.pt_undergrad_enrollment_percent_09.blank? and @school.pt_undergrad_enrollment_percent_09 > 0 %>
+					<p>
+						Of the <%= number_with_delimiter(@school.undergraduate_population) %> undergraduate
+						students at <%= @school.name %>,
+						<%= @school.pt_undergrad_enrollment_percent_09 %>% are part-time.
+
+					  <% if @school.percent_undergrad_under_25 and @school.percent_undergrad_under_25 > 49.9 %>
+					  A majority (<%= @school.percent_undergrad_under_25 %>%) of the undergrad students are under 25 years of age.
+					  <% end %>
+
+					  <% if !@school.pt_grad_enrollment_percent_09.blank? and @school.pt_grad_enrollment_percent_09 > 0 %>
+							And <%= @school.pt_grad_enrollment_percent_09 %>% of the <%=  number_with_delimiter(@school.grad_enrollment_09) -%>
+							graduate students are part-time.
+						<% end %>
+
+					</p>
+				<% end %>
+			</td>
+		</tr>
+
+		<% if @school.percent_undergrad_in_state %>
+		<tr class="<%= cycle("even", "odd") -%>">
+			<td class="title">Percent of In-State Undergrads</td>
+			<td class="no_padding"><span class="percent"><span style="width:<%= @school.percent_undergrad_in_state -%>%">&nbsp;&nbsp;&nbsp;&nbsp;<%= @school.percent_undergrad_in_state -%>%</span></span></td>
+		</tr>
+		<% end %>
+
+		<% if @school.ft_retention_rate %>
+		<tr class="<%= cycle("even", "odd") -%>">
+			<td class="title">Full Time Retention Rate</td>
+			<td class="no_padding"><span class="percent"><span style="width:<%= @school.ft_retention_rate -%>%">&nbsp;&nbsp;&nbsp;&nbsp;<%= @school.ft_retention_rate -%>%</span></span></td>
+		</tr>
+		<% end %>
+		<% if @school.pt_retention_rate %>
+		<tr class="<%= cycle("even", "odd") -%>">
+			<td class="title">Part Time Retention Rates</td>
+			<td class="no_padding"><span class="percent"><span style="width:<%= @school.pt_retention_rate -%>%">&nbsp;&nbsp;&nbsp;&nbsp;<%= @school.pt_retention_rate -%>%</span></span></td>
+		</tr>
+		<% end %>
+		<% if @school.four_yr_grad_rate %>
+		<tr class="<%= cycle("even", "odd") -%>">
+			<td class="title">Four-Year Graduation Rate</td>
+			<td class="no_padding"><span class="percent"><span style="width:<%= @school.four_yr_grad_rate -%>%">&nbsp;&nbsp;&nbsp;&nbsp;<%= @school.four_yr_grad_rate -%>%</span></span></td>
+		</tr>
+		<% end %>
+		<% if @school.six_yr_grad_rate %>
+		<tr class="<%= cycle("even", "odd") -%>">
+			<td class="title">Six-Year Graduation Rate</td>
+			<td class="no_padding"><span class="percent"><span style="width:<%= @school.six_yr_grad_rate -%>%">&nbsp;&nbsp;&nbsp;&nbsp;<%= @school.six_yr_grad_rate -%>%</span></span></td>
+		</tr>
+		<% end %>
+		<% if @school.overall_grad_rate %>
+		<tr class="<%= cycle("even", "odd") -%>">
+			<td class="title">Overall Graduation Rate</td>
+			<td class="no_padding"><span class="percent"><span style="width:<%= @school.overall_grad_rate -%>%">&nbsp;&nbsp;&nbsp;&nbsp;<%= @school.overall_grad_rate -%>%</span></span></td>
+		</tr>
+		<% end %>
+
+	</table>
+				<div class="section_break">&nbsp;</div>
+  <% end %>

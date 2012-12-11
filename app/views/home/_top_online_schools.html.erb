@@ -1,0 +1,26 @@
+<div class="module">
+	<div class="header">
+		<h4>Top 70 Online Schools</h4>
+	</div>
+	<div class="content">
+		<ul class="link_list">
+			<% if request.request_uri.index(/\/rankings/) %>
+			<li> Online School rankings are based on data provided by the 
+				   <a href="http://nces.ed.gov/">National Center for Education Statistics</a> with a formula similar to campus schools, but are scaled relative to other  
+				   online schools to give more helpful comparisons for the benefits that online education provides. <li>
+			
+			  <%# for school in School.find(:all, :order => 'rank DESC', :conditions => ['is_online = 1']) %>
+				<% for school in School.all_online %>
+				  <li><a rel="nofollow" href="http://info.onlineeducation.net<%= school.getinfourl('', 'SW') -%>"><%= school.name %> (<%= school.display_rank_online -%>)</a></li>
+	      <% end %>
+				
+			<% else %>		  
+			  <% for school in School.all_online %>
+				  <li><a rel="nofollow" href="http://info.onlineeducation.net<%= school.getinfourl('', 'SW') -%>"><%= school.name %></a></li>
+	      <% end %>
+      <% end %>
+		</ul>
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

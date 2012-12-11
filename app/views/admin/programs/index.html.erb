@@ -1,0 +1,5 @@
+Select a School to work on its programs
+<br><br>
+<% for school in School.find(:all, :conditions => ['is_online = 1'], :order => 'name') %>
+  <%= school.good_to_go == true ? '<font style="color:green">GOOD TO GO =========></font>' : '' %> <a href="/admin/programs/schoolprograms?id=<%= school.id -%>"><%= school.name %></a><br>
+<% end %>

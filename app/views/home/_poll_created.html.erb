@@ -1,0 +1,29 @@
+<div class="universal_popup poll_created">
+<h2>Your Poll Has Been Created!</h2>
+<br/>
+<strong>Full URL:</strong> <a target="_blank" href="http://<%= @thehost -%>/poll/<%= @p.url_string %> ">http://<%= @thehost -%>/poll/<%= @p.url_string %></a><br/><br/>
+<strong>Shortened URL:</strong> <a target="_blank" href="<%= @p.bitly_url -%>"><%= @p.bitly_url -%></a><br/><br/>
+
+<% @output = 'Help me decide where to go to school! Take my poll: ' %>
+<% @output += @p.bitly_url rescue nil %>
+
+<% @url = 'http://www.facebook.com/dialog/feed?' %>
+<% @url += 'app_id=' + @fb_app_id %>
+<% @url += '&picture=' + URI::escape('http://' + @thehost + '/images/map_shot.png') %>
+<% @url += '&name=' + URI::escape(@p.title) %>
+<% @url += '&caption=' + URI::escape('A custom-made poll for friends to help decide school choices.') %>
+<% @url += '&description=' + URI::escape(' ') %>
+<% @url += '&message=' + URI::escape('Help me decide where to go to school!') %>
+<% @url += '&link=' + URI::escape('http://' + @thehost + '/poll/' + @p.url_string) %>
+
+<% @url += '&redirect_uri=' + URI::escape('http://' + @thehost + '/home/posted_on_facebook') %>
+
+<div class="blue_button"><img style="float:left;padding-right:8px;" src="/images/icons/social/16/twitter.png"/><a target="_blank" href="http://twitter.com/home?status=<%= CGI.escape(@output) -%>">Click here to share this URL on Twitter </a></div><br/>
+<div class="blue_button"><img style="float:left;padding-right:8px;" src="/images/icons/social/16/facebook.png"/><a target="_blank" href="<%= @url -%>">Click here to share on Facebook</a></div><br/>
+<div style="width:300px; font-size: 10px">
+<strong>Note:</strong> anyone who knows your poll URL can access it and vote.
+	 To ensure accurate results, the URL and its contents cannot be edited. If you would like to change something, please
+	 feel free to create a new poll.
+</div>
+</div>
+

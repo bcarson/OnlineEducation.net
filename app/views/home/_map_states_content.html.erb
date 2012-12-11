@@ -1,0 +1,16 @@
+
+
+    <% for state in @nearby_states %>
+      <% if state != @state %>
+
+				<div class="nearby_state<%= cycle("", "", "", " last", :name => "nearby_states") -%>">
+					<div class="state_image">
+						<a title="<%= @subject.name if @subject -%> Schools in <%= state.name -%>" href="/schools/<%= @subject ? Worker.inurl(@subject.name) : 'all' -%>/<%= state.two_letter_code -%>"><img alt="<%= @subject.name if @subject -%> Schools in <%= state.name -%>" src="/images/states/small/<%= state.two_letter_code -%>.png"/></a>
+					</div>
+					<div class="state_name">
+						<a title="<%= @subject.name if @subject -%> Schools in <%= state.name -%>" href="/schools/<%= @subject ? Worker.inurl(@subject.name) : 'all' -%>/<%= state.two_letter_code -%>"><%= state.name %></a>
+					</div>
+				</div>
+
+      <% end %>
+    <% end %>	

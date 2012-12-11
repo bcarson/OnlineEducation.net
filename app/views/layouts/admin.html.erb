@@ -1,0 +1,12 @@
+<html>
+<head>
+  <%= javascript_include_tag :defaults %>
+  <% if request.request_uri.index(/\/pages/i) || request.request_uri.index(/\/blogs/i) || request.request_uri.index(/\/tags/i) %>
+    <%= active_scaffold_includes %>
+  <% end %>
+</head>
+<body>
+	<%= '<br><br><center>' + flash[:notice] + '</center><br><br>' if !flash[:notice].blank? %>
+	<%= yield %>
+</body>
+</html>

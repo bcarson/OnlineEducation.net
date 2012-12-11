@@ -1,0 +1,8 @@
+<div class="universal_popup matching">
+	<h2>Based on your preferences, we'd recommend:</h2><br>
+	<ul>
+	<% for school in @schools %>
+	  <li><a href="/school/<%= school.url_string -%>"><%= school.name %></a></li>
+	<% end %>
+	</ul>
+</div>

@@ -1,0 +1,59 @@
+
+
+<table>
+<tr>
+	<td colspan="6">
+		<% if Worker.is_not_blank(@program.instructions) %>
+		  <%= @program.instructions %>
+		  <br><br>
+		<% end %>
+
+		<% if Worker.is_not_blank(@program.prereq_degree) %>
+		  <b>Prereq Degree:</b> <%= @program.prereq_degree %>
+		  <br><br>
+		<% end %>
+
+		<% if @thiscleanedup and Worker.is_not_blank(@program.prereq_gpa) %>
+		  <b>Prereq GPA:</b> <%= @program.prereq_gpa %>
+		  <br><br>
+		<% end %>
+		
+		<% if Worker.is_not_blank(@program.prereq_url) %>
+		  Full Info: <a target="_blank" href="<%= @program.prereq_url %>"><%= @program.prereq_url %></a>
+		  <br><br>
+		<% end %>
+		
+		<% if Worker.is_not_blank(@program.credit_transfer_restrictions) %>
+		  <b>Credit Transfer Restrictions:</b> <%= @program.credit_transfer_restrictions %>
+		<% end %>
+		
+	</td>
+</tr>
+
+<tr>
+	<td>Course Name</td>
+	<td>Number</td>
+	<td>Description</td>
+</tr>
+<% for course in @program.courses %>
+<tr>
+	<td><%= course.name %></td>
+	<td><%= course.number %></td>
+	<td>
+		<% if !course.credits.blank? %>		
+		  <b>Credits:</b> <%= course.credits -%><br>
+		<% end %>
+		<% if course.is_prereq == true %>
+		  <b>This is a prereq course</b><br>
+		<% end %>
+		
+		<% if Courseprogramjoin.find_by_course_id_and_program_id_and_is_optional(course.id, @program.id, true) -%>
+		  <b>This is an elective</b><br>
+		<% end %>
+		<br>
+	  <%= show_more(course.description, 20) %>
+	</td>
+</tr>
+<% end %>
+
+</table>

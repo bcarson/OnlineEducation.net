@@ -1,0 +1,9 @@
+
+    <% for z in @profession.zoccupations %>
+      <% if z.id != @profession.prim_zocc_id %>
+			  <%= link_to_remote('X', :update => 'zlist' + @subject.id.to_s, :url => {:action => 'remove_z', :sid => @subject.id, :zid => z.id}, :confirm => 'Are you sure you want to disassociate "' + z.name + '" from the subject "' + @subject.name + '?"') %>				
+        <%= z.name %><br>
+      <% end %>
+    <% end %>			
+
+

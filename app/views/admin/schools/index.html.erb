@@ -1,0 +1,95 @@
+<div style="padding: 15px">
+
+		<h1>Modifying school <%= @attr %></h1>
+
+		<%= will_paginate @schools %>  
+
+  <table border="1" cellspacing="0">
+	<% for school in @schools %>
+	  <% @display = school.name %>
+	  <% @display = @display + ' ' + school.city.name + ', ' + school.city.state.two_letter_code rescue @display %>
+	  <tr>
+		  <td>
+			  <a target="_blank" href="http://www.google.com/search?q=<%= CGI::escape(@display) -%>"><%= @display -%></a> 
+      </td>
+
+
+      <td>
+        <%= form_remote_tag(:update => 'disp' + school.id.to_s, :url => {:action => :update_attr}) %> 	    
+          
+
+        <% if @special == true %>
+				  
+	          <% if params[:attr] == 'socialmedia' -%>
+              Blog URL <input type="text" size="100" name="school[blog_url]" value="<%= school.blog_url -%>"> 
+              <br>Blog RSS URL <input type="text" size="100" name="school[blog_rss_url]" value="<%= school.blog_rss_url -%>"> 
+              <br>Facebook URL <input type="text" size="100" name="school[facebook_url]" value="<%= school.facebook_url -%>"> 
+              <br>Twitter Username <input type="text" size="20" name="school[twitter_username]" value="<%= school.twitter_username -%>"> 
+              <br>You Tube URL <input type="text" size="100" name="school[you_tube_url]" value="<%= school.you_tube_url -%>"> 
+              <br>Linkedin URL <input type="text" size="100" name="school[linkedin_url]" value="<%= school.linkedin_url -%>"> <br>
+            <% end %>
+  	        <% if params[:attr] == 'newspapers' -%>
+
+	            Campus Newspaper Name <input type="text" size="30" name="school[campus_newspaper_name]" value="<%= school.campus_newspaper_name -%>"> 
+	            <br>Campus Newspaper URL <input type="text" size="100" name="school[campus_newspaper_url]" value="<%= school.campus_newspaper_url -%>"> 
+	            <br>Local Newspaper Name  <input type="text" size="30" name="school[local_newspaper_name]" value="<%= school.local_newspaper_name -%>"> 
+	            <br>Local Newspaper URL <input type="text" size="100" name="school[local_newspaper_url]" value="<%= school.local_newspaper_url -%>"> <br>
+
+            <% end %>
+
+	          <% if params[:attr] == 'admissions' -%>
+
+	            Admissions Office Email <input type="text" size="30" name="school[admissions_office_email]" value="<%= school.admissions_office_email -%>"> 
+	            <br>Admissions Office Phone<input type="text" size="20" name="school[admissions_office_phone]" value="<%= school.admissions_office_phone -%>"> 
+	            <br>Admissions Office Address <input type="text" size="100" name="school[admissions_office_address]" value="<%= school.admissions_office_address -%>"> 
+	            <br>Admissions Transfer URL <input type="text" size="100" name="school[admissions_transfer_url]" value="<%= school.admissions_transfer_url -%>"> 
+	            <br>Admissions Requirements <textarea cols="100" rows="3" name="school[admissions_requirements]"><%= school.admissions_requirements -%></textarea> 
+	            <br>Application Deadline <input type="text" size="100" name="school[application_deadline]" value="<%= school.application_deadline -%>"> <br>
+	
+	          <% end %>
+	
+	        
+        <% else %>
+						
+			    <% @length = school.attributes[@attr].length rescue nil %>
+          <% @length = 1 if @length.blank? %>
+			    <% if @length.blank? %>
+			      <input type="hidden" name="school[<%= @attr -%>]" value="0">
+			      <input name="school[<%= @attr -%>]" value="1" type="checkbox" <%= 'checked="yes"' if school.attributes[@attr] == true -%>>
+			    <% else %>
+				    <% if @length < 150 %>
+				      <% case @length  					 
+					         when 0..10
+						         @size = '20'
+						       when 11..30
+							       @size = '45'
+							     when 31..50
+							       @size = '70'
+							     when 51..100
+								     @size = '120'
+								   when 101..149
+									   @size = '180'
+						     end
+						  %>
+				
+				      <input type="text" size="<%= @size -%>" name="school[<%= @attr -%>]" value="<%= school.attributes[@attr] -%>"> 
+				    <% else %>
+				      <textarea rows="8" cols="100" name="school[<%= @attr -%>]"><%= school.attributes[@attr] -%></textarea>
+				    <% end %>   
+			    <% end %>
+			
+			 <% end %>
+			
+			    <input type="hidden" name="sid" value="<%= school.id -%>">
+			    <input type="submit" value="Edit &raquo;">
+					<span id="disp<%= school.id -%>">
+					</span>
+	      </form>
+	    </td>
+	
+	  </tr>
+  <% end %>
+  </table>
+  <br><br>
+  <%= will_paginate @schools %>  
+</div>

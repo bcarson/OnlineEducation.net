@@ -1,0 +1,12 @@
+
+
+Here are the new pics
+<br><br>
+<% if @logo %>
+	<b>Logo:</b><br>
+	<img src="/images/school/<%= @school.picfoldernum %>/logo-med.png?rand=<%= rand(24324234) -%>" /><br><br>
+<% end %>
+<% if @photo %>
+	<b>Photo:</b><br>
+	<img src="/images/school/<%= @school.picfoldernum %>/photo-med.jpg?rand=<%= rand(224324234) -%>" /><br>
+<% end %>

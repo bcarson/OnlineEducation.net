@@ -1,0 +1,30 @@
+<% if !@school.blank? %>
+<div class="school online" itemscope itemtype="http://schema.org/CollegeOrUniversity">
+	<div class="left">
+		<label for="select_school_<%= @school.id -%>"><%= @school.logo_small -%></label><br/>
+	</div>
+	<div class="right">
+		<h4><a href="http://info.onlineeducation.net<%= @school.getinfourl -%>"><span itemprop="name"><%= @school.name %></span></a></h4>
+			<div class="sub">
+			
+      <% @p = Program.find(:first, :conditions => ['is_online = 1 and inactive IS NULL and school_id = ? and subjects.id = ?', @school.id, @subject.id], :include => [:subjects]) if !@subject.blank? %>
+      <% if @p %>
+        <div class="online">Featured Online Program:</div>
+        <div class="subject_name"><a href="<%= @p.getinfourl -%>"><%= @p.name -%>&nbsp;&raquo;</a></div>
+      <% else %>
+        <div class="online">Online School</div>
+      <% end %>
+		</div>
+		<!-- <a class="more_info" href="#" onClick="load_school_info_view(<%= @school.id -%>); return false;"><span>More Info</span></a> -->
+		<% if @p %>
+	
+		  <a class="get_free_info" href="http://info.onlineeducation.net<%= @p.getinfourl -%>">GET FREE INFO</a>
+		<% else %>
+	
+	  <a class="get_free_info" href="http://info.onlineeducation.net<%= @school.getinfourl -%>">GET FREE INFO</a>		
+		<% end %>
+	</div>
+	<div class="clear"></div>
+</div>
+<% end %>
+

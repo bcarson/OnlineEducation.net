@@ -1,0 +1,35 @@
+<%= render(:partial => "mw_page_title") %>
+
+<div id="wrapper">
+	<div id="content">
+		<div id="main">
+
+				<%= '<center>' + flash[:notice] + '</center><br><br>' if !flash[:notice].blank? %>
+				<p>Email us at <strong>info (@) onlineeducation.net</strong> or contact us below.</p>
+
+			<form action="/home/contactsubmit" class="contact universal_form">
+				<ul>
+					<li class="full"><label>Send us a Message: <small>(please include your email address for a reply)</small></label>
+						<textarea name="message" cols="50" rows="5" class="box"></textarea>
+					</li>
+					<li class="full"><label>What is 4 + 7 ?</label><input style="width: 100px;" type="text" name="anti" size="7" class="box"> <small>(anti-spam question)</small>
+					</li>
+					<li class="full"><input type="image" src="/images/btn_universal_submit.png"/></li>
+
+			</form>
+			<br/><br/>
+
+		</div>
+		<!-- end #main -->
+		<div class="clear"></div>
+	</div>
+	<!-- end #content -->
+</div>
+<!-- #wrapper -->
+
+
+
+
+
+
+

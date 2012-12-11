@@ -1,0 +1,15 @@
+<div id="the_states" class="popup_window">
+	<div class="top"></div>
+	<div class="wrapped">
+		<div class="header">
+			<h2>States Near <%= @state.name rescue nil %></h2>
+			<div class="close"><a href="#">Close</a></div>
+			<div class="clear"></div>
+		</div>
+		<div class="info_content full_page">
+			<%= render :partial => 'map_states_content'%>
+		</div>		
+	</div>
+	<div class="clear"></div>
+	<div class="bottom"></div>
+</div>

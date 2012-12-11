@@ -1,0 +1,17 @@
+<div class="module">
+	<div class="header">
+		<h4>Other <%= @degreelevel.name %> Degrees</h4>
+	</div>
+	<div class="content">
+		<ul class="link_list">
+			<li><a href="/online-<%= Worker.inurl(@degreelevel.name)-%>-degrees">All Online <%= @degreelevel.name %> Degrees </a></li>
+		  <% for subject in Subject.nodes %>
+		      <%# if Worker.is_degreelevel_subject(@degreelevel,subject) %>
+    			  <li><a href="/online-<%= Worker.inurl(@degreelevel.name) -%>-degree-in-<%= Worker.inurl(subject.name) -%>">Online <%= @degreelevel.name %> Degree in <%= subject.name %></a></li>
+          <%# end %>
+      <% end %>
+		</ul>
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

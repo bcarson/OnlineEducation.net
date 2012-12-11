@@ -1,0 +1,19 @@
+var ct = 0;
+var yelps = new Array();
+
+$.each(ydata.businesses, function(i,b){
+	
+	var arr = [b.name,
+   b.latitude,
+   b.longitude,
+   '<img src="' + b.photo_url_small + '" />',
+   b.address1 + ' ' + b.city + ', ' + b.state + ' ' + b.zip,
+   '<img src="' + b.rating_img_url_small + '" />',
+   i,
+   b.id,
+   b.avg_rating,
+   b.review_count
+  ]
+	
+  yelps.push(arr);
+});

@@ -1,0 +1,30 @@
+<h3>Ranked by Excellence</h3>
+
+<% for school in @schools %>
+  <%# @programs = school.matching_programs(@subject) -%>
+  <% school_programs = Worker.all_programs_from_school(@programs, school) %>
+	<div class="entry thumb">
+
+
+    <% @school = school %>
+    <%= render :partial => 'school_thumbnail' %>
+
+
+		<div class="article">
+			<h4><a href="/school/<%= school.url_string -%>"><%= school.name %></a></h4>
+			<% school.imported_mission_statement && school.imported_mission_statement.length < 10 ? @output = school.mission_statement : @output = school.imported_mission_statement  %>
+			<p><%= show_more_to_school(@output, 100, school) %></p>
+			<h4><%= @subject.name -%> Programs at <%= school.name %> </h4>
+			<ul>
+				<% for program in school_programs %>
+				  <li>
+					  <a href="/programs/<%= Worker.inurl(@subject.name) -%>/online#<%= Worker.inurl(program.name) -%>"><%= program.name -%></a></a>
+				  </li>
+				<% end %>
+			</ul>
+
+		</div>
+		<div class="clear"></div>
+	</div>
+
+<% end %>

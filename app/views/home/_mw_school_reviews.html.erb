@@ -1,0 +1,194 @@
+<!-- #==REVIEWS
+  #Ratemyprofessor URLS for departments - top ranked teachers probably...
+  #other site URLs -->
+
+
+	<script type="text/javascript">
+		function leave_rating_go(id){
+
+		  document.getElementById('rating_submitting').innerHTML = '<input type="image" class="submit" src="/images/spinner_e3e3e3.gif" disabled/>';
+		  jQuery.ajax({
+				url: '/home/leave_rating_go?id=' + id.toString(),
+				data: $("#leave_rating").serialize(),
+				success: function(data){
+					jQuery('#rating_submitting_msg').html(data);
+					document.getElementById('rating_submitting').innerHTML = '<input type="image" class="submit" src="/images/btn_rating_submitted.png" disabled/>';
+				}
+			});
+		}
+
+		function leave_comment_go(id){
+
+		  document.getElementById('comment_submitting').innerHTML = '<input type="image" class="submit" src="/images/spinner_e3e3e3gif" disabled/>';
+		  jQuery.ajax({
+				url: '/home/leave_comment_go?id=' + id.toString(),
+				data: $("#leave_comment").serialize(),
+				success: function(data){
+					jQuery('#school_comments').html(data);
+					document.getElementById('comment_submitting').innerHTML = '<input type="image" class="submit" src="/images/btn_comment_submitted.png" disabled/>';
+				}
+			});
+		}
+
+	</script>
+
+
+
+<% reset_cycle() -%>
+	<table class="universal school" cellspacing="0">
+		<tr class="<%= cycle("even", "odd") -%>">
+			<th colspan="2">Reviews</th>
+		</tr>
+
+		<tr>
+			<td id="school_ratings" colspan="2">
+
+				<% if @school.ratings.blank? %>
+				  <div class="no_comments"><i>Be the first to rank this school</i></div>
+				<% else %>
+				  <h2 class="ratings_total"><%= render :partial => 'ratings' %></h2>
+				<% end %>
+
+
+
+
+			  <form id="leave_rating" onSubmit="return false;">
+					<h2>Leave a Rating (1 = Terrible | 10 = Fantastic)</h2>
+					<div id="rating_submitting_msg"></div>
+					<ul>
+						<li class="radios">
+							<ul>
+					  	<li>1<input type="radio" name="rating" value="1"></li>
+					  	<li>2<input type="radio" name="rating" value="2"></li>
+					  	<li>3<input type="radio" name="rating" value="3"></li>
+					  	<li>4<input type="radio" name="rating" value="4"></li>
+					  	<li>5<input type="radio" name="rating" value="5"></li>
+					  	<li>6<input type="radio" name="rating" value="6"></li>
+					  	<li>7<input type="radio" name="rating" value="7"></li>
+					  	<li>8<input type="radio" name="rating" value="8"></li>
+					  	<li>9<input type="radio" name="rating" value="9"></li>
+					  	<li>10<input type="radio" name="rating" value="9"></li>
+						</ul>
+						</li>
+					  <li><span id="rating_submitting">
+						  <input type="image" class="submit" src="/images/btn_universal_submit.png" onClick="leave_rating_go(<%= @school.id -%>); return false;">
+						</span></li>
+					</ul>
+					<div class="clear"></div>
+				</form>
+
+			</td>
+		</tr>
+
+		<tr>
+			<td id="school_comments" colspan="2">
+				<h2>Comments</h2>
+				<% if @school.comments.blank? %>
+				  <div class="no_comments"><i>Be the first to leave a comment on <%= @school.name %></i></div>
+				<% else %>
+				  <%= render :partial => 'comments' %>
+				<% end %>
+
+
+
+			  <form class="universal_form" id="leave_comment" onSubmit="return false;">
+				<h2>Leave a Comment</h2>
+				<ul>
+          <li class="full"><label>Name</label><input type="text" name="name" class="box"></li>
+          <li class="full"><label>Comment</label>
+          <textarea cols="50" rows="5" name="body" class="box"></textarea></li>
+
+				  <span id="comment_submitting">
+					  <input type="image" class="submit" src="/images/btn_universal_submit.png" onClick="leave_comment_go(<%= @school.id -%>); return false;">
+					</span>
+					</ul>
+					<div class="clear"></div>
+				</form>
+
+			</td>
+		</tr>
+
+
+		<% @crawlschools = @school.crawlschools %>
+		<% if !@crawlschools.blank? %>
+			<tr>
+				<td id="external_reviews" colspan="2">
+					<h2>External Reviews of <%= @school.name -%></h2>
+						<% i = 0 %>
+						<ul>
+					  <% for crawlschool in @crawlschools %>
+					   	<% if crawlschool.url.index(/ratemy/) %>
+								<% if i == 0 %>
+								<li class="review_site">
+										<img src="/images/icons/icon_ratemyprofessors.png"/>
+								</li>
+								<% end %>
+							<% i += 1 %>
+							<li class="rate">
+						    <%# 'RateMyProfessors.com: ' if crawlschool.url.index(/ratemy/) %>
+						    <%= crawlschool.name %> (<%= crawlschool.city %>, <%= crawlschool.state %>) <a rel="nofollow" target="_blank" href="<%= crawlschool.url -%>">Read Reviews &raquo;</a>
+							</li>
+							<% end %>
+						<% end %>
+						</ul>
+						<div class="clear"></div>
+
+						<% i = 0 %>
+						<ul>
+						<% for crawlschool in @crawlschools %>
+							<% if crawlschool.url.index(/unigo/) %>
+								<% if i == 0 %>
+								<li class="review_site">
+										<img src="/images/icons/icon_unigo.png"/>
+								</li>
+								<% end %>
+							<% i += 1 %>
+							<li class="rate">
+						    <%# 'Unigo.com: ' if crawlschool.url.index(/unigo/) %>
+						    <%= crawlschool.name %> (<%= crawlschool.city %>, <%= crawlschool.state %>) <a rel="nofollow" target="_blank" href="<%= crawlschool.url -%>">Read Reviews &raquo;</a>
+							</li>
+							<% end %>
+						<% end %>
+						</ul>
+						<div class="clear"></div>
+
+
+						<% i = 0 %>
+						<ul>
+							<% for crawlschool in @crawlschools %>
+						<% if crawlschool.url.index(/prowler/) %>
+								<% if i == 0 %>
+								<li class="review_site">
+										<img src="/images/icons/icon_collegeprowler.png"/>
+								</li>
+								<% end %>
+							<% i += 1 %>
+							<li class="rate">
+						    <%# 'CollegeProwler.com: ' if crawlschool.url.index(/prowler/) %>
+						    <%= crawlschool.name %> (<%= crawlschool.city %>, <%= crawlschool.state %>) <a rel="nofollow" target="_blank" href="<%= crawlschool.url -%>">Read Reviews &raquo;</a>
+							</li>
+							<% end %>
+						<% end %>
+						</ul>
+						<div class="clear"></div>
+				</td>
+			</tr>
+		<% end %>
+
+
+		<% @crawlprofs = @school.top_rated_professors %>
+		<% if !@crawlprofs.blank? %>
+			<tr>
+				<td id="top_professors" colspan="2">
+					<h2>Top Rated Professors at <%= @school.name -%></h2>
+					<p>Read ratings on Ratemyprofessors.com</p>
+					  <ul>
+					  <% for crawlprof in @crawlprofs %>
+					    <li> <%= crawlprof.name %> (<%= crawlprof.department %>) <a rel="nofollow" target="_blank" href="http://www.ratemyprofessors.com/ShowRatings.jsp?tid=<%= crawlprof.url -%>">Read Ratings &raquo;</a></li>
+					  <% end %>
+				  </ul>
+				</td>
+			</tr>
+	  <% end %>
+
+	</table>

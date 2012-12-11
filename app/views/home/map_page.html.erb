@@ -1,0 +1,100 @@
+
+<div id="map_full_page">
+  <% if !request.request_uri.index(/\/mapsearch/) %>
+	<noscript>
+	  <div id="no_js">
+			<div id="ns_static" style="background: white; padding: 15px">
+				<%= render :partial => 'content_colleges_in_city' if @page and @page.url_string == 'colleges-in-[city]' -%>
+			  <%= render :partial => 'content_colleges_in_state' if @page and @page.url_string == 'colleges-in-[state]' -%>
+			  <%= render :partial => 'content_subject_schools_in_city' if @page and @page.url_string == '[Subject]-schools-in-[City]' -%>
+			  <%= render :partial => 'content_subject_schools_in_state' if @page and @page.url_string == '[Subject]-schools-in-[State]' -%>
+			</div>
+			<div id="ns_cities" style="background: white; padding: 15px">
+				<%= render :partial => 'map_cities_content'%>
+			</div>
+			<div id="ns_states" style="background: white; padding: 15px">
+				<%= render :partial => 'map_states_content' %>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</noscript>
+	<% end %>
+	<%= render :partial => 'map_functions' %>
+	<div id="left_col">
+	<%= render :partial => 'map_listing_widget' %>
+    <%= render :partial => 'map_school_list_details' %>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$(".listing_tab_content").hide();
+			$("ul.listing_tabs li:first").addClass("active").show();
+			$(".listing_tab_content:first").show();
+
+
+			$("ul.listing_tabs li").click(function() {
+			    $("ul.listing_tabs li").removeClass("active");
+			    $(this).addClass("active");
+			    $(".listing_tab_content").hide();
+			    var activeTab = $(this).find("a").attr("href");
+			    $(activeTab).show();
+			    return false;
+			});
+
+		  $("#school_info_view .close a").click(function() {
+		      $("#school_info_view").fadeOut();
+		      return false;
+		  });
+
+		});
+		</script>
+			<div class="wrapped">
+				<div class="listing_info_content">
+					<div id="listing_tab_wrapper">
+						<ul class="listing_tabs">
+							<li id="listing_tab1_li"><a href="#listing_tab1" onClick="document.getElementById('show_tab').value = '1';">Schools</a></li>
+							<li id="listing_tab2_li"><a href="#listing_tab2" onClick="map_first_load(1); setTimeout( function(){ document.getElementById('show_tab').value = '2'; if (document.getElementById('housing_listings').innerHTML == ''){$('#housing_listings').html('<div class=\'loader\'>Loading... <img src=\'/images/spinner_e3e3e3.gif\'/></div>'); load_housing_listings('0','apartment');}}, 1000)">Housing</a></li>
+							<li id="listing_tab3_li"><a href="#listing_tab3" onClick="map_first_load(1); setTimeout( function(){ document.getElementById('show_tab').value = '3'; if (document.getElementById('yelp_listings').innerHTML == ''){$('#yelp_listings').html('<div class=\'loader\'>Loading... <img src=\'/images/spinner_e3e3e3.gif\'/></div>'); load_yelp_listings('0', 'restaurants');}}, 1000)">Local Guide</a></li>
+						</ul>
+						<div class="clear"></div>
+						<div class="listing_tab_container" id="school_list">
+              <%= render :partial => 'map_listing_tab_content' %>
+						</div>
+					</div>
+					<!-- end #tab_wrapper -->
+				</div>
+				<div class="clear"></div>
+			</div>
+
+
+
+	</div>
+	<!-- end #left_col -->
+	<div id="right_col">
+    <%= render :partial => 'map_utility_bar' %>
+		<%= render :partial => 'map_small_tooltip' %>
+		<div class='loading_holder' style="display: none;"><div class='loader'>Loading... <img src='/images/spinner_e3e3e3.gif'/></div></div>
+		<div id="map"><%= render :partial => 'map_initial_image_load' -%></div>
+		<div id="school_info_view"></div>
+    <% if !request.request_uri.index(/mapsearch/) %>
+	    <%= render :partial => 'map_static_content' %>
+	    <%= render :partial => 'map_cities' %>
+	    <%= render :partial => 'map_states' %>
+    <% end %>
+    <%= render :partial => 'map_compare_results' %>
+    <%= render :partial => 'map_yelp_user_reviews' %>
+    <%= render :partial => 'map_house_details' %>
+
+
+	</div>
+	<!-- end #right_col -->
+
+	<div id="map_footer">
+			<div class="left">
+				&copy; 2012 Education Database Online | <a rel="nofollow" href="/privacy-policy">Privacy Policy</a> | <a href="/contact" rel="nofollow">Contact</a>
+			</div>
+			<div class="right">
+				Questions? Comments? <a href="/contact" rel="nofollow">Contact Us</a>
+			</div>
+	</div>
+</div>
+<div class="clear"></div>
+<!-- end #map_full_page -->

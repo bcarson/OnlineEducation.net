@@ -1,0 +1,34 @@
+<h3>Ranked by Excellence</h3>
+
+<% for school in @schools %>
+  <%# @programs = school.matching_programs(@subject) -%>
+  <% school_programs = Worker.all_programs_from_school(@programs, school) %>
+
+	<div class="entry thumb">
+
+     <% @school = school %>
+     <%= render :partial => 'school_thumbnail' %>
+		
+			<div class="article">
+				<% for program in school_programs %>
+				  <% courses = program.courses %>
+				<div class="section <%= dom_class_last(program, school_programs) %>">
+  				<h4><%= program.name %></h4>
+	  			<p><%= program.description %></p>
+		      <ul>
+			      
+			      <% for course in courses %>
+			        <% if Worker.is_not_blank(course.name) %>
+				        <li><a href="/courses/<%= Worker.inurl(@subject.name) -%>/online#<%= course.id -%>-<%= Worker.inurl(course.name) -%>"><%= Worker.clean_content_display(course.name) %></a>&nbsp;&raquo; </li>
+				      <% end %>
+					  <% end %>	
+				  </ul>
+				</div>
+				<% end %>
+			</div>
+			
+
+		<div class="clear"></div>
+	</div>
+
+<% end %>

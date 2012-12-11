@@ -1,0 +1,25 @@
+
+	<div class="module">
+		<div class="header">
+			<h4>Online <%= @subject.name %> Education</h4>
+		</div>
+		<div class="content">
+			<ul class="link_list">
+				<% if @subject.has_online_program == true %>
+				  <li><a href="/schools/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name %> Schools</a></li>
+				  <li><a href="/programs/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name %> Programs</a></li>
+				  <li><a href="/courses/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name %> Courses</a></li>
+				  <% if @subject.has_online_cert == true %>
+				    <li><a href="/certifications/<%= Worker.inurl(@subject.name) -%>/online">Online <%= @subject.name %> Certifications</a></li>						
+				  <% end %>
+				<% end %>
+				<li><a href="/subjects/<%= Worker.inurl(@subject.name) -%>"><%= @subject.name %> Information</a></li>						
+	      <% for profession in @subject.professions[0..1] %>
+	  			<li><a href="/professions/<%= Worker.inurl(profession.name) -%>"><%= profession.name %> Salary</a></li>						
+	      <% end %>
+			
+			</ul>
+		</div>
+		<div class="footer"></div>
+	</div>
+	<!-- end .module -->

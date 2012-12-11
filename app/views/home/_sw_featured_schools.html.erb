@@ -1,0 +1,44 @@
+<% if @online_schools and @online_programs %>
+  <% @topschools = @online_schools[0..2] %>
+  <% @topprograms = @online_programs %>
+<% else %>
+	<% if @subject.blank? %>
+	    <% @topschools = School.find(:all, :limit => 3, :order => 'priority DESC', :conditions => ['is_online = 1']) -%>
+	<% else %>
+	  <% if @degreelevel.blank? %>
+		  <% @topprograms = Program.find(:all, :limit => 10, :conditions => ['inactive IS NULL AND is_online = 1 AND subjects.id = ?', @subject.id], :include => [:subjects])  %>
+    <% else %>
+	    <% @topprograms = Program.find(:all, :limit => 10, :conditions => ['inactive IS NULL AND is_online = 1 AND subjects.id = ? AND degreelevels.id = ?', @subject.id, @degreelevel.id], :include => [:subjects, :degreelevels])  %>
+    <% end %>
+    <% @topschools = [] %>
+    <% for p in @topprograms %>
+      <% s = p.school %>
+      <% @topschools << s unless @topschools.index(s)  -%>
+    <% end %>
+    <% @topschools.sort!{|a,b| b.priority <=> a.priority } %>
+    <% @topschools = @topschools[0..2]%>
+	<% end %>
+<% end %>
+<% @ct = 1 %>
+
+<div class="module" style="display:none;">
+	<div class="header">
+	<div style="display:none;"></div>
+		<h4>Top Schools</h4>
+	</div>
+	<div class="content">
+		<ul class="link_list thumbs">
+			<% for school in @topschools %>
+
+				<% @top_widget_programs = school.top_widget_programs if @subject.blank? and @topprograms.blank? %>
+  			<li>
+  			    <img itemprop="image" width="50" src="/images/school/<%= school.picfoldernum %>/logo-small.png" />
+  			    <a href="http://info.onlineeducation.net<%= school.getinfourl -%>" ><%= school.name %></a><div class="clear"></div></li>
+					<% @ct += 1 %>
+				<% end %> 
+				
+		</ul>
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

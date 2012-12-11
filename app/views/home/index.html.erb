@@ -1,0 +1,195 @@
+
+		<div id="billboard">
+			<div class="content_wrap">
+				<img class="bb_image" src="images/billboard/main.jpg"/>
+				<div class="search_box">
+					<div class="submit_btn"></div>
+						<div class="overlayContainer">
+							<form action="/mapsearch" id="search_box_form" method="GET">
+							  <input type="text" name="location" class="overlayField" />
+
+							  <span class="overlayLabel">Enter a Location or Address</span>
+							</form>
+						</div>
+				</div>
+			</div>
+		</div>
+		<!-- end #billboard -->
+		<div id="features">
+			<div class="content_wrap">
+				<div class="col">
+					<div class="feature">
+						<img class="icon" src="/images/feature_icons/magnify_glass.png"/>
+						<div class="right">
+							<h4>Google Map Search</h4>
+							<p>Use your mouse to move and zoom an easy-to-use Google map to discover schools within any US region at any ariel view.  Quickly adjust and update the map as needed.</p>
+							<a class="green_btn" href="/about#overview"><span>Learn More &raquo;</span></a>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="feature">
+						<img class="icon" src="/images/feature_icons/graduate.png"/>
+						<div class="right">
+							<h4>Programs &amp; Certificates</h4>
+							<p>Learn about which degree programs at every level are offered by schools of interest.  Discover how many students have graduated at each level in the past from your desired program.</p>
+							<a class="green_btn" href="/about#school_summary"><span>Learn More &raquo;</span></a>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="feature">
+						<img class="icon" src="/images/feature_icons/macbook.png"/>
+						<div class="right">
+							<h4>Social Media Integration</h4>
+							<p>Find rankings, comments, tweets, questions, and Facebook posts about every school.  Ask questions via social media directly to schools and your friends.</p>
+							<a class="green_btn" href="/about#school_summary"><span>Learn More &raquo;</span></a>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="feature">
+						<img class="icon" src="/images/feature_icons/home.png"/>
+						<div class="right">
+							<h4>Local Guides</h4>
+							<p>Find available apartments, condos, houses, etc. around the schools you are considering as well as popular local restaurants, night life, activities, and more.</p>
+							<a class="green_btn" href="/about#features"><span>Learn More &raquo;</span></a>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="col last">
+					<div class="feature">
+						<img class="icon" src="/images/feature_icons/heart_plus.png"/>
+						<div class="right">
+							<h4>School Matching</h4>
+							<p>Not sure where to apply and/or attend?  Use simple tools to be matched to a school based on your preferences and create a custom poll to get your friends' advice.</p>
+							<a class="green_btn" href="/about#tools"><span>Learn More &raquo;</span></a>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="feature">
+						<img class="icon" src="/images/feature_icons/chalkboard.png"/>
+						<div class="right">
+							<h4>Learning From Home</h4>
+							<p>Save time and money via online education.  An increasing number of accredited colleges and universities are offering online degrees and programs to help your career.</p>
+							<a class="green_btn" href="/about"><span>Learn More &raquo;</span></a>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end #features -->
+		<div id="more_features">
+			<div class="content_wrap">
+				<div class="col school_matching_tool">
+					<%= render :partial => 'sw_school_questionaire' %>
+				</div>
+				<div class="col poll_your_friends">
+					<%= render :partial => 'sw_poll_your_friends'%>
+				</div>
+				<div class="col school_ranking">
+					<div class="top">
+						<a href="/rankings"><img src="/images/ad_school_rankings.png"/></a>
+					</div>
+					<div class="left">
+						<h4>Ranking Factors That Matter</h4>
+						<p>Quickly see how schools you are considering compare to one another in terms of
+							 costs, student-to-faculty ratios, enrollment, test scores, and more.</p>
+					</div>
+					<div class="right">
+						<a class="green_btn" href="/about"><span>Learn More &raquo;</span></a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end #more_features -->
+		<div id="schools_by_state">
+			<div class="content_wrap">
+				<h3>Schools by State</h3>
+				<% @ct = 1 %>
+				<% for state in State.all %>
+					<div class="state <%= 'last' if @ct % 3 == 0 -%>">
+						<img src="/images/states/<%= state.two_letter_code -%>.png"/>
+						<h4><a href="/schools/all/<%= state.two_letter_code -%>">Schools in <%= state.full_name %></a></h4>
+						<ul>
+							<li>
+								<div class="left">Total Schools</div>
+								<div class="right"><%= state.total_schools %></div>
+							</li>
+							<li>
+								<div class="left">Avg. Rank of Schools</div>
+								<div class="right"><%= sprintf("%.2f", state.avg_rank) %></div>
+							</li>
+							<li>
+								<div class="left">Avg. Student/Faculty Ratio</div>
+								<div class="right"><%= state.avg_student_to_faculty_ratio.to_i.to_s %>:1</div>
+							</li>
+							<li>
+								<div class="left">Total Programs</div>
+								<div class="right"><%= state.total_programs %></div>
+							</li>
+						</ul>
+						<div class="clear"></div>
+					</div>
+					<% @ct += 1 %>
+				<% end %>
+
+
+
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end #schools_by_state -->
+		<div id="subject_directory">
+			<div class="content_wrap">
+				<h3>Online Directory of Subjects</h3>
+				<div class="col">
+					<% @subjects = Subject.all_prims_alpha_order %>
+					<h4>A &mdash; D</h4>
+
+					<ul>
+					  <% for subject in @subjects[0..104] %>
+					    <% if subject.has_online_program == true -%>
+						  <li><a href="/schools/<%= Worker.inurl(subject.name)-%>/online"><%= subject.name %></a></li>
+						  <% end %>
+						<% end %>
+					</ul>
+				</div>
+				<div class="col">
+					<h4>E &mdash; I</h4>
+					<ul>
+					  <% for subject in @subjects[105..206] %>
+					    <% if subject.has_online_program == true -%>
+						  <li><a href="/schools/<%= Worker.inurl(subject.name)-%>/online"><%= subject.name %></a></li>
+						  <% end %>
+						<% end %>
+					</ul>
+				</div>
+				<div class="col">
+					<h4>K &mdash; O</h4>
+					<ul>
+					  <% for subject in @subjects[207..293] %>
+				    <% if subject.has_online_program == true -%>
+						  <li><a href="/schools/<%= Worker.inurl(subject.name)-%>/online"><%= subject.name %></a></li>
+						<% end %>
+						<% end %>
+					</ul>
+				</div>
+				<div class="col last">
+					<h4>P &mdash; Z</h4>
+					<ul>
+					  <% for subject in @subjects[294..399] %>
+					    <% if subject.has_online_program == true -%>
+						  <li><a href="/schools/<%= Worker.inurl(subject.name)-%>/online"><%= subject.name %></a></li>
+						  <% end %>
+						<% end %>
+					</ul>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end #subject_directory -->
+<%= render(:partial => "footer") %>

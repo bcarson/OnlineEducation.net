@@ -1,0 +1,116 @@
+<%= render(:partial => "mw_page_title") %>
+
+<div id="wrapper">
+	<div id="content">
+		<div id="main" class="rankings">
+			<div style="float: right; padding-left: 20px; padding-bottom: 10px"><img src="/images/top_level_photos/Certifications.jpg"/></div>
+			<p class="large">Our advanced ranking algorithm is designed to help you choose the <u>best</u> possible school for your investment of time and money.</p>
+			<p>Choosing a school is difficult. At the end of the day, we know you are looking to maximize your investment
+				 of both <b>time</b> and <b>money</b> into education
+				 that will help you succeed.  When ranking an institution, many systems weigh heavily some factors
+				 over others that may or may not be important to you. Rather than rely on more subjective data such as peer evaluations
+				 and surveys, our sophisticated rankings our based on precise information
+				 reported directly to the <a href="http://nces.ed.gov/">National Center for Education Statistics</a>
+				 and compiled into factors such as:
+			</p>
+
+			<ul>
+				 <li>
+					<b>Value per dollar of tuition</b> - Just because a school is expensive doesn't always mean it will give you
+					a high-quality education.  In fact, many state schools that provide reduced-rate tuition for in-state residents
+					report better numbers (graduation rates, program offerings, etc...) than expensive private colleges.  Our ranking
+					factor here is actually split into tuition weighted against multiple factors such as student-to-faculty ratios and
+					current enrollment statistics.
+				 </li>
+				 <li>
+					<b>Student-to-faculty ratios</b> - Schools can make direct decisions about how many students to pack into classrooms
+					and how many teachers to hire. While many ranking algorithms put this as a high determining factor, we have
+					weighted this relatively lower because the value of education with regard to small class sizes is complex.  For example,
+					a great teacher with 25 students will provide significantly better education than a terrible teacher with 10. A school
+					may hire many inexpensive teachers to promote lower ratios, but this should not boost their ranking.  Still, in general
+					this is still an important ratio to look for and we have kept it in our ranking algorithm.
+				 </li>
+				 <li>
+					<b>Retention rates</b> - Are students leaving the school after a couple of years?  Are they dropping out because it is
+					too hard or frustrating?  Or are they flunking out?  While the fine details may not be able to be determined from reported
+					retention rates, whichever way you look at it this is a very important metric to consider when ranking a school?
+				 </li>
+				 <li>
+					<b>Graduation rates</b> - More than just the flip side of retention rates, graduation rates of individuals seeking
+					Associate, Bachelor, Master, or Doctorate degrees (as well as earning various certifications) are another important
+					ranking factor for colleges.  This includes the duration of time that students
+					take to complete their degree program at various levels.
+				 </li>
+				 <li>
+					<b>Applicant pool ratios</b> - Have the rates of students applying for this school changed?  Do a large number of students
+					apply for this school relative to enrollment?  It is important to look at these numbers not only to examine your
+					odds of getting into the school, but to give you an idea of both popularity and up-to-date changes the school
+					has made with regard to its applicate pool statistics.
+				 </li>
+				 <li>
+					<b>Admission ratios</b> -  While a large number of people may apply and be accepted, a key metric to examine
+					about a school how how many of the accepted students <i>actually say yes and attend the school</i>.  For example,
+					many of the nation's top prospective students may apply to a wide variety of schools and be accepted, but a key
+					factor that should boost a school's ranking is the accepted-to-admitted ratio.
+				 </li>
+				 <li>
+					<b>Enrollment numbers</b> - For each grade level as appropriate for the programs offered, are enrollment numbers steady
+					and reasonable?  Are transfer students flocking to or from the school?  Does the number of students enrolled in graduate
+					and undergraduate programs seem appropriate based on what is offered?
+				 </li>
+				 <li>
+					<b>Program offerings</b> - Is there a rich diversity of programs compared to cost and enrollment numbers?  While a school
+					that has relatively few programs should not be ranked less if it is offering a high quality education, those
+					schools that simply add more programs and hire more teachers without maintaining enrollment and graduating more
+					students at various levels should be marked down in the rankings.
+
+				 </li>
+				 <li>
+					<b>Cost of living</b> - While many ranking systems leave cost of living out of their algorithms, we have decided
+					to include a non-trivial value to it because it contributes significantly to the net cost (i.e. with books, tuition, etc...) and thus
+					should be an important factor when choosing a school.
+				 </li>
+				 <li>
+					<b>Test scores</b> - A school that has students with higher test scores tends to follow many of the important ranking
+					factors described above.  However, there are cases (such as many state schools) when other ranking factors are lower
+					but the quality of the students actually enrolling (and staying enrolled) in a school is high.  Who your peers are
+					at a school is an important part of education and thus we have included ACT/SAT scores in our ranking algorithm.
+				 </li>
+			</ul>
+
+			<p>Given the factors described above, schools are ranking programmatically and scaled to fit within a range from 0-100. The top 100 schools in the US are listed below.</p>
+			<div class="ranking_header"></div>
+			<table class="universal rankings">
+			<% for school in School.find(:all, :limit => 100, :order => 'rank DESC' ) %>
+			  <tr>
+				  <td class="title" style="width:80px; border-right:none;height:75px">
+			       <center><%= school.logo_small %> </center>
+			    </td>
+			    <td valign='center' class="title" style="width:350px;font-size: 18px;">
+				    <a href="/school/<%= school.url_string -%>"><%= school.name %></a>
+			    </td>
+			    <td valign='center' style="font-size: 18px">
+				    <center><strong><%= school.display_rank %></strong></center>
+				  </td>
+			  </tr>
+			<% end %>
+			</table>
+
+
+
+
+
+		</div>
+		<div id="sidebar">
+			<%= render :partial => "sw_find_school_form" %>
+			<%= render :partial => "top_online_schools" %>
+		</div>
+		<!-- end #main -->
+		<div class="clear"></div>
+	</div>
+	<!-- end #content -->
+</div>
+<!-- #wrapper -->
+
+
+

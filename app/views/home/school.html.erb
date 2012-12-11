@@ -1,0 +1,40 @@
+<div id="page_header">
+	<div id="page_header_content">
+		<h2>School Information</h2>
+	</div>
+</div>
+<div id="wrapper">
+	<div id="content">
+		<div id="main">
+			<%= render :partial => "mw_school_general" %>
+			<div class="section_break">&nbsp;</div>
+			<%= render :partial => "mw_school_costs" %>
+			<%= render :partial => "mw_school_enrollment_and_graduation" %>
+			<%= render :partial => "mw_school_admissions" %>
+			<% if @school.is_online == true %>
+  			<%= render :partial => "mw_school_course_catalog" %>
+      <% else %>
+			  <%= render :partial => "mw_school_programs" %>
+	    <% end %>
+      <div class="section_break">&nbsp;</div>
+			<%= render :partial => "mw_school_social" %>
+			<div class="section_break">&nbsp;</div>
+			<%= render :partial => "mw_school_contact" %>
+			<div class="section_break">&nbsp;</div>
+			<%= render :partial => "mw_school_reviews" %>
+			<div class="section_break">&nbsp;</div>
+			<%= render :partial => "mw_school_qa" %>
+			<div class="section_break">&nbsp;</div>
+			<%= render :partial => "mw_school_google_news" %>
+			<div class="section_break">&nbsp;</div>
+	  </div>
+		<div id="sidebar">
+			<%= render :partial => "sw_find_school_form" %>
+			<%= render :partial => "sw_school_questionaire" %>
+			<%= render :partial => "sw_other_schools" %>
+			<%= render :partial => 'sw_poll_your_friends' %>
+
+		</div>
+		<div class="clear"></div>
+  </div>
+</div>

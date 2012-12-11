@@ -1,0 +1,40 @@
+<div id="page_header">
+	<div id="page_header_content">
+		<% if !@cousin_name.blank? and !@subject.blank? and @cousin_name != 'Subjects' and @cousin_name != 'Professions' -%>
+		  <h2>Online <%= @subject.name %> <%= @cousin_name %></h2>		
+		  <% @titled = true %>
+		  <% @cousin_subject_page = true %>		
+		<% end %>
+	  
+
+			
+    <% if !@subject.blank? and !@degreelevel.blank? -%> 
+		  <h2><%= @page_phrase %></h2>
+		  <% @titled = true %>
+		  <% @degreelevel_subject_page = true %>
+		<% end %>
+		
+    <% if @subject.blank? and !@degreelevel.blank? -%> 
+		  <h2><%= @page_phrase %></h2>
+		  <% @titled = true %>
+		  <% @degreelevel_page = true %>
+		<% end %>		
+		
+    <% if !@profession.blank? -%> 
+		  <h2><%= @profession.name %> | Salary &amp; Job Information</h2>		
+		  <% @titled = true %>
+		  <% @profession_page = true %>		  
+		<% end %>
+		
+		<% if @cousin_name == 'Subjects' and !@subject.blank? %>
+		  <h2><%= @subject.name %></h2>	
+		  <% @titled = true %>
+		  <% @subject_page = true %>
+		<% end %>
+		
+		<% if @titled.blank? -%>
+  		<h2><%= @title %></h2> 
+    <% end %>
+	</div>
+</div>
+<!-- end #page_header -->

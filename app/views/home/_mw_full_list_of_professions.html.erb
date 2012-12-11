@@ -1,0 +1,29 @@
+<div class="module">
+	<div class="header">
+		<h4>Full List of Professions</h4>
+	</div>
+	<div class="content">
+		<div class="entry">
+			<div class="article">
+				<ul class="main_list_left">
+				<% @ct = 0 %>
+				<% @len = @professions.count %>
+				<% for profession in @professions -%>
+				  <% if !profession.has_zocc.blank? %>
+						<% @ct += 1 %>
+						<li><a href="/professions/<%= Worker.inurl(profession.name) -%>"><%= profession.name -%></a></li>
+					  <% if @ct == 460 %>
+							</ul>
+							<ul class="main_list_right">
+						<% end %>
+					<% end %>
+				<% end -%>
+				</ul>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end .entry -->
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

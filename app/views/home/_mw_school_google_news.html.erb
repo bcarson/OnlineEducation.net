@@ -1,0 +1,62 @@
+
+  <!-- #==News About (Google API) -->
+<% reset_cycle() -%>    
+	<table class="universal school" cellspacing="0">
+		<tr class="<%= cycle("even", "odd") -%>">
+			<th colspan="2"><%= 'Local Info &amp;' if !@school.is_online? -%> Current Events</th>
+		</tr>
+		
+	<% if !@school.is_online? %>	
+	
+	  <% if !@school.full_address.blank? and request.request_uri.index(/^\/school/) %>
+			<tr>
+				<td colspan="2"> 
+				<h2><a href="/mapsearch?l=10&location=<%= CGI::escape(@school.full_address) -%>">Click Here 
+					  for a map view of <%= @school.name -%></a> &amp; see nearby schools, housing availability, 
+					  location restaurants, and more...! </h2>
+				</td>
+			</tr>
+		<% end %>
+		<% if Worker.is_not_blank(@school.campus_newspaper_name) || Worker.is_not_blank(@school.local_newspaper_name) %>
+		<tr><td colspan="2"> <h2>Local News</h2>
+			<p>
+				
+				
+				<% if Worker.is_not_blank(@school.local_newspaper_name) -%>
+				  Local newspaper: 
+				  <% if Worker.is_not_blank(@school.local_newspaper_url) -%>
+				    <a href="<%= @school.campus_newspaper_url -%>"><%= @school.local_newspaper_name %></a>.
+				  <% else %>
+				    <a href="http://www.google.com/search?q=<%= CGI::escape(@school.local_newspaper_name + ' ' + @school.name) -%>"><%= @school.local_newspaper_name -%></a>. 
+				  <% end %>
+          <br>
+				<% end %>
+								
+			<% if Worker.is_not_blank(@school.campus_newspaper_name) -%>
+			  Read about <%= @school.name %> events, stories, news, etc.. at their school newspaper, 
+			  <% if Worker.is_not_blank(@school.campus_newspaper_url) -%>
+			    <a href="<%= @school.campus_newspaper_url -%>"><%= @school.campus_newspaper_name %></a>.
+			  <% else %>
+			    <a href="http://www.google.com/search?q=<%= CGI::escape(@school.campus_newspaper_name + ' ' + @school.name) -%>"><%= @school.campus_newspaper_name -%></a>.
+			  <% end %>
+			
+			<% end %>
+
+
+     </p>
+
+			
+		</td></tr>
+		<% end %>
+		
+		
+	<% end %>
+		
+		<tr>
+		<td>
+				
+				<div id="google_news"><div style="display:none" class="school_name"><%= @school.name %></div></div>
+					
+		</td>
+		</tr>
+	</table>

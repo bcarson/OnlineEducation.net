@@ -1,0 +1,82 @@
+
+
+		<% @nearby_cities.sort {|a,b| a.state_id <=> b.state_id} %>
+		<% if !@city.blank? || !params[:location].blank? %>
+
+			<table class="universal cities">
+				<tr class="heading" style="font-weight: bold;font-size:12px;">
+					<td class="col_item" style="text-align:left; border-left:1px solid #ddd;">Name</th>
+					<td class="col_item">State</th>
+					<td class="col_item">Population</th>
+					<td class="col_item"># of Schools</th>
+					<td class="col_item">Avg School Rank</th>
+					<td class="col_item">Total Programs</th>
+					<td class="col_item">Distance from <%= @city.name -%></th>
+				</tr>
+
+      <% for city in @nearby_cities %>
+        <% if city != @city %>
+	        <% @two_letter_code = city.state.two_letter_code -%>
+	        <tr>
+		       <td class="title" style="border-left:1px solid #ddd;">
+	           <a href="/schools/<%= @subject ? Worker.inurl(@subject.name) : 'all' -%>/<%= @two_letter_code -%>/<%= Worker.inurl(city.name) -%>"><%= city.name %></a>
+	         </td>
+	         <td class="col_item">
+	           <%= @two_letter_code %>
+	         </td>
+	         <td class="col_item">
+	         	 <%= city.population.blank? ? '-' : number_with_delimiter(city.population) %>
+	         </td>
+	         <td class="col_item">
+	         	 <%= city.total_schools.blank? ? '-' : number_with_delimiter(city.total_schools) %>
+	         </td>
+	         <td class="col_item">
+	         	 <%= city.avg_rank.blank? ? '-' : number_with_delimiter(city.avg_rank) %>
+	         </td>
+	         <td class="col_item">
+	         	 <%= city.total_programs.blank? ? '-' : number_with_delimiter(city.total_programs) %>
+	         </td>
+	         <td class="col_item">
+	         	 <%= sprintf("%.1f",@city.distance_from(city, :units=>:miles)) -%> miles
+	         </td>
+	       </tr>
+
+	      <% end %>
+      <% end %>
+		</table>
+
+
+    <% else %>
+
+
+	      <div class="by_state">
+					<div class="left">
+						<div class="nearby_state">
+							<div class="state_image">
+								<a href="/schools/<%= @subject ? Worker.inurl(@subject.name) : 'all' -%>/<%= @state.two_letter_code -%>"><img src="/images/states/small/<%= @state.two_letter_code -%>.png"/></a>
+							</div>
+							<div class="state_name">
+								<a href="/schools/<%= @subject ? Worker.inurl(@subject.name) : 'all' -%>/<%= @state.two_letter_code -%>"><%= @state.name %></a>
+							</div>
+						</div>
+
+					</div>
+					<div class="right">
+						<ul>
+						<% for city in @state.prim_cities %>
+							<li><a href="/schools/<%= @subject ? Worker.inurl(@subject.name) : 'all' -%>/<%= @state.two_letter_code -%>/<%= Worker.inurl(city.name) -%>">
+			          <% if @subject %>
+			            <%= @subject.name -%> Schools in <%= city.name %>
+			          <% else -%>
+			            <%= city.name %>
+			          <% end -%>
+			      	</a></li>
+						<% end %>
+						</ul>
+					</div>
+					<div class="clear"></div>
+				</div>
+
+
+    <% end %>
+

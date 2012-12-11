@@ -1,0 +1,19 @@
+<div id="listing_tab1" class="listing_tab_content">
+	<%= render :partial => 'map_compare_selected_buttons' %>
+	<%= render :partial => 'map_directions' %>
+	<div class="school_list">
+		<%= render :partial => 'map_school_list' %>
+	</div>
+</div>
+<div id="listing_tab2" class="listing_tab_content">
+	<div id="map_housing_heading"></div>
+	<div class="school_list housing_list">
+		<%= render :partial => 'map_housing_list' %>
+	</div>
+</div>
+<div id="listing_tab3" class="listing_tab_content">
+	<div id="map_local_heading"></div>
+	<div class="school_list yelp_list">
+		<%= render :partial => 'map_local_list' %>
+	</div>
+</div>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:fb="http://www.facebook.com/2008/fbml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title><%= @title %></title>
+		<meta name="description" content="<%= @description -%>">
+		<link rel="alternate" href="http://onlineeducation.net/feed" title="Online Education Blog Feed" type="application/rss+xml" />
+    <%= include_stylesheets :workspace, :media => 'all' %>
+		<!--[if lte IE 7]>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/ie7.css" />
+		<![endif]-->
+		<!--[if IE 8]>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/ie8.css" />
+		<![endif]-->
+	<script src="http://static.collegedegrees.com/assets/js/widgets/QuickDegreeFinder.jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="http://onlineeducation.net/assets/setDefaults.js"></script>
+    <%= include_javascripts :workspace %>
+		<!--[if lt IE 9]>
+		<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+		<![endif]-->
+		<% if @map_on == true -%>
+		  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<% end %>
+	  <% if request.env['HTTP_X_FORWARDED_HOST'] == 'www.onlineeducation.net' || request.env['HTTP_X_FORWARDED_HOST'] == '173.203.197.173' -%>
+			
+<!-- Satellite Header Code -bjc 9/7/12 -->
+<script src="//s3.amazonaws.com/searchdiscovery-satellite-production/73e838b12498fbc88a04286ad6036d82e8fa072e/satelliteLib-3e456b31ea3a76b87b47aabb1d27cf93a566ea31.js"></script>			
+		<% end %>
+	</head>
+	<body>
+		<div id="header">
+			<div id="header_content"<% if @map_on %> class="map_page"<% end %>>
+				<div id="logo"><h1><a href="/">Education Database Online</a></h1></div>
+				<!-- end #logo -->
+				<div id="nav">
+					<ul>
+						<li><a class="dropdown nav_state" href="#">Choose Your State</a>
+							<div class="sub s_state">
+								<div class="dropdown_content s_state">
+							    <ul class="col">
+										<li><a href="/schools/all/AL">Alabama</a></li>
+										<li><a href="/schools/all/AK">Alaska</a></li>
+										<li><a href="/schools/all/AZ">Arizona</a></li>
+										<li><a href="/schools/all/AR">Arkansas</a></li>
+										<li><a href="/schools/all/CA">California</a></li>
+										<li><a href="/schools/all/CO">Colorado</a></li>
+										<li><a href="/schools/all/CT">Connecticut</a></li>
+										<li><a href="/schools/all/DE">Delaware</a></li>
+										<li><a href="/schools/all/DC">DC</a></li>
+										<li><a href="/schools/all/FL">Florida</a></li>
+										<li><a href="/schools/all/GA">Georgia</a></li>
+										<li><a href="/schools/all/HI">Hawaii</a></li>
+										<li><a href="/schools/all/ID">Idaho</a></li>
+									</ul>
+									<ul class="col">
+										<li><a href="/schools/all/IL">Illinois</a></li>
+										<li><a href="/schools/all/IN">Indiana</a></li>
+										<li><a href="/schools/all/IA">Iowa</a></li>
+										<li><a href="/schools/all/KS">Kansas</a></li>
+										<li><a href="/schools/all/KY">Kentucky</a></li>
+										<li><a href="/schools/all/LA">Louisiana</a></li>
+										<li><a href="/schools/all/ME">Maine</a></li>
+										<li><a href="/schools/all/MD">Maryland</a></li>
+										<li><a href="/schools/all/MA">Massachusetts</a></li>
+										<li><a href="/schools/all/MI">Michigan</a></li>
+										<li><a href="/schools/all/MN">Minnesota</a></li>
+										<li><a href="/schools/all/MS">Mississippi</a></li>
+										<li><a href="/schools/all/MO">Missouri</a></li>
+									</ul>
+									<ul class="col">
+										<li><a href="/schools/all/MT">Montana</a></li>
+										<li><a href="/schools/all/NE">Nebraska</a></li>
+										<li><a href="/schools/all/NV">Nevada</a></li>
+										<li><a href="/schools/all/NH">New Hampshire</a></li>
+										<li><a href="/schools/all/NJ">New Jersey</a></li>
+										<li><a href="/schools/all/NM">New Mexico</a></li>
+										<li><a href="/schools/all/NY">New York</a></li>
+										<li><a href="/schools/all/NC">North Carolina</a></li>
+										<li><a href="/schools/all/ND">North Dakota</a></li>
+										<li><a href="/schools/all/OH">Ohio</a></li>
+										<li><a href="/schools/all/OK">Oklahoma</a></li>
+										<li><a href="/schools/all/OR">Oregon</a></li>
+										<li><a href="/schools/all/PA">Pennsylvania</a></li>
+									</ul>
+									<ul class="col end">
+										<li><a href="/schools/all/RI">Rhode Island</a></li>
+										<li><a href="/schools/all/SC">South Carolina</a></li>
+										<li><a href="/schools/all/SD">South Dakota</a></li>
+										<li><a href="/schools/all/TN">Tennessee</a></li>
+										<li><a href="/schools/all/TX">Texas</a></li>
+										<li><a href="/schools/all/UT">Utah</a></li>
+										<li><a href="/schools/all/VT">Vermont</a></li>
+										<li><a href="/schools/all/VA">Virginia</a></li>
+										<li><a href="/schools/all/WA">Washington</a></li>
+										<li><a href="/schools/all/WV">West Virginia</a></li>
+										<li><a href="/schools/all/WI">Wisconsin</a></li>
+										<li><a href="/schools/all/WY">Wyoming</a></li>
+									</ul>
+									<div class="clear"></div>
+								</div>
+							</div>
+						</li>
+						<li><a class="dropdown nav_oe" href="#">Online Education</a>
+							<div class="sub s_oe">
+								<div class="dropdown_content s_oe">
+									<ul class="col">
+										<li class="nav_schools"><a href="/schools/all/online">Online Schools</a></li>
+										<li class="nav_courses"><a href="/courses/all/online">Online Courses</a></li>
+										<li class="nav_programs"><a href="/programs/all/online">Online Programs</a></li>
+										<li class="nav_certifications"><a href="/certifications/all/online">Online Certifications</a></li>
+										<li class="nav_professions"><a href="/professions">Top Professions</a></li>
+										<li class="nav_subjects"><a href="/subjects">Top Subjects</a></li>
+										<li class="nav_classroom"><a href="/classroom-vs-online">Classroom vs. Online</a></li>
+									</ul>
+									<div class="clear"></div>
+								</div>
+							</div>
+						</li>
+						</li>
+						<li><a href="/about">About</a></li>
+						<li><a href="/blog">Blog</a></li>
+						<li class="pluseone"><g:plusone size="small"></g:plusone></li>
+					</ul>
+				</div>
+				<!-- end #nav -->
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end #header -->
+    <%= render :partial => "home/main_widget_bar" unless @no_top_monetize_show == true %>
+		<%= yield %>
+		<!-- #footer -->
+		<% if @map_on.blank? %>
+			<div id="footer">
+				<div id="footer_content">
+					<div class="left">
+						&copy; 2012 Education Database Online | <a target="_blank" href="/privacy-policy">Privacy Policy</a> | <a href="/contact" target="_blank">Contact</a>
+					</div>
+					<div class="right">
+						<a target="_blank" href="/contact"><img src="/images/btn_footer_contact.png"/></a>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		<% end %>
+<script type="text/javascript" >
+
+document.body.innerHTML = document.body.innerHTML.replace(/\/getinfo\//gi, "\/forms\/");
+
+
+</script >
+		<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    <script type="text/javascript">
+			function require(jspath) {
+			    document.write('<script type="text/javascript" src="/javascripts/'+jspath+'"><\/script>');
+			}
+			if (document.getElementById('google_news') != null ||  document.getElementById('school_list') != null ){
+				$.googleSearchKey = 'ABQIAAAAXKQLSsPjWqylTMicteWj7BQTfek-mltBd_E80o_48Y--ZFBVDxSKwCKyxtLdFJrdxuMQBWWWwcFqoA';
+			  require("jquery.gsnewsbar.min.js");
+			}
+      window.fbAsyncInit = function() {
+        FB.init({appId: '<%= @fb_app_id -%>', status: true, cookie: true,
+                 xfbml: true});
+      };
+    </script>
+    <!-- DL -->
+    <script>
+    // new QuickDegreeFinder().populate('.edudirect-degree_level_id',
+    // 								 '.edudirect-category_id',
+    // 								 '.edudirect-subject_id')
+    // 								 .setDefaults('Master', '','');						
+    </script>
+    <!-- Satellite Footer Code -->
+    <script type="text/javascript">_satellite.pageBottom();</script>
+    <p>..<%= @description -%>..</p>
+	</body>
+</html>

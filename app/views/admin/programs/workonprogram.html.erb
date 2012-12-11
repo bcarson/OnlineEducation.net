@@ -1,0 +1,41 @@
+<a href="/admin/programs/schoolprograms?id=<%= @school.id -%>">&larr; back to <%= @school.name %> programs</a>
+<br><br>
+Working on: <b><%= @program.name %> from <%= @school.name %></b> <small>(ID# <%= @program.id %>)</small>
+<a href="/admin/programs/courselist?id=<%= @program.id -%>">(edit course list)</a>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="/admin/programs/coursecheck?id=<%= @program.id -%>">Course Check from Cache</a> <br><br>
+
+<br><br><br><div style="background-color:#CCC;"><b>EDIT THE PROGRAM ITSELF - <%= @program.name %> </b>
+<%= form_remote_tag(:update => 'poutput', :url => 'update_program') %>
+	<input type="hidden" name="pid" value="<%= @program.id -%>">
+	
+  <input type="hidden" name="program[good_to_go]" value="0">	
+  Good to go? <input type="checkbox" name="program[good_to_go]" value="1" <%= 'checked=true' if @program.good_to_go == true -%> >
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  <input type="hidden" name="program[inactive]" value="1">	
+  Active? <input type="checkbox" name="program[inactive]" value="" <%= 'checked=true' if @program.inactive.blank? -%> >
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	Deficiency: <input type="text" name="program[deficiency]" value="<%= @program.deficiency -%>" size="40">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	Parent ID: <input type="text" name="program[parent_id]" value="<%= @program.parent_id -%>" size="5"><br><br>
+
+
+
+	Name: <input type="text" name="program[name]" value="<%= @program.name -%>" size="100"><br>
+
+
+	More info URL: <input type="text" name="program[more_info_url]" value="<%= @program.more_info_url -%>" size="100"><br>
+	Prereq URL: <input type="text" name="program[prereq_url]" value="<%= @program.prereq_url -%>" size="100"><br>
+	Prereq GPA: <input type="text" name="program[prereq_gpa]" value="<%= @program.prereq_gpa -%>" size="100"><br>
+	Prereq Degree: <input type="text" name="program[prereq_degree]" value="<%= @program.prereq_degree -%>" size="50"><br>
+	Instructions:<br><textarea name="program[instructions]" cols="150" rows="3"><%= @program.instructions -%></textarea><br>
+	Credit Transfer Restrictions:<br><textarea name="program[credit_transfer_restrictions]" cols="150" rows="3"><%= @program.credit_transfer_restrictions -%></textarea><br>
+	Description:<br><textarea name="program[description]" cols="150" rows="8"><%= @program.description -%></textarea>
+  <br><br>
+  <input type="submit" value="Update &raquo;"> <span id="poutput"></span>
+  <br><br>
+</form></div>
+<br><br><br><b>EDIT COURSES</b><br><hr>
+<div id="zcourselist">
+  <%= render :partial => 'thecourselist' %>
+</div>
+

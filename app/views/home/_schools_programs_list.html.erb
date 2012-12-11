@@ -1,0 +1,28 @@
+	<% for p in @ps -%>
+		<li style="background-position: 0 5px;"><div class="program">
+
+		<span class="name"><%= p.name -%></span><br/>
+
+<% if !p.certificate_completions_08.blank? || !p.associate_completions_08.blank? || !p.bachelor_completions_08.blank? || !p.master_completions_08.blank? || !p.phd_completions_08.blank? -%><div class="levels">
+<em>Levels offered:<span>
+    <% @daoutput = '' -%>
+    <% if !p.certificate_completions_08.blank? -%>
+      <% @daoutput += ' Certificate,' -%>
+    <% end -%>
+    <% if !p.associate_completions_08.blank? -%>
+      <% @daoutput += ' Associates,' -%>
+    <% end -%>
+    <% if !p.bachelor_completions_08.blank? -%>
+      <% @daoutput += ' Bachelors,' -%>
+    <% end -%>
+    <% if !p.master_completions_08.blank? -%>
+      <% @daoutput += ' Masters,' -%>
+    <% end -%>
+    <% if !p.phd_completions_08.blank? -%>
+       <% @daoutput += ' PhD,' -%>
+    <% end -%>
+    <b><%= @daoutput.gsub(/,$/,'')%></b>
+		</em></span></div>
+		<% end -%>
+		</div></li>
+	<% end -%>

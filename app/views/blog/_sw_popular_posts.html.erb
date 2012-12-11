@@ -1,0 +1,20 @@
+<div class="module">
+	<div class="header">
+		<h4>Most Popular Posts</h4>
+	</div>
+	<div class="content">
+		<ul class="article_list">
+    <% @last_4_blogs = Blog.find(:all, :order => 'created_at DESC', :limit => 4 ) %>
+    <% for blog in @last_4_blogs %>
+        <li>
+            <a href="<%= blog.url -%>">
+            <% if File.exists?("public/images/blogs/" + blog.url_string + "/featured.jpg") %>
+              <img src="<%= blog.featured_pic_url -%>" width="153px" class="thumb" alt="" /> 
+            <% end %>
+            <%= blog.title %></a>
+        </li>
+    <% end -%>
+		</ul>
+	</div>
+	<div class="footer"></div>
+</div>

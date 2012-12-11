@@ -1,0 +1,44 @@
+<div class="module">
+	<div class="header">
+		<h4>Full List of Online <%= @cousin_name.gsub(/s$/,'') -%> Subjects</h4>
+	</div>
+	<div class="content">
+		<div class="entry">
+			<div class="article">
+				<ul class="main_list_left">
+				<% @ct = 0 -%>
+				<% @len = Subject.count -%>
+				<% for subject in Subject.all_prims_alpha_order -%>
+				  <% if subject.has_online_program == true -%>
+				
+				    <% if @cousin_name == 'Certifications' %>
+              <% if subject.has_online_cert == true %>			
+								<% @ct += 1 -%>
+								<li><a href="/<%= @cousin_name.downcase -%>/<%= Worker.inurl(subject.name) -%>/online">Online <%= subject.name -%> <%= @cousin_name -%></a></li>
+							  <% if @ct == 115 -%>
+									</ul>
+									<ul class="main_list_right">
+								<% end -%>
+              <% end %>
+				
+				    <% else %>
+				
+							<% @ct += 1 -%>
+							<li><a href="/<%= @cousin_name.downcase -%>/<%= Worker.inurl(subject.name) -%>/online">Online <%= subject.name -%> <%= @cousin_name -%></a></li>
+						  <% if @ct == 173 -%>
+								</ul>
+								<ul class="main_list_right">
+							<% end -%>
+						
+						<% end %>
+					<% end -%>
+				<% end -%>
+				</ul>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end .entry -->
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

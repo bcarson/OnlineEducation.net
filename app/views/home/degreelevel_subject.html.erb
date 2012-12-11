@@ -1,0 +1,30 @@
+<%= render(:partial => "mw_page_title") %>
+
+<div id="wrapper">
+	<div id="content">
+		<div id="main">
+
+			
+			<%= render :partial => "mw_featured_subject_programs" %>
+
+			<%= render :partial => "content_subject_degreelevel"  %>
+				
+			<div class="section_break"></div>
+			<!-- end .section_break -->
+			<%= render(:partial => "mw_top_schools_campus") %>
+		</div>
+		<!-- end #main -->
+		<div id="sidebar">
+			<%= render(:partial => "sw_find_school_form") %>
+			<%= render(:partial => "sw_subject_cousins") %>
+			<%= render(:partial => "sw_other_degreelevel_degrees") %>			
+			<%= render(:partial => "sw_degreelevel_subjects") %>			
+			<%= render(:partial => "sw_top_cities_subject") %>
+			<%= render(:partial => "sw_subject_schools_by_state") %>
+		</div>
+		<!-- end #sidebar -->
+		<div class="clear"></div>
+	</div>
+	<!-- end #content -->
+</div>
+<!-- #wrapper -->

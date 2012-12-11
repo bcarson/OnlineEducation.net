@@ -1,0 +1,107 @@
+<div style="padding: 15px">
+	
+	<% if params[:model] == 'profession' %>
+	
+		<h1>Profession List Reviews</h1>
+
+	  <%= will_paginate @professions %>  
+
+
+    <% for profession in @professions %>
+ 
+      <% if Replacement.find_by_name_and_replaceable_id('profession.typical_work_locations',profession.id) and !profession.opt_zoccs.blank? %>
+			
+	      <% @themodel = profession %>
+  
+		    <% for name in ['profession.typical_work_locations','profession.positives','profession.negatives','profession.consider_these_related_professions','profession.common_interview_questions','profession.common_collaborating_professions','profession.training_books','profession.popular_books','profession.best_to_work_for_companies','profession.common_college_major_subjects'] %>
+	
+		      <% @name = name %>
+		      <% @ht = Hittype.find(:last, :conditions => ['name = ?', @name]) -%>
+    
+		      <%= render :partial => 'freviewform' %>
+	      <% end %>
+	      <br><br><hr><hr>
+	    <% end %>
+    <% end %>	
+	
+	  <%= will_paginate @professions %>  
+	<% end %>
+	
+	
+	
+	<% if params[:model] == 'city' %>
+	
+		<h1>City List Reviews</h1>
+
+	  <%= will_paginate @cities %>  
+
+
+	  <% for city in @cities %>
+	    <% @themodel = city %>
+	  
+		  <% for name in ['city.music_venues','city.restaurants','city.bars','city.landmarks','city.top_industries','city.parks'] %>
+		
+	      <% @name = name %>
+	      <% @ht = Hittype.find(:last, :conditions => ['name = ?', @name]) -%>
+      
+	      <%= render :partial => 'freviewform' %>
+	    <% end %>
+	    <br><br><hr><hr>
+	  <% end %>
+	
+	  <%= will_paginate @cities %>  
+
+  <% end %>
+	
+	
+	
+	<% if params[:model] == 'state' %>
+	
+		<h1>State List Reviews</h1>
+
+	  <%= will_paginate @states %>  
+
+
+	  <% for state in @states %>
+	    <% @themodel = state %>
+	  
+		  <% for name in ['state.top_national_parks','state.famous_residents'] %>
+		
+	      <% @name = name %>
+	      <% @ht = Hittype.find(:last, :conditions => ['name = ?', @name]) -%>
+      
+	      <%= render :partial => 'freviewform' %>
+	    <% end %>
+	    <br><br><hr><hr>
+	  <% end %>
+	
+	  <%= will_paginate @states %>  
+
+  <% end %>
+	
+	
+	<% if params[:model].blank? || params[:model] == 'subject' %>
+	
+		<h1>Subject List Reviews</h1>
+
+	  <%= will_paginate @subjects %>  
+
+
+	  <% for subject in @subjects %>
+	    <% @themodel = subject %>
+	  
+		  <% for name in ['subject.common_job_tasks','subject.journals_and_magazines','subject.organizations','subject.currently_in_demand_professions','subject.top_employment_cities','subject.top_employment_states','subject.common_degree_programs','subject.common_course_titles'] %>
+		
+	      <% @name = name %>
+	      <% @ht = Hittype.find(:last, :conditions => ['name = ?', @name]) -%>
+      
+	      <%= render :partial => 'freviewform' %>
+	    <% end %>
+	    <br><br><hr><hr>
+	  <% end %>
+	
+	  <%= will_paginate @subjects %>  
+
+  <% end %>
+
+</div>

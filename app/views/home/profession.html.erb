@@ -1,0 +1,28 @@
+<%= render :partial => "mw_page_title" %>
+<div id="wrapper">
+	<div id="content">
+		<div id="main">			
+
+			<%= render :partial => "content_profession" %>
+      <div class="section_break"></div>
+      <%= render :partial => "mw_salary_table" %>
+			<div class="section_break"></div>
+			<%= render :partial => "mw_states_and_cities" -%>
+		</div>		
+		<div id="sidebar">
+			<%= render :partial => "sw_123_widget" %>	
+			<%= render :partial => "sw_featured_schools" %>
+			<%= render :partial => "sw_find_school_form" %>
+			<%= render :partial => "sw_subject_cousins" %>		
+			<% for subject in @profession.opt_subjects %>
+			  <% @thesubject = subject %>
+  			<%= render :partial => "sw_other_professions" %>
+      <% end %>
+      <%= render :partial => 'sw_classroom_ad' %>
+			<%# render :partial => "sw_top_cities_subject" %>
+			<%# render :partial => "sw_subject_schools_by_state" %>		
+      <%# render :partial => "sw_degreelevel_subjects" %>			
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>

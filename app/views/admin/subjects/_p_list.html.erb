@@ -1,0 +1,6 @@
+<% for p in @subject.professions %>
+  <% if p.id != @subject.prim_profession_id %>
+    <%= link_to_remote('X', :update => 'plist' + @subject.id.to_s, :url => {:action => 'remove_p', :sid => @subject.id, :pid => p.id}, :confirm => 'Are you sure you want to disassociate "' + p.name + '" from the subject "' + @subject.name + '?"') %>				
+    <%= p.name %><br>
+  <% end %>
+<% end %>

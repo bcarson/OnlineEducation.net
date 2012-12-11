@@ -1,0 +1,30 @@
+<div id="yelp_title"><a href="http://yelp.com">Powered by <img src="/images/yelp-logo-mini.png" /></a></div>
+<div id="yelp_options">
+	<p><small>Display Yelp listings after next update? <input <%= "checked=true" if @show_yelps == true -%> id="yelp_save" type="checkbox" value="1" onClick="if (this.checked == true){document.getElementById('show_yelps').value = '1'}else{document.getElementById('show_yelps').value = '0';}"> <strong>Yes</strong></small></p>
+	<p>and show top-rated <select id="yelp_category_select" name="category" onChange="document.getElementById('yelp_category').value = this.value; if (document.getElementById('show_yelps').value == '0'){document.getElementById('yelp_save').checked = true; document.getElementById('show_yelps').value = '1';}; submit_utility_form();">
+	<option <%= 'selected="true"' if @category == 'all' -%> value="all">All Categories</option>
+	<option <%= 'selected="true"' if @category == 'restaurants' || @category.blank? -%> value="restaurants">Restaurants</option>
+	<option <%= 'selected="true"' if @category == 'shopping' -%> value="shopping">Shopping</option>
+	<option <%= 'selected="true"' if @category == 'Food' -%> value="Food">Food Stores</option>
+	<option <%= 'selected="true"' if @category == 'health and medical' -%> value="health and medical">Health and Medical</option>
+	<option <%= 'selected="true"' if @category == 'beauty and spas' -%> value="beauty and spas">Beauty and Spas</option>
+	<option <%= 'selected="true"' if @category == 'Home Services' -%> value="Home Services">Home Services</option>
+	<option <%= 'selected="true"' if @category == 'Active Life' -%> value="Active Life">Active Life</option>
+	<option <%= 'selected="true"' if @category == 'Nightlife' -%> value="Nightlife">Nightlife / Clubs</option>
+	<option <%= 'selected="true"' if @category == 'Local Services' -%> value="Local Services">Local Services</option>
+	<option <%= 'selected="true"' if @category == 'Event Planning and Services' -%> value="Event Planning and Services">Event Planning Services</option>
+	<option <%= 'selected="true"' if @category == 'Arts and Entertainment' -%> value="Arts and Entertainment">Arts &amp; Entertainment</option>
+	<option <%= 'selected="true"' if @category == 'Automotive' -%> value="Automotive">Automotive</option>
+	<option <%= 'selected="true"' if @category == 'Real Estate' -%> value="Real Estate">Real Estate Firms</option>
+	<option <%= 'selected="true"' if @category == 'Hotels and Travel' -%> value="Hotels and Travel">Hotels &amp; Travel</option>
+	<option <%= 'selected="true"' if @category == 'Professional' -%> value="Professional Services">Professional Services</option>
+	<option <%= 'selected="true"' if @category == 'Pets' -%> value="Pets">Pet Stores &amp; Services</option>
+	<option <%= 'selected="true"' if @category == 'Education' -%> value="Education">Schools (all levels)</option>
+	<option <%= 'selected="true"' if @category == 'Financial Services' -%> value="Financial Services">Financial Services</option>
+	<option <%= 'selected="true"' if @category == 'Public Services and Government' -%> value="Public Services and Government">Public Services &amp; Govmt.</option>
+	<option <%= 'selected="true"' if @category == 'Local Flavor' -%> value="Local Flavor">Local Sites &amp; Events</option>
+	<option <%= 'selected="true"' if @category == 'Mass Media' -%> value="Mass Media">Mass Media</option>
+	<option <%= 'selected="true"' if @category == 'Religious Organizations' -%> value="Religious Organizations">Religious Organizations</option>
+
+	</select></p>
+</div>

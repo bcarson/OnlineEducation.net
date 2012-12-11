@@ -1,0 +1,28 @@
+<div class="module">
+	<div class="header">
+		<h4>List of <%= @subject.categorysubject.name -%> Subjects</h4>
+	</div>
+	<div class="content">
+		<div class="entry">
+			<div class="article">
+				<ul class="main_list_left">
+				<% @ct = 0 %>
+				<% @len = Subject.count %>
+				<% @ss = @subject.categorysubject.prim_kids %>
+				<% for subject in @ss -%>
+					<% @ct += 1 %>
+					<li><a href="/subjects/<%= Worker.inurl(subject.name) -%>"><%= subject.name -%></a></li>
+				  <% if @ct == @ss.count / 2 %>
+						</ul>
+						<ul class="main_list_right">
+					<% end %>
+				<% end -%>
+				</ul>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end .entry -->
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

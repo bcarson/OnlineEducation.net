@@ -1,0 +1,14 @@
+<div class="module">
+	<div class="header">
+		<h4><%= @subject.name %> Schools <%# @cousin_name %> by State</h4>
+	</div>
+	<div class="content top">
+		<ul class="link_list">
+			<% for state in State.all %>
+				<li><a href="/schools/<%= Worker.inurl(@subject.name) -%>/<%= state.two_letter_code -%>"><%= @subject.name %> Schools <%# @cousin_name %> in <%= state.name %> </a></li>																
+      <% end %>
+		</ul>
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->

@@ -1,0 +1,193 @@
+<h1>CDclient</h1>
+
+<h2>What is CDclient ?</h2>
+
+<p>CDclient is a web proxy that acts as a passthrough client to the collegedegrees.com forms. The client can be routed to serve content on a web server that meets its requirements. Visitors can submit leads on collegedegrees forms via the client, the content files will be appropriately cached and served to them directly from your website.</p>
+
+<h2>What are the requirements ?</h2>
+
+<p>To use CDclient your hosting server must meet the following conditions:<br />
+* Must have PHP 5.2 or higher<br />
+* Must have mod rewrite capable host and the ability to use .htaccess files<br />
+* The web server must have write access to the folder where the content will be hosted    </p>
+
+<h2>How to install CDclient ?</h2>
+
+<ol>
+<li><p>create a folder named "schools" and unzip / extract the archive into "schools"  </p>
+
+<p>(You could replace the schools directory name with whatever you wish. By default, CDclient 
+uses schools as its sub-directory pathing so it is what we recommend "schools" but remains optional.)</p></li>
+<li><p>Rename index.example.php to index.php</p></li>
+<li><p>FTP the schools/ directory to your web root directory on your host.</p></li>
+</ol>
+
+<p><em>Thats it</em>
+You should be able to visit your website with the sub path of /schools like this:
+http://www.yoursite.com/schools</p>
+
+<h2>How to select / exclude content ?</h2>
+
+<h2><em>Example 1.a instantiate client and echo content:</em></h2>
+
+<pre><code>&lt;?php
+include('library.php');
+
+$client = new cdClient();
+$client-&gt;request();
+$client-&gt;initHeaders();
+
+if (!$cdClient-&gt;isType('html')) {
+    echo $client-&gt;getContent();
+    exit();
+}
+
+echo $client-&gt;getContent();
+</code></pre>
+
+<p>Only use selection handles when the content type is <em>html</em>
+to allow other types to use pure passthrough, use a condition like this:</p>
+
+<pre><code>if (!$cdClient-&gt;isType('html')) {
+    echo $client-&gt;getContent();
+    exit();
+}
+</code></pre>
+
+<h2><em>Example 1.b merging custom options into the client:</em></h2>
+
+<p>CDclient uses index.php to tailor the content that it provides. For this reason, any customization and  configuration options should only be done in the index.php file. If you make changes to CDclient in other files, the changes will be overwritten by future code updates. For this reason, it's important to only make changes to index.php because that file will not be overwritten by updates.</p>
+
+<p>You can merge custom options into CDclient at runtime by sending an $options array to the constructor when the object is instantiated. Here's the following code as an example:</p>
+
+<pre><code>&lt;?php
+//how to merge custom options into your client upon instantiation
+
+$options = array(
+    'server' =&gt; 'http://staging.collegedegrees.com',
+);
+$client = new cdClient($options);
+$client-&gt;request();
+$client-&gt;initHeaders();
+//...
+</code></pre>
+
+<p>It's evident by the example that this will make CDclient use the collegedegrees staging website rather than the production website which is default.</p>
+
+<p>All options have intuitive defaults so there is no need to explicitly set them unless there is a need to do so. For example, the default sub-directory is "/schools" so if you wanted to change that to something like "http://mySite.com/myCDclient" you could do that. Here is a comprehensive example of all configurable options:</p>
+
+<pre><code>&lt;?php
+//example of available options
+$options = array(
+    'home_dir'        =&gt; '/var/www/mySite/myCDclient',          # directory on the server 
+    'server'          =&gt; 'http://staging.collegedegrees.com',   # target content server
+    'controller'      =&gt; '/myCDclient',                         # http://mySite.com/myCDclient
+);
+</code></pre>
+
+<h2>Selection is done by CSS handles.</h2>
+
+<p>To select elements by CSS class preface with a . like '.analytics'
+To select elements by element ID use the hash mark like '#content'
+To select elements by tag simply use the element name like 'body'
+<em>Example 2. select the body exclude all analytics:</em></p>
+
+<pre><code>&lt;?php
+include('library.php');
+
+$client = new cdClient();
+$client-&gt;request();
+$client-&gt;initHeaders();
+
+if (!$cdClient-&gt;isType('html')) {
+    echo $client-&gt;getContent();
+    exit();
+}
+
+echo $client-&gt;getContent('body', '.analytics');
+</code></pre>
+
+<p>Array notation can be used to select multiple things
+<em>Example 3. select everything exclude google analytics and getClicky:</em></p>
+
+<pre><code>&lt;?php
+include('library.php');
+
+$client = new cdClient();
+$client-&gt;request();
+$client-&gt;initHeaders();
+
+if (!$cdClient-&gt;isType('html')) {
+    echo $client-&gt;getContent();
+    exit();
+}
+
+echo $client-&gt;getContent(null, array(
+    '#gaq',
+    '#getClicky-top',
+    '#getClicky-bot'
+));
+</code></pre>
+
+<p><em>Example 4. select multiple elements and arrange them with your custom templates:</em></p>
+
+<pre><code>&lt;?php
+include('library.php');
+
+$client = new cdClient();
+$client-&gt;request();
+$client-&gt;initHeaders();
+
+if (!$cdClient-&gt;isType('html')) {
+    echo $client-&gt;getContent();
+    exit();
+}
+
+$title = $client-&gt;getContent('title');
+$headMeta = $client-&gt;getContent('meta');
+$headLink = $client-&gt;getContent('head link');
+$headScript = $client-&gt;getContent('head script');
+$bodyScript = $client-&gt;getContent('body script');
+$bodyContent = $client-&gt;getContent('#content');
+
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt; MyWebsite.com | $title &lt;/title&gt;
+        echo $headMeta;
+        echo $headLink;
+        echo $headScript;
+    &lt;/head&gt;
+    &lt;body&gt;
+        include('header.php');
+        echo $bodyContent;
+        include('footer.php');
+        echo $bodyScript;
+    &lt;/body&gt;
+</code></pre>
+
+<h2>Change Log</h2>
+
+<h2>1.1 4/12/2011</h2>
+
+<p>added robots.txt</p>
+
+<p>added second parameter to the getContent method. getContent now accepts a second parameter 
+of string, array or null as a list of content to exclude from the selection.</p>
+
+<h2>1.2 4/27/2011</h2>
+
+<p>Fixed an issue with the redirect handling. Redirects weren't handled correctly if they used the absolute URL. In this new build redirects will handle as expected with absolute and referenced URLs.</p>
+
+<p>Fixed an issue that might cause errant cached files.</p>
+
+<p>Added Exception throws for situations where CDclient cannot create the necessary folders or cannot write to those folders.</p>
+
+<p>Added logging via KLogger. Look for logs under the /log directory</p>
+
+<h2>1.3 5/11/2011</h2>
+
+<p>New Header X-Cache-hit will have the value 1 or 0 if the page was retrieved from cache.</p>
+
+<p>Cache is now disabled if an error is retrieved from the server and if the content is zero length.</p>
+
+<p><em>5/13/2011</em> added verbose logging for redirection events.</p>

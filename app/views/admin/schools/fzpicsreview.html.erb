@@ -1,0 +1,54 @@
+
+<div style="padding: 15px">
+	<h1>School Logo/Photo Reviews</h1>
+
+  <%= will_paginate @schools %>  
+	
+	
+	<% for school in @schools %>
+	
+	  <% if school.website.blank? %>
+	    <b><%= school.name -%></b> 
+	  <% else %>
+	    <a target="_blank" href="http://<%= school.website -%>"><%= school.name -%></a>
+	  <% end %>
+	  | 
+	  <% if !school.full_address.blank? %>
+	    <%= school.full_address %> 
+	  <% else %>
+	    <% if !school.city.blank? %>
+	      <%= school.city.name %>, <%= school.city.state.two_letter_code %>
+	    <% end %>
+	  <% end %>
+	  | 
+	
+	  
+   <small> <a target="_blank" href="http://www.google.com/images?q=<%= school.name -%> logo">logo check</a>
+    | 
+    <a target="_blank" href="http://www.google.com/images?q=<%= school.name -%> campus">photo check</a></small>
+	  <br>
+	  Logo &rarr; <img src="/images/school/<%= school.picfoldernum -%>/logo-med.png" /> 
+	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	  Photo &rarr; <img src="/images/school/<%= school.picfoldernum -%>/photo-med.jpg" /> 
+
+    &nbsp; <span style="font-size: 18px; color: blue; cursor: pointer" onClick="new Effect.toggle('schooldiv<%= school.id -%>', 'Appear')">Edit &raquo;</span>
+    <div id="schooldiv<%= school.id -%>" style="display:none">	
+	    <br><br><br>
+		  <form target="upload_target<%= school.id -%>" enctype="multipart/form-data" action="/admin/schools/uploadnewpics" method="post">
+		    New School Logo<input id="logo" type="file" name="logo">
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		    New Campus Photo <input id="photo" type="file" name="photo">
+		    <input type="hidden" name="school_id" value="<%= school.id if school -%>">
+		    <input type="submit" value="Go &raquo;">
+			</form>
+		
+			<iframe id="upload_target" name="upload_target<%= school.id -%>" style="width:600;height:300;border:0px solid #fff;" src=""></iframe>
+		</div>
+	  <br><br><br><br><br>
+	
+	<% end %>
+
+  <%= will_paginate @schools %>  
+  
+
+</div>

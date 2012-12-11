@@ -1,0 +1,34 @@
+<div class="module">
+	<% if ['Certifications', 'Professions', 'Subjects'].index(@cousin_name) %>
+	  <% @dn = 'Programs' %>
+	<% else %>
+	  <% @dn = @cousin_name %>
+	<% end %>
+	<div class="header">
+		<h4><%= @subject.name -%> <%= @dn %> by State &amp; City</h4>
+	</div>
+	<div class="content">
+		<div class="entry">
+			<div class="article">
+				<ul class="main_list_left">
+				  <% for state in State.all -%>
+				    <a href="/schools/<%= Worker.inurl(@subject.name) -%>/<%= state.two_letter_code -%>">
+					    <li><%= @subject.name %> <%= @dn %> in <%= state.name %></li>
+					  </a>
+				  <% end -%>
+				</ul>
+				<ul class="main_list_right">
+				  <% for city in City.find(:all, :order => 'population DESC', :limit => 51) -%>
+				    <a href="/schools/<%= Worker.inurl(@subject.name) -%>/<%= city.state.two_letter_code -%>/<%= Worker.inurl(city.name) -%>">
+					    <li><%= @subject.name %> <%= @dn %> in <%= city.name %></li>
+					  </a>
+				  <% end -%>					
+				</ul>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- end .entry -->
+	</div>
+	<div class="footer"></div>
+</div>
+<!-- end .module -->
